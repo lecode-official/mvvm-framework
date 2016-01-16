@@ -1,0 +1,76 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Windows.Mvvm.Application", "System.Windows.Mvvm.Application\System.Windows.Mvvm.Application.csproj", "{87A21405-B4EE-47A1-AB9D-7542ABDDF92E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Windows.Mvvm.Services.Application", "System.Windows.Mvvm.Services.Application\System.Windows.Mvvm.Services.Application.csproj", "{2F9DAD0B-504C-4A20-8112-80D6595CEE88}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Windows.Mvvm.Services.OperatingSystem", "System.Windows.Mvvm.Services.OperatingSystem\System.Windows.Mvvm.Services.OperatingSystem.csproj", "{156941F4-1B21-4831-8D2C-4012BF15F913}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Windows.Mvvm.UI.ValueConverters", "System.Windows.Mvvm.UI.ValueConverters\System.Windows.Mvvm.UI.ValueConverters.csproj", "{B2C79ED3-0268-4EEF-A59E-AE97D4F92049}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Windows.Mvvm.UI.Markup", "System.Windows.Mvvm.UI.Markup\System.Windows.Mvvm.UI.Markup.csproj", "{1116516A-43B9-45E7-BE42-E88152282E74}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Windows.Mvvm.Reactive", "System.Windows.Mvvm.Reactive\System.Windows.Mvvm.Reactive.csproj", "{F69D1CFB-E729-4087-8496-EEE1A0D2329F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Windows.Mvvm.Services.Dialog", "System.Windows.Mvvm.Services.Dialog\System.Windows.Mvvm.Services.Dialog.csproj", "{D83D3704-21CA-410C-A50E-1F332EB79C4F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Windows.Mvvm.Services.Navigation", "System.Windows.Mvvm.Services.Navigation\System.Windows.Mvvm.Services.Navigation.csproj", "{BB9FB8FE-CC08-44F0-B4EA-B04B9FC8013F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Windows.Mvvm.Configuration", "System.Windows.Mvvm.Configuration\System.Windows.Mvvm.Configuration.csproj", "{4BF2CE70-E68E-4413-B229-180EF613F33A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Windows.Mvvm.UI.Controls", "System.Windows.Mvvm.UI.Controls\System.Windows.Mvvm.UI.Controls.csproj", "{4FB04A4C-AD2D-460A-A93B-EFCC8BFA88AD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{87A21405-B4EE-47A1-AB9D-7542ABDDF92E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87A21405-B4EE-47A1-AB9D-7542ABDDF92E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87A21405-B4EE-47A1-AB9D-7542ABDDF92E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87A21405-B4EE-47A1-AB9D-7542ABDDF92E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F9DAD0B-504C-4A20-8112-80D6595CEE88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F9DAD0B-504C-4A20-8112-80D6595CEE88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F9DAD0B-504C-4A20-8112-80D6595CEE88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F9DAD0B-504C-4A20-8112-80D6595CEE88}.Release|Any CPU.Build.0 = Release|Any CPU
+		{156941F4-1B21-4831-8D2C-4012BF15F913}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{156941F4-1B21-4831-8D2C-4012BF15F913}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{156941F4-1B21-4831-8D2C-4012BF15F913}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{156941F4-1B21-4831-8D2C-4012BF15F913}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2C79ED3-0268-4EEF-A59E-AE97D4F92049}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2C79ED3-0268-4EEF-A59E-AE97D4F92049}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2C79ED3-0268-4EEF-A59E-AE97D4F92049}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2C79ED3-0268-4EEF-A59E-AE97D4F92049}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1116516A-43B9-45E7-BE42-E88152282E74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1116516A-43B9-45E7-BE42-E88152282E74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1116516A-43B9-45E7-BE42-E88152282E74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1116516A-43B9-45E7-BE42-E88152282E74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F69D1CFB-E729-4087-8496-EEE1A0D2329F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F69D1CFB-E729-4087-8496-EEE1A0D2329F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F69D1CFB-E729-4087-8496-EEE1A0D2329F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F69D1CFB-E729-4087-8496-EEE1A0D2329F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D83D3704-21CA-410C-A50E-1F332EB79C4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D83D3704-21CA-410C-A50E-1F332EB79C4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D83D3704-21CA-410C-A50E-1F332EB79C4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D83D3704-21CA-410C-A50E-1F332EB79C4F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB9FB8FE-CC08-44F0-B4EA-B04B9FC8013F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB9FB8FE-CC08-44F0-B4EA-B04B9FC8013F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB9FB8FE-CC08-44F0-B4EA-B04B9FC8013F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB9FB8FE-CC08-44F0-B4EA-B04B9FC8013F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4BF2CE70-E68E-4413-B229-180EF613F33A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4BF2CE70-E68E-4413-B229-180EF613F33A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4BF2CE70-E68E-4413-B229-180EF613F33A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4BF2CE70-E68E-4413-B229-180EF613F33A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4FB04A4C-AD2D-460A-A93B-EFCC8BFA88AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4FB04A4C-AD2D-460A-A93B-EFCC8BFA88AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4FB04A4C-AD2D-460A-A93B-EFCC8BFA88AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4FB04A4C-AD2D-460A-A93B-EFCC8BFA88AD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
