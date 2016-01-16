@@ -58,6 +58,12 @@
       <LastGenOutput>FileTypeRestriction.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\System.Windows.Mvvm.Services.Application\System.Windows.Mvvm.Services.Application.csproj">
+      <Project>{2f9dad0b-504c-4a20-8112-80d6595cee88}</Project>
+      <Name>System.Windows.Mvvm.Services.Application</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
