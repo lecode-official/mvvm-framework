@@ -23,6 +23,19 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Windows.Mvvm.Configu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Windows.Mvvm.UI.Controls", "System.Windows.Mvvm.UI.Controls\System.Windows.Mvvm.UI.Controls.csproj", "{4FB04A4C-AD2D-460A-A93B-EFCC8BFA88AD}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Project Items", "Project Items", "{E10DE234-2565-4642-A9C1-7412E05928F6}"
+	ProjectSection(SolutionItems) = preProject
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{0C94849C-3898-444D-827F-3E1137BD2728}"
+	ProjectSection(SolutionItems) = preProject
+		Documentation\Documentation.md = Documentation\Documentation.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -72,5 +85,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0C94849C-3898-444D-827F-3E1137BD2728} = {E10DE234-2565-4642-A9C1-7412E05928F6}
 	EndGlobalSection
 EndGlobal
