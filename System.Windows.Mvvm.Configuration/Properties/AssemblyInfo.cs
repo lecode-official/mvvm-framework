@@ -10,12 +10,12 @@ using System.Runtime.InteropServices;
 
 #region General Assembly Information
 
-[assembly: AssemblyTitle("MineralManagement MVVM Configuration")]
-[assembly: AssemblyDescription("A library that offers MVVM related functionality for the mineral management application. This part of the MVVM framework contains a base class for configuration.")]
+[assembly: AssemblyTitle("MVVM Framework Configuration")]
+[assembly: AssemblyDescription("An MVVM framework, which was build upon the basis of ReactiveUI and enhances it with several utility functions. This part of the MVVM framework contains a base class for configuration.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("NextGenSoft")]
-[assembly: AssemblyProduct("Mineral Management")]
-[assembly: AssemblyCopyright("Copyright © NextGenSoft 2016")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("MVVM Framework")]
+[assembly: AssemblyCopyright("Copyright © David Neumann & Lukas Rögner 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
