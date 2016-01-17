@@ -5,10 +5,10 @@ with a lot of utility functions such as windowing and navigation services. This 
 pattern easier.
 
 ## Acknowledgments
-My special thanks goes out to Lukas Rögner who wrote a lot of the code and did a great deal of refactoring. Without him the project would not have happened.
+My special thanks goes out to Lukas Rï¿½gner who wrote a lot of the code and did a great deal of refactoring. Without him the project would not have happened.
 
 ## Using the project
-The project is available on NuGet: https://www.nuget.org/packages/System.Windows.Mvvm/0.1.0.
+The project is available on NuGet: https://www.nuget.org/packages/System.Windows.Mvvm/0.1.1.
 
 ```batch
 PM> Install-Package System.Windows.Mvvm
