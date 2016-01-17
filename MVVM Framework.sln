@@ -34,6 +34,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{0C94849C-3898-444D-827F-3E1137BD2728}"
 	ProjectSection(SolutionItems) = preProject
 		Documentation\Documentation.md = Documentation\Documentation.md
+		QuickStart.md = QuickStart.md
 	EndProjectSection
 EndProject
 Project("{FF286327-C783-4F7A-AB73-9BCBAD0D4460}") = "System.Windows.Mvvm.NuGet", "System.Windows.Mvvm.NuGet\System.Windows.Mvvm.NuGet.nuproj", "{2AE7D561-D045-4E97-9948-BB294BB3EAB2}"
