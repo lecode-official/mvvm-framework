@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|AnyCPU">
+      <Configuration>Debug</Configuration>
+      <Platform>AnyCPU</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|AnyCPU">
+      <Configuration>Release</Configuration>
+      <Platform>AnyCPU</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\System.Windows.Mvvm.Application\System.Windows.Mvvm.Application.csproj" />
+    <ProjectReference Include="..\System.Windows.Mvvm.Configuration\System.Windows.Mvvm.Configuration.csproj" />
+    <ProjectReference Include="..\System.Windows.Mvvm.Reactive\System.Windows.Mvvm.Reactive.csproj" />
+    <ProjectReference Include="..\System.Windows.Mvvm.Services.Application\System.Windows.Mvvm.Services.Application.csproj" />
+    <ProjectReference Include="..\System.Windows.Mvvm.Services.Dialog\System.Windows.Mvvm.Services.Dialog.csproj" />
+    <ProjectReference Include="..\System.Windows.Mvvm.Services.Navigation\System.Windows.Mvvm.Services.Navigation.csproj" />
+    <ProjectReference Include="..\System.Windows.Mvvm.Services.OperatingSystem\System.Windows.Mvvm.Services.OperatingSystem.csproj" />
+    <ProjectReference Include="..\System.Windows.Mvvm.UI.Controls\System.Windows.Mvvm.UI.Controls.csproj" />
+    <ProjectReference Include="..\System.Windows.Mvvm.UI.Markup\System.Windows.Mvvm.UI.Markup.csproj" />
+    <ProjectReference Include="..\System.Windows.Mvvm.UI.ValueConverters\System.Windows.Mvvm.UI.ValueConverters.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Readme.txt" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>2ae7d561-d045-4e97-9948-bb294bb3eab2</ProjectGuid>
+  </PropertyGroup>
+  <PropertyGroup>
+    <NuProjPath Condition=" '$(NuProjPath)' == '' ">$(MSBuildExtensionsPath)\NuProj\</NuProjPath>
+  </PropertyGroup>
+  <Import Project="$(NuProjPath)\NuProj.props" Condition="Exists('$(NuProjPath)\NuProj.props')" />
+  <PropertyGroup Label="Configuration">
+    <Id>System.Windows.Mvvm</Id>
+    <Version>0.1.0</Version>
+    <Title>MVVM Framework</Title>
+    <Authors>David Neumann, Lukas Rögner</Authors>
+    <Owners>David Neumann</Owners>
+    <Summary>This MVVM framework was build on top of ReactiveUI. It enhances ReactiveUI with a lot of utility functions such as windowing and navigation services.</Summary>
+    <Description>This MVVM framework was build on top of ReactiveUI. It enhances ReactiveUI with a lot of utility functions such as windowing and navigation services. This project aims at building on those features that ReactiveUI shines in and provide extra functionality to make implementing an application on the basis of the MVVM pattern easier.</Description>
+    <ReleaseNotes>
+    </ReleaseNotes>
+    <ProjectUrl>https://github.com/lecode-official/mvvm-framework</ProjectUrl>
+    <LicenseUrl>https://github.com/lecode-official/mvvm-framework/blob/master/LICENSE</LicenseUrl>
+    <Copyright>Copyright © David Neumann</Copyright>
+    <Tags>MVVM, WPF, Framework, ReactiveUI</Tags>
+    <GenerateSymbolPackage>false</GenerateSymbolPackage>
+  </PropertyGroup>
+  <Import Project="$(NuProjPath)\NuProj.targets" />
+</Project>
