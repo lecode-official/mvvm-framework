@@ -10,12 +10,12 @@ using System.Runtime.InteropServices;
 
 #region Genereal Assembly Information
 
-[assembly: AssemblyTitle("Mineral Management MVVM UI Controls")]
-[assembly: AssemblyDescription("A library, which contains all general purpose controls used in the mineral management application. This part of the framework contains controls.")]
+[assembly: AssemblyTitle("MVVM Framework UI Controls")]
+[assembly: AssemblyDescription("An MVVM framework, which was build upon the basis of ReactiveUI and enhances it with several utility functions. This part of the framework contains controls.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("NextGenSoft")]
-[assembly: AssemblyProduct("Mineral Management")]
-[assembly: AssemblyCopyright("Copyright © NextGenSoft 2016")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("MVVM Framework")]
+[assembly: AssemblyCopyright("Copyright © David Neumann & Lukas Rögner 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
