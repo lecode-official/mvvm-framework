@@ -23,6 +23,7 @@
     <ProjectReference Include="..\System.Windows.Mvvm.UI.ValueConverters\System.Windows.Mvvm.UI.ValueConverters.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="License.txt" />
     <Content Include="Readme.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -34,17 +35,16 @@
   <Import Project="$(NuProjPath)\NuProj.props" Condition="Exists('$(NuProjPath)\NuProj.props')" />
   <PropertyGroup Label="Configuration">
     <Id>System.Windows.Mvvm</Id>
-    <Version>0.1.0</Version>
+    <Version>0.1.1</Version>
     <Title>MVVM Framework</Title>
     <Authors>David Neumann, Lukas Rögner</Authors>
-    <Owners>David Neumann</Owners>
+    <Owners>David Neumann, Lukas Rögner</Owners>
     <Summary>This MVVM framework was build on top of ReactiveUI. It enhances ReactiveUI with a lot of utility functions such as windowing and navigation services.</Summary>
     <Description>This MVVM framework was build on top of ReactiveUI. It enhances ReactiveUI with a lot of utility functions such as windowing and navigation services. This project aims at building on those features that ReactiveUI shines in and provide extra functionality to make implementing an application on the basis of the MVVM pattern easier.</Description>
-    <ReleaseNotes>
-    </ReleaseNotes>
+    <ReleaseNotes>Added the project license to the NuGet package and updated some of the meta information in the libraries. No functional changes were made.</ReleaseNotes>
     <ProjectUrl>https://github.com/lecode-official/mvvm-framework</ProjectUrl>
     <LicenseUrl>https://github.com/lecode-official/mvvm-framework/blob/master/LICENSE</LicenseUrl>
-    <Copyright>Copyright © David Neumann</Copyright>
+    <Copyright>Copyright © David Neumann &amp; Lukas Rögner</Copyright>
     <Tags>MVVM, WPF, Framework, ReactiveUI</Tags>
     <GenerateSymbolPackage>false</GenerateSymbolPackage>
   </PropertyGroup>
