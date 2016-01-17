@@ -7,9 +7,14 @@ easier.
 My special thanks goes out to Lukas Rögner who wrote a lot of the code and did a great deal of refactoring. Without him the project would not have happened.
 
 ## Using the project
-I am planning on releasing the project to NuGet as soon as possible. Till then you have to download and manually build the solution if you want to use the project.
-The project was built using Visual Studio 2015. Basically any version of Visual Studio 2015 will suffice, no extra plugins or tools are needed. Just clone the Git
-repository open the solution using Visual Studio and build the solution.
+The project is available on NuGet: https://www.nuget.org/packages/System.Windows.Mvvm/0.1.0.
+
+```batch
+PM> Install-Package System.Windows.Mvvm
+```
+
+If you want to you can download and manually build the solution. The project was built using Visual Studio 2015. Basically any version of Visual Studio 2015 will
+suffice, no extra plugins or tools are needed. Just clone the Git repository open the solution using Visual Studio and build the solution.
 
 ```batch
 git pull https://github.com/lecode-official/mvvm-framework.git

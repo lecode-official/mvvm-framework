@@ -36,6 +36,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 		Documentation\Documentation.md = Documentation\Documentation.md
 	EndProjectSection
 EndProject
+Project("{FF286327-C783-4F7A-AB73-9BCBAD0D4460}") = "System.Windows.Mvvm.NuGet", "System.Windows.Mvvm.NuGet\System.Windows.Mvvm.NuGet.nuproj", "{2AE7D561-D045-4E97-9948-BB294BB3EAB2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -82,6 +84,10 @@ Global
 		{4FB04A4C-AD2D-460A-A93B-EFCC8BFA88AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4FB04A4C-AD2D-460A-A93B-EFCC8BFA88AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4FB04A4C-AD2D-460A-A93B-EFCC8BFA88AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2AE7D561-D045-4E97-9948-BB294BB3EAB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AE7D561-D045-4E97-9948-BB294BB3EAB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AE7D561-D045-4E97-9948-BB294BB3EAB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AE7D561-D045-4E97-9948-BB294BB3EAB2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
