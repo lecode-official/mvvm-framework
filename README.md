@@ -8,7 +8,7 @@ pattern easier.
 My special thanks goes out to Lukas Rögner who wrote a lot of the code and did a great deal of refactoring. Without him the project would not have happened.
 
 ## Using the project
-The project is available on NuGet: https://www.nuget.org/packages/System.Windows.Mvvm/0.1.1.
+The project is available on NuGet: https://www.nuget.org/packages/System.Windows.Mvvm/0.1.2.
 
 ```batch
 PM> Install-Package System.Windows.Mvvm
