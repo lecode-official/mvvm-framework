@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Core.Metadata.Edm;
 using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Core.Objects.DataClasses;
 using System.Data.Entity.Infrastructure;
@@ -47,13 +48,14 @@ namespace System.Windows.Mvvm.Reactive
 
         #region Public Methods
 
+
         /// <summary>
         /// Detects all changes before saving them to the set.
         /// </summary>
         public override Task BeforeDetectChangesAsync()
         {
             return Task.Run(() =>
-            { 
+            {
                 // Checks whether any changes have been applied to the context
                 this.DbContext.ChangeTracker.DetectChanges();
 
@@ -103,20 +105,40 @@ namespace System.Windows.Mvvm.Reactive
                         // Tries to get the entities from the original values
                         try
                         {
-                            for (int i = 0; i < entry.OriginalValues.FieldCount; i++)
+                            // This method of change detection can only handle relationships with two ends
+                            if (entry.OriginalValues.FieldCount != 2)
+                                throw new InvalidOperationException();
+
+                            // Gets the entity of the first end
+                            ObjectStateEntry firstRelatedEntry = this.DbContext.ObjectContext.ObjectStateManager.GetObjectStateEntry(entry.OriginalValues[0]);
+                            RelationshipMultiplicity firstRelationType = (entry.EntitySet as AssociationSet).AssociationSetEnds[1].CorrespondingAssociationEndMember.RelationshipMultiplicity;
+                            T firstEntity = firstRelatedEntry.Entity as T;
+
+                            // Checks whether this change should be detected, which is the case if
+                            // - This set is responsible for the type of the entity
+                            // - The entity is not deleted or added
+                            // - The correct type of navigation property is set as policy
+                            if (firstEntity != null && (firstRelatedEntry.State == EntityState.Unchanged || firstRelatedEntry.State == EntityState.Modified) && (((this.Policy & ChangeDetectionPolicy.NavigationProperty) == ChangeDetectionPolicy.NavigationProperty && (firstRelationType == RelationshipMultiplicity.One || firstRelationType == RelationshipMultiplicity.ZeroOrOne)) || ((this.Policy & ChangeDetectionPolicy.CollectionNavigationProperty) == ChangeDetectionPolicy.CollectionNavigationProperty && firstRelationType == RelationshipMultiplicity.Many)))
                             {
-                                object originalValue = entry.OriginalValues[i];
-                                if (originalValue != null)
-                                {
-                                    ObjectStateEntry relatedEntry = this.DbContext.ObjectContext.ObjectStateManager.GetObjectStateEntry(entry.OriginalValues[i]);
-                                    T entity = relatedEntry.Entity as T;
-                                    if (entity != null && (relatedEntry.State == EntityState.Unchanged || relatedEntry.State == EntityState.Modified))
-                                    {
-                                        itemsChanged = true;
-                                        this.beforeItemChanged.OnNext(entity);
-                                        this.detectedChanges.Add(() => this.itemChanged.OnNext(entity));
-                                    }
-                                }
+                                itemsChanged = true;
+                                this.beforeItemChanged.OnNext(firstEntity);
+                                this.detectedChanges.Add(() => this.itemChanged.OnNext(firstEntity));
+                            }
+
+                            // Gets the entity of the first end
+                            ObjectStateEntry secondRelatedEntry = this.DbContext.ObjectContext.ObjectStateManager.GetObjectStateEntry(entry.OriginalValues[1]);
+                            RelationshipMultiplicity secondRelationType = (entry.EntitySet as AssociationSet).AssociationSetEnds[0].CorrespondingAssociationEndMember.RelationshipMultiplicity;
+                            T secondEntity = secondRelatedEntry.Entity as T;
+
+                            // Checks whether this change should be detected, which is the case if
+                            // - This set is responsible for the type of the entity
+                            // - The entity is not deleted or added
+                            // - The correct type of navigation property is set as policy
+                            if (secondEntity != null && (secondRelatedEntry.State == EntityState.Unchanged || secondRelatedEntry.State == EntityState.Modified) && (((this.Policy & ChangeDetectionPolicy.NavigationProperty) == ChangeDetectionPolicy.NavigationProperty && (secondRelationType == RelationshipMultiplicity.One || secondRelationType == RelationshipMultiplicity.ZeroOrOne)) || ((this.Policy & ChangeDetectionPolicy.CollectionNavigationProperty) == ChangeDetectionPolicy.CollectionNavigationProperty && secondRelationType == RelationshipMultiplicity.Many)))
+                            {
+                                itemsChanged = true;
+                                this.beforeItemChanged.OnNext(secondEntity);
+                                this.detectedChanges.Add(() => this.itemChanged.OnNext(secondEntity));
                             }
                         }
                         catch (InvalidOperationException) { }
@@ -124,20 +146,40 @@ namespace System.Windows.Mvvm.Reactive
                         // Tries to get the entities from the new values
                         try
                         {
-                            for (int i = 0; i < entry.CurrentValues.FieldCount; i++)
+                            // This method of change detection can only handle relationships with two ends
+                            if (entry.CurrentValues.FieldCount != 2)
+                                throw new InvalidOperationException();
+
+                            // Gets the entity of the first end
+                            ObjectStateEntry firstRelatedEntry = this.DbContext.ObjectContext.ObjectStateManager.GetObjectStateEntry(entry.CurrentValues[0]);
+                            RelationshipMultiplicity firstRelationType = (entry.EntitySet as AssociationSet).AssociationSetEnds[1].CorrespondingAssociationEndMember.RelationshipMultiplicity;
+                            T firstEntity = firstRelatedEntry.Entity as T;
+
+                            // Checks whether this change should be detected, which is the case if
+                            // - This set is responsible for the type of the entity
+                            // - The entity is not deleted or added
+                            // - The correct type of navigation property is set as policy
+                            if (firstEntity != null && (firstRelatedEntry.State == EntityState.Unchanged || firstRelatedEntry.State == EntityState.Modified) && (((this.Policy & ChangeDetectionPolicy.NavigationProperty) == ChangeDetectionPolicy.NavigationProperty && (firstRelationType == RelationshipMultiplicity.One || firstRelationType == RelationshipMultiplicity.ZeroOrOne)) || ((this.Policy & ChangeDetectionPolicy.CollectionNavigationProperty) == ChangeDetectionPolicy.CollectionNavigationProperty && firstRelationType == RelationshipMultiplicity.Many)))
                             {
-                                object currentValue = entry.CurrentValues[i];
-                                if (currentValue != null)
-                                {
-                                    ObjectStateEntry relatedEntry = this.DbContext.ObjectContext.ObjectStateManager.GetObjectStateEntry(entry.CurrentValues[i]);
-                                    T entity = relatedEntry.Entity as T;
-                                    if (entity != null && (relatedEntry.State == EntityState.Unchanged || relatedEntry.State == EntityState.Modified))
-                                    {
-                                        itemsChanged = true;
-                                        this.beforeItemChanged.OnNext(entity);
-                                        this.detectedChanges.Add(() => this.itemChanged.OnNext(entity));
-                                    }
-                                }
+                                itemsChanged = true;
+                                this.beforeItemChanged.OnNext(firstEntity);
+                                this.detectedChanges.Add(() => this.itemChanged.OnNext(firstEntity));
+                            }
+
+                            // Gets the entity of the first end
+                            ObjectStateEntry secondRelatedEntry = this.DbContext.ObjectContext.ObjectStateManager.GetObjectStateEntry(entry.CurrentValues[1]);
+                            RelationshipMultiplicity secondRelationType = (entry.EntitySet as AssociationSet).AssociationSetEnds[0].CorrespondingAssociationEndMember.RelationshipMultiplicity;
+                            T secondEntity = secondRelatedEntry.Entity as T;
+
+                            // Checks whether this change should be detected, which is the case if
+                            // - This set is responsible for the type of the entity
+                            // - The entity is not deleted or added
+                            // - The correct type of navigation property is set as policy
+                            if (secondEntity != null && (secondRelatedEntry.State == EntityState.Unchanged || secondRelatedEntry.State == EntityState.Modified) && (((this.Policy & ChangeDetectionPolicy.NavigationProperty) == ChangeDetectionPolicy.NavigationProperty && (secondRelationType == RelationshipMultiplicity.One || secondRelationType == RelationshipMultiplicity.ZeroOrOne)) || ((this.Policy & ChangeDetectionPolicy.CollectionNavigationProperty) == ChangeDetectionPolicy.CollectionNavigationProperty && secondRelationType == RelationshipMultiplicity.Many)))
+                            {
+                                itemsChanged = true;
+                                this.beforeItemChanged.OnNext(secondEntity);
+                                this.detectedChanges.Add(() => this.itemChanged.OnNext(secondEntity));
                             }
                         }
                         catch (InvalidOperationException) { }
