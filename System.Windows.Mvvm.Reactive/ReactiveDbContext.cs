@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -67,7 +68,7 @@ namespace System.Windows.Mvvm.Reactive
         private async Task BeforeDetectChangesAsync()
         {
             // Calls the detection method of each observable
-            foreach (ReactiveDbSet reactiveDbSet in this.reactiveDbSets.Values)
+            foreach (ReactiveDbSet reactiveDbSet in this.reactiveDbSets.Values.SelectMany(dictionary => dictionary.Values).ToList())
                 await reactiveDbSet.BeforeDetectChangesAsync();
         }
 
@@ -77,7 +78,7 @@ namespace System.Windows.Mvvm.Reactive
         private async Task DetectChangesAsync()
         {
             // Calls the detection method of each observable
-            foreach (ReactiveDbSet reactiveDbSet in this.reactiveDbSets.Values)
+            foreach (ReactiveDbSet reactiveDbSet in this.reactiveDbSets.Values.SelectMany(dictionary => dictionary.Values).ToList())
                 await reactiveDbSet.DetectChangesAsync();
         }
 
