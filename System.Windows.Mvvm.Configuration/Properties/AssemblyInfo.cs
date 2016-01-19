@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 #region General Assembly Information
 
 [assembly: AssemblyTitle("MVVM Framework Configuration")]
-[assembly: AssemblyDescription("An MVVM framework, which was build upon the basis of ReactiveUI and enhances it with several utility functions. This part of the MVVM framework contains a base class for configuration.")]
+[assembly: AssemblyDescription("An MVVM Framework, which was build upon the basis of ReactiveUI and enhances it with several utility functions. This part of the MVVM Framework contains a base class for configuration.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("MVVM Framework")]
@@ -27,7 +27,7 @@ using System.Runtime.InteropServices;
 
 #region Assembly Version
 
-[assembly: AssemblyVersion("0.1.2.*")]
-[assembly: AssemblyFileVersion("0.1.2.0")]
+[assembly: AssemblyVersion("0.1.3.*")]
+[assembly: AssemblyFileVersion("0.1.3.0")]
 
 #endregion
