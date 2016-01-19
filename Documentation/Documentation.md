@@ -1,10 +1,10 @@
 # Introduction
 
-This MVVM framework was build on top of [ReactiveUI](https://github.com/reactiveui/ReactiveUI). It enhances ReactiveUI with a lot of utility functions such as
+This MVVM Framework was build on top of [ReactiveUI](https://github.com/reactiveui/ReactiveUI). It enhances ReactiveUI with a lot of utility functions such as
 windowing and navigation services. This project aims at building on those features that [ReactiveUI](https://github.com/reactiveui/ReactiveUI) shines in and
 provide extra functionality to make implementing an application on the basis of the MVVM pattern easier.
 
-As stated above, the MVVM framework builds upon the work done by [ReactiveUI](https://github.com/reactiveui/ReactiveUI). It adds several utility functions, such
+As stated above, the MVVM Framework builds upon the work done by [ReactiveUI](https://github.com/reactiveui/ReactiveUI). It adds several utility functions, such
 as application lifecycle management, navigation, and services most applications need. This makes it much easier to implement MVVM-based applications. Right now the
 project only supports WPF projects, but this might change in the future and may libraries for mobile applications may be added.
 

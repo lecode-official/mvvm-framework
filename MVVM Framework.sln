@@ -34,10 +34,18 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{0C94849C-3898-444D-827F-3E1137BD2728}"
 	ProjectSection(SolutionItems) = preProject
 		Documentation\Documentation.md = Documentation\Documentation.md
+		Documentation\Installation.md = Documentation\Installation.md
 		Documentation\QuickStart.md = Documentation\QuickStart.md
 	EndProjectSection
 EndProject
 Project("{FF286327-C783-4F7A-AB73-9BCBAD0D4460}") = "System.Windows.Mvvm.NuGet", "System.Windows.Mvvm.NuGet\System.Windows.Mvvm.NuGet.nuproj", "{2AE7D561-D045-4E97-9948-BB294BB3EAB2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Windows.Mvvm.Sample", "System.Windows.Mvvm.Sample\System.Windows.Mvvm.Sample.csproj", "{E65CD314-34D9-48B6-A71F-512BA0ED43FC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Images", "Images", "{263D3AEF-5532-487E-9B2F-592848FCAE13}"
+	ProjectSection(SolutionItems) = preProject
+		Documentation\Images\ProjectCreationDialog.jpg = Documentation\Images\ProjectCreationDialog.jpg
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -89,11 +97,16 @@ Global
 		{2AE7D561-D045-4E97-9948-BB294BB3EAB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2AE7D561-D045-4E97-9948-BB294BB3EAB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2AE7D561-D045-4E97-9948-BB294BB3EAB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E65CD314-34D9-48B6-A71F-512BA0ED43FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E65CD314-34D9-48B6-A71F-512BA0ED43FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E65CD314-34D9-48B6-A71F-512BA0ED43FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E65CD314-34D9-48B6-A71F-512BA0ED43FC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{0C94849C-3898-444D-827F-3E1137BD2728} = {E10DE234-2565-4642-A9C1-7412E05928F6}
+		{263D3AEF-5532-487E-9B2F-592848FCAE13} = {0C94849C-3898-444D-827F-3E1137BD2728}
 	EndGlobalSection
 EndGlobal
