@@ -190,6 +190,18 @@ namespace System.Windows.Mvvm.Services.Navigation
         /// <returns>Returns a value that determines whether the window was closed or its closing was cancelled. If <see cref="isCancellable"/> is set to <c>false</c>, <c>NavigationResult.Navigated</c> is always returned.</returns>
         internal async Task<NavigationResult> CloseWindowAsync(bool isCancellable, NavigationReason navigationReason)
         {
+            return await this.CloseWindowAsync(isCancellable, navigationReason, true);
+        }
+
+        /// <summary>
+        /// Closes the window that is managed by this navigation manager.
+        /// </summary>
+        /// <param name="isCancellable">Determines whether the closing of the application can be cancelled by the view model.</param>
+        /// <param name="navigationReason">The navigation reason that is sent to the view model.</param>
+        /// <param name="closeWindow">Indicates whether the window should be closed or the view models should just be disposed of.</param>
+        /// <returns>Returns a value that determines whether the window was closed or its closing was cancelled. If <see cref="isCancellable"/> is set to <c>false</c>, <c>NavigationResult.Navigated</c> is always returned.</returns>
+        internal async Task<NavigationResult> CloseWindowAsync(bool isCancellable, NavigationReason navigationReason, bool closeWindow)
+        {
             // Creates new event arguments for the navigation events
             NavigationEventArgs eventArguments = null;
 
@@ -227,7 +239,8 @@ namespace System.Windows.Mvvm.Services.Navigation
             await this.ClearNavigationStackAsync();
 
             // Closes the window
-            this.Window.Close();
+            if (closeWindow)
+                this.Window.Close();
 
             // Since the window was closed successfully, a positive result is returned
             return NavigationResult.Navigated;
