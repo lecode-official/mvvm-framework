@@ -29,6 +29,7 @@
         </ListBox>
 
         <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right">
+            <Button Command="{Binding Path=CreateTodoListItemCommand}" Padding="5" Margin="10">Create new item</Button>
             <Button Command="{Binding Path=MarkTodoListItemAsFinishedCommand}" Padding="5" Margin="10">Mark as finished</Button>
             <Button Command="{Binding Path=RemoveTodoListItemCommand}" Padding="5" Margin="10">Remove</Button>
         </StackPanel>

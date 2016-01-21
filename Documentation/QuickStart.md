@@ -240,13 +240,16 @@ public class MainViewModel : ReactiveViewModel
     public override Task OnNavigateToAsync(NavigationEventArgs e)
     {
         this.TodoListItems.Clear();
-        this.TodoListItems.AddRange(this.todoListItemsRepository.GetTodoListItems().Select(item => new TodoListItemViewModel
+        foreach (TodoListItem todoListItem in this.todoListItemsRepository.GetTodoListItems().ToList())
         {
-            Id = item.Id,
-            Title = item.Title,
-            Description = item.Description,
-            IsFinished = item.IsFinished
-        }));
+            this.TodoListItems.Add(new TodoListItemViewModel
+            {
+                Id = todoListItem.Id,
+                Title = todoListItem.Title,
+                Description = todoListItem.Description,
+                IsFinished = todoListItem.IsFinished
+            });
+        }
 
         return Task.FromResult(0);
     }

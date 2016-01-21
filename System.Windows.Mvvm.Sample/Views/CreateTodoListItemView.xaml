@@ -1,0 +1,37 @@
+﻿
+<!-- Represents a view where the user is able to create a new todo list item. -->
+<Page x:Class="System.Windows.Mvvm.Sample.Views.CreateTodoListItemView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:System.Windows.Mvvm.Sample.Views"
+      mc:Ignorable="d" d:DesignHeight="130" d:DesignWidth="300">
+
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock FontSize="18" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0">Create new todo list item</TextBlock>
+
+        <TextBlock Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center">Title</TextBlock>
+        <TextBox Grid.Column="1" Grid.Row="1" Margin="2" Text="{Binding Path=Title}"></TextBox>
+
+        <TextBlock Grid.Column="0" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center">Description</TextBlock>
+        <TextBox Grid.Column="1" Grid.Row="2" Margin="2" Text="{Binding Path=Description}"></TextBox>
+
+        <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4" HorizontalAlignment="Right">
+            <Button Command="{Binding Path=CancelCommand}" Padding="5" Margin="10">Cancel</Button>
+            <Button Command="{Binding Path=SaveCommand}" Padding="5" Margin="10">Save</Button>
+        </StackPanel>
+    </Grid>
+</Page>
