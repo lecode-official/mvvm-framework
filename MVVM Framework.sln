@@ -44,6 +44,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Windows.Mvvm.Sample"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Images", "Images", "{263D3AEF-5532-487E-9B2F-592848FCAE13}"
 	ProjectSection(SolutionItems) = preProject
+		Documentation\Images\Logo.fw.png = Documentation\Images\Logo.fw.png
+		Documentation\Images\Logo.ico = Documentation\Images\Logo.ico
+		Documentation\Images\Logo1024x1024.png = Documentation\Images\Logo1024x1024.png
+		Documentation\Images\Logo128x128.png = Documentation\Images\Logo128x128.png
+		Documentation\Images\Logo256x256.png = Documentation\Images\Logo256x256.png
+		Documentation\Images\Logo512x512.png = Documentation\Images\Logo512x512.png
+		Documentation\Images\Logo64x64.png = Documentation\Images\Logo64x64.png
 		Documentation\Images\ProjectCreationDialog.jpg = Documentation\Images\ProjectCreationDialog.jpg
 	EndProjectSection
 EndProject
