@@ -533,6 +533,20 @@ public override Task OnActivateAsync()
 Here we use the `NavigateAsync` method. You have to specify the type of the view as the generic parameter. Optionally you could pass a `dynamic` object with parameters to the
 `NavigateAsync` method. The properties in the dynamic object are automatically matched and assigned to the public properties of the view model with the same name.
 
+Finally, don't forget to add a new button to the main view, which navigates the user to the creation view:
+
+```xaml
+<StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right">
+    <Button Command="{Binding Path=CreateTodoListItemCommand}" Padding="5" Margin="10">Create new item</Button>
+    <Button Command="{Binding Path=MarkTodoListItemAsFinishedCommand}" Padding="5" Margin="10">Mark as finished</Button>
+    <Button Command="{Binding Path=RemoveTodoListItemCommand}" Padding="5" Margin="10">Remove</Button>
+</StackPanel>
+```
+
+The end result should look somtehing like this:
+
+![Sample application create todo list item view](https://github.com/lecode-official/mvvm-framework/blob/master/Documentation/Images/SampleApplicationCreateTodoListItemView.jpg "Sample application create todo list item view")
+
 ## Application service
 
 
