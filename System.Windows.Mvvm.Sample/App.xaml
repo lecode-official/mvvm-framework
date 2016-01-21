@@ -2,8 +2,18 @@
                       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                       xmlns:local="clr-namespace:System.Windows.Mvvm.Sample"
-                      xmlns:mvvm="clr-namespace:System.Windows.Mvvm.Application;assembly=System.Windows.Mvvm.Application">
-    <Application.Resources>
+                      xmlns:mvvm="clr-namespace:System.Windows.Mvvm.Application;assembly=System.Windows.Mvvm.Application"
+                      xmlns:mvvmUIValueConverters="clr-namespace:System.Windows.Mvvm.UI.ValueConverters;assembly=System.Windows.Mvvm.UI.ValueConverters">
+    <mvvm:MvvmApplication.Resources>
+        <ResourceDictionary>
 
-    </Application.Resources>
+            <!-- #region Value Converters -->
+
+            <mvvmUIValueConverters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <mvvmUIValueConverters:InvertedBooleanToVisibilityConverter x:Key="InvertedBooleanToVisibilityConverter" />
+                
+            <!-- #endregion -->
+            
+        </ResourceDictionary>
+    </mvvm:MvvmApplication.Resources>
 </mvvm:MvvmApplication>
