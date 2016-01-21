@@ -25,26 +25,26 @@ namespace System.Windows.Mvvm.Services.Navigation
         #region Methods
 
         /// <summary>
-        /// Is called when the view model is created (before the user is navigated to the view and before the OnNavigateTo even is called). After the view model was created, it is cached and reused until it is destroyed, therefore OnActivate
+        /// Is called when the view model is created (before the user is navigated to the view and before the OnNavigateToAsync event is called). After the view model was created, it is cached and reused until it is destroyed, therefore OnActivateAsync
         /// is only called once in the life cycle of a view model.
         /// </summary>
         Task OnActivateAsync();
 
         /// <summary>
-        /// Is called before the view model is navigated to. Other than OnActivate, OnNavigateTo is called everytime the user navigates to this view model.
+        /// Is called before the view model is navigated to. Other than OnActivateAsync, OnNavigateToAsync is called everytime the user navigates to this view model.
         /// </summary>
         /// <param name="e">The event arguments, that allows the navigation to be cancelled.</param>
         Task OnNavigateToAsync(NavigationEventArgs e);
 
         /// <summary>
-        /// Is called before the view model is navigated away from. Other than OnDeactivate, OnNavigateFrom is called everytime the user navigates away from this view model.
+        /// Is called before the view model is navigated away from. Other than OnDeactivateAsync, OnNavigateFromAsync is called everytime the user navigates away from this view model.
         /// </summary>
         /// <param name="e">The event arguments, that allows the navigation to be cancelled.</param>
         Task OnNavigateFromAsync(NavigationEventArgs e);
 
         /// <summary>
         /// Is called when the view model gets deactivated. The view model only gets deactivated when the navigation stack of the window, that contains the view of this view model, is cleared, or when the windows, containing the view of
-        /// this view model, is closed. Therefore OnDeactivate is only called once in the life cycle of a view model.
+        /// this view model, is closed. Therefore OnDeactivateAsync is only called once in the lifecycle of a view model.
         /// </summary>
         Task OnDeactivateAsync();
 
