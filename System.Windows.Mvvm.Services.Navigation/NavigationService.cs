@@ -3,13 +3,11 @@
 
 using Ninject;
 using Ninject.Parameters;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 
@@ -296,10 +294,14 @@ namespace System.Windows.Mvvm.Services.Navigation
             IViewModel viewModel = null;
             ViewModelAttribute viewModelAttribute = typeof(TView).GetCustomAttributes<ViewModelAttribute>().FirstOrDefault();
             if (viewModelAttribute != null)
+            {
                 viewModelType = viewModelAttribute.ViewModelType;
-            else if (this.assemblyTypes == null)
-                this.assemblyTypes = typeof(TView).Assembly.GetTypes();
-            viewModelType = this.assemblyTypes.FirstOrDefault(type => type.Name == string.Concat(typeof(TView).Name, "Model"));
+            }
+            else
+            {
+                this.assemblyTypes = this.assemblyTypes ?? typeof(TView).Assembly.GetTypes();
+                viewModelType = this.assemblyTypes.FirstOrDefault(type => type.Name == string.Concat(typeof(TView).Name, "Model"));
+            }
             
             // Checks if the view has a view model attribute, if so then the type specified in the attribute is used to instantiate a new view model for the view
             if (viewModelType != null)
