@@ -53,6 +53,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Images", "Images", "{263D3A
 		Documentation\Images\Logo64x64.png = Documentation\Images\Logo64x64.png
 		Documentation\Images\LogoHeader.png = Documentation\Images\LogoHeader.png
 		Documentation\Images\ProjectCreationDialog.jpg = Documentation\Images\ProjectCreationDialog.jpg
+		Documentation\Images\SampleApplicationCreateTodoListItemView.jpg = Documentation\Images\SampleApplicationCreateTodoListItemView.jpg
 		Documentation\Images\SampleApplicationMainView.jpg = Documentation\Images\SampleApplicationMainView.jpg
 	EndProjectSection
 EndProject
