@@ -164,6 +164,20 @@ namespace System.Windows.Mvvm.Services.Navigation
                 }
                 navigationService.Window.DataContext = windowViewModel;
 
+                // Subscribes to the closing event of the window, so that the window can be properly closed (with all the lifecycle callbacks)
+                bool isClosing = false;
+                navigationService.Window.Closing += async (sender, e) =>
+                {
+                    // In order to not have an infite feedback loop of closing events (because CloseWindowAsync eventually closes the Window and then the Closing event is raised again), it is checked, whether the window is already being closed, if so then the event handler returns
+                    if (isClosing)
+                        return;
+                    isClosing = true;
+
+                    // Since we do not want Windows to handle the closing of the window, the closing is aborted and then the window is closed using the window navigation service
+                    e.Cancel = true;
+                    await this.CloseWindowAsync(navigationService);
+                };
+
                 // Returns the result
                 return new WindowCreationResult
                 {
