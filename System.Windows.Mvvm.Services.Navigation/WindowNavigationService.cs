@@ -231,10 +231,13 @@ namespace System.Windows.Mvvm.Services.Navigation
             this.navigationServices.Add(result.NavigationService);
 
             // Sets the window as the new main window, if the user requested us to do so
-            if (isMainWindow)
-                Application.Current.MainWindow = result.Window;
-            else if (Application.Current.MainWindow != null)
-                result.Window.Owner = Application.Current.MainWindow;
+            if (Application.Current != null)
+            {
+                if (isMainWindow)
+                    Application.Current.MainWindow = result.Window;
+                else if (Application.Current.MainWindow != null)
+                    result.Window.Owner = Application.Current.MainWindow;
+            }
 
             // Opens the new window
             result.Window.Show();
@@ -291,10 +294,13 @@ namespace System.Windows.Mvvm.Services.Navigation
             this.navigationServices.Add(result.NavigationService);
 
             // Sets the window as the new main window, if the user requested us to do so
-            if (isMainWindow)
-                Application.Current.MainWindow = result.Window;
-            else if (Application.Current.MainWindow != null)
-                result.Window.Owner = Application.Current.MainWindow;
+            if (Application.Current != null)
+            {
+                if (isMainWindow)
+                    Application.Current.MainWindow = result.Window;
+                else if (Application.Current.MainWindow != null)
+                    result.Window.Owner = Application.Current.MainWindow;
+            }
 
             // Opens the new window
             result.Window.Show();
