@@ -9,7 +9,8 @@ pattern easier.
 
 ## Acknowledgments
 
-My special thanks goes out to Lukas Rögner who wrote a lot of the code and did a great deal of refactoring. Without him the project would not have happened.
+My special thanks goes out to [Lukas Rögner](https://github.com/lukasroegner) who wrote a lot of the code and did a great deal of refactoring. Without him the
+project would not have happened.
 
 ## Using the project
 
