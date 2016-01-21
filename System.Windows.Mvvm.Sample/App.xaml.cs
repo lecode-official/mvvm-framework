@@ -14,6 +14,8 @@ namespace System.Windows.Mvvm.Sample
     {
         #region MvvmApplication Implementation
         
+        
+
         #endregion
     }
 }

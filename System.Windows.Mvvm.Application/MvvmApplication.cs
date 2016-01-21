@@ -15,7 +15,7 @@ namespace System.Windows.Mvvm.Application
     /// <summary>
     /// Represents the base class for applications based on the MVVM pattern.
     /// </summary>
-    public class MvvmApplication : System.Windows.Application, IDisposable
+    public class MvvmApplication : Windows.Application, IDisposable
     {
         #region Private Fields
 
