@@ -4,6 +4,9 @@ The MVVM Framework builds upon the work done by [ReactiveUI](https://github.com/
 as application lifecycle management, navigation, and services most applications need. This makes it much easier to implement MVVM-based applications. Right now the
 project only supports WPF projects, but this might change in the future and may libraries for mobile applications may be added.
 
+Many parts of the source code were left out for brevity. If you want to view the whole source code for the sample application, you can find it
+[here](https://github.com/lecode-official/mvvm-framework/tree/master/System.Windows.Mvvm.Sample).
+
 # Using the MVVM Framework
 
 ## Creating a new project
@@ -45,3 +48,29 @@ public partial class App : MvvmApplication
 }
 ```
 
+The `MvvmApplication` has several lifecycle callback methods, which you can override:
+
+- **`OnStartedAsAdditionalInstanceAsync`** - Gets called when there already is another instance of the same application running. This callback method is called before `OnStartedAsync` is invoked.
+- **`OnStartedAsync`** - Gets called after the application startup. This can be overridden to implement custom startup logic and displaying views.
+- **`OnExitAsync`** - Gets called right before the application quits. This can be overridden to implement custom shutdown logic.
+- **`OnUnhandledExceptionAsync`** - Gets called if an exception was thrown that was not handled by user-code.
+
+All the callback methods are asynchronous methods and can therefore call asynchronous methods. Additionally `MvvmApplication` implements the `IDisposable` interface
+and there is a `Dispose` method which you can override.
+
+At the very least you'll have to implement the `OnStartedAsync` method, which is the entry-point to the application and should be used to set up the Application
+and navigate to the initial view of the application.
+
+## The model
+
+## The view model
+
+## The view
+
+## navigation
+
+# The broader picture
+
+There are many more features that come with the MVVM Framework that are out of scope of this quick start guide. If you want to dive deeper then head over to the
+[Documentation](https://github.com/lecode-official/mvvm-framework/blob/master/Documentation/Documentation.md), which has detailed instructions for all of the
+features of the MVVM framework.
