@@ -102,16 +102,20 @@ namespace System.Windows.Mvvm.Application
                     temporaryKernel.Dispose();
             }
 
+            // Signs up for the unhandled exception event, which is raised when an exception was thrown, which was not handled by user-code
+            AppDomain.CurrentDomain.UnhandledException += async (sender, eventArguments) => await this.OnUnhandledExceptionAsync(eventArguments);
+
             // Determines whether this application instance is the first instance of the application or whether another instance is already running (this can be used to force the application to be a single instance application)
             bool isFirstApplicationInstance;
             Mutex mutex = new Mutex(true, Assembly.GetExecutingAssembly().FullName, out isFirstApplicationInstance);
 
-            // As this is the first instance of the application, the mutex is set and stores, so that it can be disposed of when this instance closes
+            // If this is the first instance of the application, the mutex is set and stored, so that it can be disposed of when this instance closes
             if (isFirstApplicationInstance)
                 this.singleInstanceMutex = mutex;
 
-            // Signs up for the unhandled exception event, which is raised when an exception was thrown, which was not handled by user-code
-            AppDomain.CurrentDomain.UnhandledException += async (sender, eventArguments) => await this.OnUnhandledExceptionAsync(eventArguments);
+            // Checks if this is not the first instance of the application, if so then OnStartedAsAdditionalInstanceAsync before OnStartedAsync is called
+            if (!isFirstApplicationInstance)
+                await this.OnStartedAsAdditionalInstanceAsync();
 
             // Calls the on started method where the user is able to call his own code to set up the application
             await this.OnStartedAsync(new ApplicationStartedEventArgs(e.Args, isFirstApplicationInstance));
