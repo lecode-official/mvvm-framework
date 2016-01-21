@@ -89,7 +89,7 @@ namespace System.Windows.Mvvm.Sample.ViewModels
         public override Task OnActivateAsync()
         {
             // Initializes the command, which marks the currently selected todo list item as finished
-            this.MarkTodoListItemAsFinishedCommand = ReactiveCommand.CreateAsyncTask(x =>
+            this.MarkTodoListItemAsFinishedCommand = ReactiveCommand.CreateAsyncTask(this.WhenAnyValue(x => x.SelectedTodoListItem).Select(x => this.SelectedTodoListItem != null), x =>
             {
                 this.SelectedTodoListItem.IsFinished = true;
                 this.todoListItemsRepository.MarkTodoListItemAsFinished(this.SelectedTodoListItem.Id);
@@ -97,7 +97,7 @@ namespace System.Windows.Mvvm.Sample.ViewModels
             });
 
             // Initializes the command, which removes the currently selected todo list item
-            this.MarkTodoListItemAsFinishedCommand = ReactiveCommand.CreateAsyncTask(x =>
+            this.RemoveTodoListItemCommand = ReactiveCommand.CreateAsyncTask(this.WhenAnyValue(x => x.SelectedTodoListItem).Select(x => this.SelectedTodoListItem != null), x =>
             {
                 this.TodoListItems.Remove(this.SelectedTodoListItem);
                 this.todoListItemsRepository.RemoveTodoListItem(this.SelectedTodoListItem.Id);

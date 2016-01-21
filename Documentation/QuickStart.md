@@ -34,9 +34,9 @@ Secondly the application class has to derive from `MvvmApplication`. After makin
                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                       xmlns:local="clr-namespace:System.Windows.Mvvm.Sample"
                       xmlns:mvvm="clr-namespace:System.Windows.Mvvm.Application;assembly=System.Windows.Mvvm.Application">
-    <Application.Resources>
-
-    </Application.Resources>
+    <mvvm:MvvmApplication.Resources>
+        
+    </mvvm:MvvmApplication.Resources>
 </mvvm:MvvmApplication>
 ```
 
@@ -203,7 +203,6 @@ public class MainViewModel : ReactiveViewModel
     {
         this.todoListItemsRepository = todoListItemsRepository;
     }
-
     private readonly TodoListItemsRepository todoListItemsRepository;
 
     public ReactiveList<TodoListItemViewModel> TodoListItems { get; private set; } = new ReactiveList<TodoListItemViewModel> { ChangeTrackingEnabled = true };
@@ -220,19 +219,21 @@ public class MainViewModel : ReactiveViewModel
 
     public override Task OnActivateAsync()
     {
-        this.MarkTodoListItemAsFinishedCommand = ReactiveCommand.CreateAsyncTask(x =>
+        this.MarkTodoListItemAsFinishedCommand = ReactiveCommand.CreateAsyncTask(this.WhenAnyValue(x => x.SelectedTodoListItem).Select(x => this.SelectedTodoListItem != null), x =>
         {
             this.SelectedTodoListItem.IsFinished = true;
             this.todoListItemsRepository.MarkTodoListItemAsFinished(this.SelectedTodoListItem.Id);
             return Task.FromResult(Unit.Default);
         });
-        this.MarkTodoListItemAsFinishedCommand = ReactiveCommand.CreateAsyncTask(x =>
+
+        this.RemoveTodoListItemCommand = ReactiveCommand.CreateAsyncTask(this.WhenAnyValue(x => x.SelectedTodoListItem).Select(x => this.SelectedTodoListItem != null), x =>
         {
             this.TodoListItems.Remove(this.SelectedTodoListItem);
             this.todoListItemsRepository.RemoveTodoListItem(this.SelectedTodoListItem.Id);
             this.SelectedTodoListItem = null;
             return Task.FromResult(Unit.Default);
         });
+
         return Task.FromResult(0);
     }
 
@@ -246,6 +247,7 @@ public class MainViewModel : ReactiveViewModel
             Description = item.Description,
             IsFinished = item.IsFinished
         }));
+
         return Task.FromResult(0);
     }
 }
@@ -253,7 +255,132 @@ public class MainViewModel : ReactiveViewModel
 
 ## The view
 
-## Navigation
+The MVVM Framework supports a wide array of view scenarios from single-window applications, where only one main window exists that hosts all views, to
+multi-window applications where each view is a different window. Of course a mixture of both paradigms is possible as well. Our sample application will
+have one main window, which will host our views. The views are hosted within `Frame` that is contained in the window. This makes scenarios possible, where
+the window can have its own UI components. The navigation sub-system of the MVVM Framework automatically detects the `Frame` within a window. If no `Frame` is
+found, then the window does not support navigation. So please open the `MainWindow.xaml` that was created when the project was created and add a frame as its
+only control:
+
+```xaml
+<Window x:Class="System.Windows.Mvvm.Sample.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:System.Windows.Mvvm.Sample"
+        mc:Ignorable="d" Title="MVVM Framework Sample" Height="350" Width="525">
+    <Frame />
+</Window>
+```
+
+Now we have to create the main view, which displays our todo list. All views have to be of type `Page` (or be derived from `Page`). So please go ahead and add about
+`MainView.xaml`. At first you have to tell the MVVM Framework which view model belongs to the view, so that the correct view model can be instantiated when navigating
+to the view. This is done via the `ViewModelAttribute`:
+
+```csharp
+[ViewModel(typeof(MainViewModel))]
+public partial class MainView : Page
+{
+    public MainView()
+    {
+        InitializeComponent();
+    }
+}
+```
+
+Now go ahead and open the `MainView.xaml` view and add the following content:
+
+```xaml
+<Page x:Class="System.Windows.Mvvm.Sample.Views.MainView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:System.Windows.Mvvm.Sample.Views"
+      mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <ListBox ItemsSource="{Binding Path=TodoListItems}" SelectedItem="{Binding Path=SelectedTodoListItem}" IsSynchronizedWithCurrentItem="True" Grid.Row="0">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock FontSize="26" FontWeight="Bold" Text="{Binding Path=Title}" Visibility="{Binding Path=IsFinished, Converter={StaticResource InvertedBooleanToVisibilityConverter}}" />
+                        <TextBlock FontSize="26" FontWeight="Bold" Text="{Binding Path=Title}" TextDecorations="Strikethrough" Visibility="{Binding Path=IsFinished, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+                        <TextBlock FontSize="18" Text="{Binding Path=Description}" Visibility="{Binding Path=IsFinished, Converter={StaticResource InvertedBooleanToVisibilityConverter}}" />
+                        <TextBlock FontSize="18" Text="{Binding Path=Description}" TextDecorations="Strikethrough" Visibility="{Binding Path=IsFinished, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right">
+            <Button Command="{Binding Path=MarkTodoListItemAsFinishedCommand}" Padding="5" Margin="10">Mark as finished</Button>
+            <Button Command="{Binding Path=RemoveTodoListItemCommand}" Padding="5" Margin="10">Remove</Button>
+        </StackPanel>
+    </Grid>
+</Page>
+```
+
+As you can see, we're using some value converters. The MVVM Framework provides with a small selection of built-in value converters. In order to be able to use them
+application-wide, you have to add them to the application resources, so go ahead, open the `App.xaml` file and apply the following changes (do not forgot to add the
+new namespace):
+
+```xaml
+<mvvm:MvvmApplication x:Class="System.Windows.Mvvm.Sample.App"
+                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:local="clr-namespace:System.Windows.Mvvm.Sample"
+                      xmlns:mvvm="clr-namespace:System.Windows.Mvvm.Application;assembly=System.Windows.Mvvm.Application"
+                      xmlns:mvvmUIValueConverters="clr-namespace:System.Windows.Mvvm.UI.ValueConverters;assembly=System.Windows.Mvvm.UI.ValueConverters">
+    <mvvm:MvvmApplication.Resources>
+        <ResourceDictionary>
+
+            <!-- #region Value Converters -->
+
+            <mvvmUIValueConverters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <mvvmUIValueConverters:InvertedBooleanToVisibilityConverter x:Key="InvertedBooleanToVisibilityConverter" />
+                
+            <!-- #endregion -->
+            
+        </ResourceDictionary>
+    </mvvm:MvvmApplication.Resources>
+</mvvm:MvvmApplication>
+```
+
+Finally we have to make an initial navigation to the view, which has to be done in the `OnStartedAsync` callback method in the `App.xaml.cs`. You have to specify the
+type of the view and the window to which you want to navigate. The navigation sub-system automatically figures out how to instantiate the window, the page, and the
+view model. It also automatically injects all services that the view model requires in its constructor. To use the navigation sub-system, the `WindowNavigationService`
+has to be bound to the [Ninject](https://github.com/ninject/Ninject) kernel. When navigating a `dynamic` object with parameters can be passed to the view model. The
+properties in the dynamic object are automatically matched and assigned to the public properties of the view model with the same name. The second parameter of the
+`NavigateAsync` method determines whether the window is the main window of the application. The main window has the same lifetime as the application, once the main
+window is closed, the application is shut down as well.
+
+```csharp
+protected override async Task OnStartedAsync(ApplicationStartedEventArgs eventArguments)
+{
+    this.Kernel.Bind<TodoListItemsRepository>().ToSelf().InSingletonScope();
+    this.Kernel.Bind<WindowNavigationService>().ToSelf().InSingletonScope();
+
+    WindowNavigationService windowNavigationService = this.Kernel.Get<WindowNavigationService>();
+    await windowNavigationService.NavigateAsync<MainWindow, MainView>(null, true);
+}
+```
+
+Now we are ready to test our sample application for the first time. After starting the application, you should see something like this:
+
+![Sample application main view](https://github.com/lecode-official/mvvm-framework/blob/master/Documentation/Images/SampleApplicationMainView.jpg "Sample application main view")
+
+## Navigation service
+
+## Application service
+
+## Dialog service
 
 # The broader picture
 
