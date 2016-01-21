@@ -155,6 +155,7 @@
     <Compile Include="Models\TodoListItem.cs" />
     <Compile Include="Repositories\TodoListItemsRepository.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\TodoListItemViewModel.cs" />
     <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>

@@ -141,7 +141,7 @@ the usage of [Ninject](https://github.com/ninject/Ninject).
 
 ## The view model
 
-Now we're ready to implement our first view model. View models have severl lifecycle callback methods as well:
+Now we're ready to implement our first view model. View models have several lifecycle callback methods as well:
 
 - **`OnActivateAsync`** - Is called when the view model is created (before the user is navigated to the view and before the `OnNavigateToAsync` event is called). After the view model was created, it is cached and reused until it is destroyed, therefore `OnActivateAsync` is only called once in the life cycle of a view model.
 - **`OnNavigateToAsync`** - Is called before the view model is navigated to. Other than `OnActivateAsync`, `OnNavigateToAsync` is called everytime the user navigates to this view model.
@@ -153,12 +153,102 @@ so there is standard implementation for the use with [ReactiveUI](https://github
 models from `ReactiveViewModel`, because it has a lot of additional utility functions. As far as the navigation sub-system of the MVVM Framework is concerned, the only
 requirement of a view model is to implement `IViewModel`.
 
+At first we have to create a view model for our todo list items. The todo list item view model is a reactive view on the model layer of out sample application. Since
+this is just a container view model, no view model lifecycle management is needed. This is reflected by the fact, that the view model does not not derive from
+`ReactiveViewModel` but `ReactiveObject` which is [ReactiveUI](https://github.com/reactiveui/ReactiveUI)'s UI of making reactive classes. If you are not yet familiar
+with [ReactiveUI](https://github.com/reactiveui/ReactiveUI), then I recommend, that you head over to [RectiveUI.net](http://reactiveui.net/) and have a look at it
+first, because the MVVM Framework is heavily influenced by and build on [ReactiveUI](https://github.com/reactiveui/ReactiveUI).
+
+```csharp
+public class TodoListItemViewModel : ReactiveObject
+{
+    private string id;
+    public string Id
+    {
+        get { return this.id; }
+        set { this.RaiseAndSetIfChanged(ref this.id, value); }
+    }
+
+    private string title;
+    public string Title
+    {
+        get { return this.title; }
+        set { this.RaiseAndSetIfChanged(ref this.title, value); }
+    }
+
+    private string description;
+    public string Description
+    {
+        get { return this.description; }
+        set { this.RaiseAndSetIfChanged(ref this.description, value); }
+    }
+
+    private bool isFinished;
+    public bool IsFinished
+    {
+        get { return this.isFinished; }
+        set { this.RaiseAndSetIfChanged(ref this.isFinished, value); }
+    }
+}
+```
+
 At first we want to implement a simple view model, which just loads all todo list items and makes it possible to mark them as finished. Please not that the
 `TodoListItemsRepository` is passed to the view model via the constructor. The constructor arguments are automatically injected into the view model by the navigation
 sub-system of the MVVM Framework.
 
 ```csharp
+public class MainViewModel : ReactiveViewModel
+{
+    public MainViewModel(TodoListItemsRepository todoListItemsRepository)
+    {
+        this.todoListItemsRepository = todoListItemsRepository;
+    }
 
+    private readonly TodoListItemsRepository todoListItemsRepository;
+
+    public ReactiveList<TodoListItemViewModel> TodoListItems { get; private set; } = new ReactiveList<TodoListItemViewModel> { ChangeTrackingEnabled = true };
+
+    private TodoListItemViewModel selectedTodoListItem;
+    public TodoListItemViewModel SelectedTodoListItem
+    {
+        get { return this.selectedTodoListItem; }
+        set { this.RaiseAndSetIfChanged(ref this.selectedTodoListItem, value); }
+    }
+
+    public ReactiveCommand<Unit> MarkTodoListItemAsFinishedCommand { get; private set; }
+    public ReactiveCommand<Unit> RemoveTodoListItemCommand { get; private set; }
+
+    public override Task OnActivateAsync()
+    {
+        this.MarkTodoListItemAsFinishedCommand = ReactiveCommand.CreateAsyncTask(x =>
+        {
+            this.SelectedTodoListItem.IsFinished = true;
+            this.todoListItemsRepository.MarkTodoListItemAsFinished(this.SelectedTodoListItem.Id);
+            return Task.FromResult(Unit.Default);
+        });
+        this.MarkTodoListItemAsFinishedCommand = ReactiveCommand.CreateAsyncTask(x =>
+        {
+            this.TodoListItems.Remove(this.SelectedTodoListItem);
+            this.todoListItemsRepository.RemoveTodoListItem(this.SelectedTodoListItem.Id);
+            this.SelectedTodoListItem = null;
+            return Task.FromResult(Unit.Default);
+        });
+        return Task.FromResult(0);
+    }
+
+    public override Task OnNavigateToAsync(NavigationEventArgs e)
+    {
+        this.TodoListItems.Clear();
+        this.TodoListItems.AddRange(this.todoListItemsRepository.GetTodoListItems().Select(item => new TodoListItemViewModel
+        {
+            Id = item.Id,
+            Title = item.Title,
+            Description = item.Description,
+            IsFinished = item.IsFinished
+        }));
+        return Task.FromResult(0);
+    }
+}
 ```
 
 ## The view
