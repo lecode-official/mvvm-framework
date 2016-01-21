@@ -21,7 +21,6 @@ using System.Windows;
 [assembly: AssemblyCulture("")]
 [assembly: CLSCompliant(false)]
 [assembly: ComVisible(false)]
-[assembly: NeutralResourcesLanguage("en-US", UltimateResourceFallbackLocation.Satellite)]
 
 #endregion
 
@@ -33,7 +32,7 @@ using System.Windows;
 
 #region Assembly Version Information
 
-[assembly: AssemblyVersion("0.1.4.*")]
-[assembly: AssemblyFileVersion("0.1.4.0")]
+[assembly: AssemblyVersion("0.1.5.*")]
+[assembly: AssemblyFileVersion("0.1.5.0")]
 
 #endregion
