@@ -167,7 +167,15 @@ namespace System.Windows.Mvvm.Services.Navigation
                 // Subscribes to the closing event of the window, so that the window can be properly closed (with all the lifecycle callbacks)
                 navigationService.Window.Closing += (sender, e) =>
                 {
-                    e.Cancel = navigationService.CloseWindowAsync(true, NavigationReason.WindowClosing, false).Result == NavigationResult.Canceled;
+                    // Calls the close window method in order to execute the lifecycle methods (the window is not closed within this call)
+                    if (navigationService.CloseWindowAsync(true, NavigationReason.WindowClosing, false).Result == NavigationResult.Canceled)
+                    {
+                        e.Cancel = true;
+                        return;
+                    }
+
+                    // Removes the navigation manager from the list of window navigation managers
+                    this.navigationServices.Remove(navigationService);
                 };
 
                 // Returns the result
@@ -501,6 +509,15 @@ namespace System.Windows.Mvvm.Services.Navigation
         public NavigationService GetNavigationService(IViewModel viewModel)
         {
             return this.navigationServices.SingleOrDefault(navigationManager => navigationManager.WindowViewModel == viewModel || navigationManager.CurrentViewModel == viewModel);
+        }
+
+        /// <summary>
+        /// Gets all navigation services of windows that are currently opened.
+        /// </summary>
+        /// <returns>Returns all navigation services.</returns>
+        public IEnumerable<NavigationService> GetNavigationServices()
+        {
+            return this.navigationServices;
         }
 
         /// <summary>
