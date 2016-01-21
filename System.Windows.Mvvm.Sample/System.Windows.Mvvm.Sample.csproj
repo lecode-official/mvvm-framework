@@ -100,6 +100,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Views\CreateTodoListItemView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -114,8 +118,12 @@
     </Compile>
     <Compile Include="Models\TodoListItem.cs" />
     <Compile Include="Repositories\TodoListItemsRepository.cs" />
+    <Compile Include="ViewModels\CreateTodoListItemViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\TodoListItemViewModel.cs" />
+    <Compile Include="Views\CreateTodoListItemView.xaml.cs">
+      <DependentUpon>CreateTodoListItemView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>

@@ -9,6 +9,8 @@ using System.Windows.Mvvm.Services.Navigation;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive;
+using System.Windows.Mvvm.Sample.Views;
+using System.Windows.Mvvm.Sample.Models;
 
 #endregion
 
@@ -25,14 +27,20 @@ namespace System.Windows.Mvvm.Sample.ViewModels
         /// Initializes a new <see cref="MainViewModel"/> instance.
         /// </summary>
         /// <param name="todoListItemsRepository">The todo list items repository, which can be used to manage the items on the todo list.</param>
-        public MainViewModel(TodoListItemsRepository todoListItemsRepository)
+        public MainViewModel(NavigationService navigationService, TodoListItemsRepository todoListItemsRepository)
         {
+            this.navigationService = navigationService;
             this.todoListItemsRepository = todoListItemsRepository;
         }
 
         #endregion
 
         #region Private Fields
+
+        /// <summary>
+        /// Contains the navigation service, which is used to navigate between views.
+        /// </summary>
+        private readonly NavigationService navigationService;
 
         /// <summary>
         /// Contains the todo list items repository, which can be used to manage the items on the todo list.
@@ -79,6 +87,11 @@ namespace System.Windows.Mvvm.Sample.ViewModels
         /// </summary>
         public ReactiveCommand<Unit> RemoveTodoListItemCommand { get; private set; }
 
+        /// <summary>
+        /// Gets the command, which navigates the user to the create todo list item view.
+        /// </summary>
+        public ReactiveCommand<NavigationResult> CreateTodoListItemCommand { get; private set; }
+
         #endregion
 
         #region ReactiveViewModel Implementation
@@ -105,6 +118,9 @@ namespace System.Windows.Mvvm.Sample.ViewModels
                 return Task.FromResult(Unit.Default);
             });
 
+            // Initializes the command, which navigates the user to the create todo list item view
+            this.CreateTodoListItemCommand = ReactiveCommand.CreateAsyncTask(async x =>  await this.navigationService.NavigateAsync<CreateTodoListItemView>());
+
             // Since no asynchronous operation was performed, an empty task is returned
             return Task.FromResult(0);
         }
@@ -119,13 +135,16 @@ namespace System.Windows.Mvvm.Sample.ViewModels
             this.TodoListItems.Clear();
 
             // Loads all the todo list items from the repository and stores them in a list, so that the view has access to them
-            this.TodoListItems.AddRange(this.todoListItemsRepository.GetTodoListItems().Select(item => new TodoListItemViewModel
+            foreach (TodoListItem todoListItem in this.todoListItemsRepository.GetTodoListItems().ToList())
             {
-                Id = item.Id,
-                Title = item.Title,
-                Description = item.Description,
-                IsFinished = item.IsFinished
-            }));
+                this.TodoListItems.Add(new TodoListItemViewModel
+                {
+                    Id = todoListItem.Id,
+                    Title = todoListItem.Title,
+                    Description = todoListItem.Description,
+                    IsFinished = todoListItem.IsFinished
+                });
+            }
 
             // Since no asynchronous operation was performed, an empty task is returned
             return Task.FromResult(0);
