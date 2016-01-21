@@ -381,9 +381,165 @@ Now we are ready to test our sample application for the first time. After starti
 
 ## Navigation service
 
+The navigation sub-system of the MVVM Framework is comprised of two services: `WindowNavigationService` and `NavigationService`. The `WindowNavigationService` is for creating
+new windows and opening them. When a window supports navigation (which is when it contains a `Frame`), then the window is a assigned an instance of `NavigationService`,
+which can be used for navigation between views *within* the window.
+
+The navigation sub-system is also the component that takes care of instantiating view models, and injecting any dependencies into it. It also automatically injects the correct
+`NavigationService` for the current window into the view model if required. This makes navigation extremely easy, if you want to navigate to a new window, then just use the
+`WindowNavigationService`, if you want to navigate to another view within the current window, then use the `NavigationService`.
+
+Lets say we want to create a second view, which lets the user create new todo list items. Then we would create a new view model (`CreateTodoListItemViewModel.cs`) for the view.
+In order to use the `NavigationService` for the current window, we would let the navigation sub-system inject it into the constructor of our new view model:
+
+```csharp
+public class CreateTodoListItemViewModel : ReactiveViewModel
+{
+    public CreateTodoListItemViewModel(NavigationService navigationService, TodoListItemsRepository todoListItemsRepository)
+    {
+        this.navigationService = navigationService;
+        this.todoListItemsRepository = todoListItemsRepository;
+    }
+
+    private readonly NavigationService navigationService;
+    private readonly TodoListItemsRepository todoListItemsRepository;
+
+    private string title;
+    public string Title
+    {
+        get {  return this.title; }
+        set { this.RaiseAndSetIfChanged(ref this.title, value); }
+    }
+
+    private string description;
+    public string Description
+    {
+        get { return this.description; }
+        set { this.RaiseAndSetIfChanged(ref this.description, value); }
+    }
+
+    public ReactiveCommand<NavigationResult> CancelCommand { get; private set; }
+    public ReactiveCommand<NavigationResult> SaveCommand { get; private set; }
+
+    public override Task OnActivateAsync()
+    {
+        this.CancelCommand = ReactiveCommand.CreateAsyncTask(async x => await this.navigationService.NavigateBackAsync());
+
+        this.SaveCommand = ReactiveCommand.CreateAsyncTask(async x =>
+        {
+            this.todoListItemsRepository.CreateTodoListItem(this.Title, this.Description);
+            return await this.navigationService.NavigateBackAsync();
+        });
+
+        return Task.FromResult(0);
+    }
+}
+```
+
+In this sample we use the `NavigateBackAsync` to navigate back to the main view of the application. Now we need to create a new view for the creation:
+
+```xaml
+<Page x:Class="System.Windows.Mvvm.Sample.Views.CreateTodoListItemView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:System.Windows.Mvvm.Sample.Views"
+      mc:Ignorable="d" d:DesignHeight="130" d:DesignWidth="300">
+
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock FontSize="18" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0">Create new todo list item</TextBlock>
+
+        <TextBlock Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center">Title</TextBlock>
+        <TextBox Grid.Column="1" Grid.Row="1" Margin="2" Text="{Binding Path=Title}"></TextBox>
+
+        <TextBlock Grid.Column="0" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center">Description</TextBlock>
+        <TextBox Grid.Column="1" Grid.Row="2" Margin="2" Text="{Binding Path=Description}"></TextBox>
+
+        <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4" HorizontalAlignment="Right">
+            <Button Command="{Binding Path=CancelCommand}" Padding="5" Margin="10">Cancel</Button>
+            <Button Command="{Binding Path=SaveCommand}" Padding="5" Margin="10">Save</Button>
+        </StackPanel>
+    </Grid>
+</Page>
+```
+
+Don't forget to specify the view model for the view in the `CreateTodoListItemView.xaml.cs`:
+
+```csharp
+[ViewModel(typeof(CreateTodoListItemViewModel))]
+public partial class CreateTodoListItemView : Page
+{
+    public CreateTodoListItemView()
+    {
+        InitializeComponent();
+    }
+}
+```
+
+Now we just need to add the code for the navigation to the `MainViewModel`. We need to adapt the constructor, so that we can get a hold of the `NavigationService`:
+
+```csharp
+public MainViewModel(NavigationService navigationService, TodoListItemsRepository todoListItemsRepository)
+{
+    this.navigationService = navigationService;
+    this.todoListItemsRepository = todoListItemsRepository;
+}
+
+private readonly NavigationService navigationService;
+private readonly TodoListItemsRepository todoListItemsRepository;
+```
+
+Then you need to add another command to the `MainViewModel`:
+
+```csharp
+public ReactiveCommand<NavigationResult> CreateTodoListItemCommand { get; private set; }
+
+public override Task OnActivateAsync()
+{
+    this.MarkTodoListItemAsFinishedCommand = ReactiveCommand.CreateAsyncTask(this.WhenAnyValue(x => x.SelectedTodoListItem).Select(x => this.SelectedTodoListItem != null), x =>
+    {
+        this.SelectedTodoListItem.IsFinished = true;
+        this.todoListItemsRepository.MarkTodoListItemAsFinished(this.SelectedTodoListItem.Id);
+        return Task.FromResult(Unit.Default);
+    });
+
+    this.RemoveTodoListItemCommand = ReactiveCommand.CreateAsyncTask(this.WhenAnyValue(x => x.SelectedTodoListItem).Select(x => this.SelectedTodoListItem != null), x =>
+    {
+        this.TodoListItems.Remove(this.SelectedTodoListItem);
+        this.todoListItemsRepository.RemoveTodoListItem(this.SelectedTodoListItem.Id);
+        this.SelectedTodoListItem = null;
+        return Task.FromResult(Unit.Default);
+    });
+
+    this.CreateTodoListItemCommand = ReactiveCommand.CreateAsyncTask(async x =>  await this.navigationService.NavigateAsync<CreateTodoListItemView>());
+
+    return Task.FromResult(0);
+}
+```
+
+Here we use the `NavigateAsync` method. You have to specify the type of the view as the generic parameter. Optionally you could pass a `dynamic` object with parameters to the
+`NavigateAsync` method. The properties in the dynamic object are automatically matched and assigned to the public properties of the view model with the same name.
+
 ## Application service
 
+
+
 ## Dialog service
+
+
 
 # The broader picture
 
