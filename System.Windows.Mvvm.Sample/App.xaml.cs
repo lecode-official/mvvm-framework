@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Mvvm.Application;
 using System.Windows.Mvvm.Sample.Repositories;
 using System.Windows.Mvvm.Sample.Views;
+using System.Windows.Mvvm.Services.Application;
 using System.Windows.Mvvm.Services.Navigation;
 
 #endregion
@@ -28,6 +29,7 @@ namespace System.Windows.Mvvm.Sample
             // Binds the todo list item repository to the Ninject kernel, so that it can be automatically injected into view models
             this.Kernel.Bind<TodoListItemsRepository>().ToSelf().InSingletonScope();
             this.Kernel.Bind<WindowNavigationService>().ToSelf().InSingletonScope();
+            this.Kernel.Bind<ApplicationService>().ToSelf().InSingletonScope();
 
             // Navigates the user to the main view
             WindowNavigationService windowNavigationService = this.Kernel.Get<WindowNavigationService>();

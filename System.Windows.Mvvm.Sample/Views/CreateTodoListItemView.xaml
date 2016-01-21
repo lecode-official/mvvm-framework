@@ -8,7 +8,7 @@
       xmlns:local="clr-namespace:System.Windows.Mvvm.Sample.Views"
       mc:Ignorable="d" d:DesignHeight="130" d:DesignWidth="300">
 
-    <Grid Margin="10">
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />

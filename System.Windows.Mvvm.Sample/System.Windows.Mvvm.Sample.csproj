@@ -120,6 +120,7 @@
     <Compile Include="Repositories\TodoListItemsRepository.cs" />
     <Compile Include="ViewModels\CreateTodoListItemViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\TodoListItemViewModel.cs" />
     <Compile Include="Views\CreateTodoListItemView.xaml.cs">
       <DependentUpon>CreateTodoListItemView.xaml</DependentUpon>

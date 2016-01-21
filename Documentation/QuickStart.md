@@ -447,7 +447,7 @@ In this sample we use the `NavigateBackAsync` to navigate back to the main view 
       xmlns:local="clr-namespace:System.Windows.Mvvm.Sample.Views"
       mc:Ignorable="d" d:DesignHeight="130" d:DesignWidth="300">
 
-    <Grid Margin="10">
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
@@ -549,7 +549,88 @@ The end result should look somtehing like this:
 
 ## Application service
 
+The `WindowNavigationService` and the `NavigationService` are not the only services that come with the MVVM Framework. The MVVM Framework provides a wide array of services,
+that are helpful to all kinds of applications. One such service is the `ApplicationService`, which provides helpful lifecycle events, that can be subscribed to from anywhere
+in the application. It also provides some utility methods to shutdown and restart the application.
 
+We`ll use the `ApplicationService` to add a quit button to the application. This is also the perfect moment to introduce you to another helpful feature of the MVVM Framework:
+window view models. Windows may, just as views, have their own view model. As stated above, windows may have more UI than just the `Frame` for hosting views. We`ll add the
+quit button directly to the `MainWindow` because from there it is accessible from everywhere in the application.
+
+Firstly we have to add a new view model for the `MainWindow` to the project - `MainWindowViewModel`:
+
+```csharp
+public class MainWindowViewModel : ReactiveViewModel
+{
+    public MainWindowViewModel(ApplicationService applicationService)
+    {
+        this.applicationService = applicationService;
+    }
+
+    private readonly ApplicationService applicationService;
+
+    public ReactiveCommand<Unit> ShutdownApplicationCommand { get; private set; }
+
+    public override Task OnActivateAsync()
+    {
+        this.ShutdownApplicationCommand = ReactiveCommand.CreateAsyncTask(x =>
+        {
+            this.applicationService.Shutdown();
+            return Task.FromResult(Unit.Default);
+        });
+        return Task.FromResult(0);
+    }
+}
+```
+
+In order to be able to get the `applicationService` injected, it must be bound to the [Ninject](https://github.com/ninject/Ninject) kernel, so head over to the `App.xaml.cs`
+and add the following line to the `OnStartedAsync` method:
+
+```csharp
+this.Kernel.Bind<ApplicationService>().ToSelf().InSingletonScope();
+```
+
+Finally we have to add the quit button to the `MainWindow`:
+
+```xaml
+<Window x:Class="System.Windows.Mvvm.Sample.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:System.Windows.Mvvm.Sample"
+        mc:Ignorable="d" Title="MVVM Framework Sample" Height="350" Width="525">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Frame Grid.Row="0" />
+
+        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right">
+            <Button Command="{Binding Path=ShutdownApplicationCommand}" Padding="5" Margin="10">Quit</Button>
+        </StackPanel>
+    </Grid>
+</Window>
+```
+
+Do not forget to tell the navigation sub-system which view model to use for the `MainWindow`:
+
+```csharp
+[ViewModel(typeof(MainWindowViewModel))]
+public partial class MainWindow : Window
+{
+    public MainWindow()
+    {
+        InitializeComponent();
+    }
+}
+```
+
+The finished result should look like this:
+
+![Sample application main window](https://github.com/lecode-official/mvvm-framework/blob/master/Documentation/Images/SampleApplicationMainWindow.jpg "Sample application main window")
 
 ## Dialog service
 

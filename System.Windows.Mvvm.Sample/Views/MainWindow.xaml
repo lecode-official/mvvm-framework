@@ -7,5 +7,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:System.Windows.Mvvm.Sample"
         mc:Ignorable="d" Title="MVVM Framework Sample" Height="350" Width="525">
-    <Frame />
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Frame Grid.Row="0" />
+
+        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right">
+            <Button Command="{Binding Path=ShutdownApplicationCommand}" Padding="5" Margin="10">Quit</Button>
+        </StackPanel>
+    </Grid>
 </Window>
