@@ -14,7 +14,7 @@ project would not have happened.
 
 ## Using the project
 
-The project is available on NuGet: https://www.nuget.org/packages/System.Windows.Mvvm/0.1.3.
+The project is available on NuGet: https://www.nuget.org/packages/System.Windows.Mvvm/0.1.4.
 
 ```batch
 PM> Install-Package System.Windows.Mvvm
