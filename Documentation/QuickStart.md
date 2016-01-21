@@ -4,8 +4,8 @@ The MVVM Framework builds upon the work done by [ReactiveUI](https://github.com/
 as application lifecycle management, navigation, and services most applications need. This makes it much easier to implement MVVM-based applications. Right now the
 project only supports WPF projects, but this might change in the future and may libraries for mobile applications may be added.
 
-Many parts of the source code were left out for brevity. If you want to view the whole source code for the sample application, you can find it
-[here](https://github.com/lecode-official/mvvm-framework/tree/master/System.Windows.Mvvm.Sample).
+Many parts of the source code were left out for brevity. The code samples have also been stripped of all comments. If you want to view the whole source code for the
+sample application, you can find it [here](https://github.com/lecode-official/mvvm-framework/tree/master/System.Windows.Mvvm.Sample).
 
 # Using the MVVM Framework
 
@@ -63,11 +63,107 @@ and navigate to the initial view of the application.
 
 ## The model
 
+The sample application we are building is the canonical todo list app. First we start with the model, which is fairly easy. For the sake of briefness the model layer
+of the application only consists of an in-memory store. In a real-world application a database or a file-based storage system should be used. The model layer consists
+of `TodoListItem` class, which holds the information about a single todo list item:
+
+```csharp
+public class TodoListItem
+{
+    public string Id { get; set; } = Guid.NewGuid().ToString();
+    public string Title { get; set; }
+    public string Description { get; set; }
+    public bool IsFinished { get; set; }
+}
+```
+
+For managing the todo list, there is the `TodoListItemsRepository`, which implements the repository pattern:
+
+```csharp
+public class TodoListItemsRepository
+{
+    private static List<TodoListItem> todoListItems = new List<TodoListItem>
+    {
+        new TodoListItem
+        {
+            Title = "Feed the dog",
+            Description = "Don't forgot to buy Bingo's favorite dog chow."
+        },
+        new TodoListItem
+        {
+            Title = "Buy milk",
+            Description = "Lactose free please."
+        }
+    };
+
+    public IEnumerable<TodoListItem> GetTodoListItems() => TodoListItemsRepository.todoListItems;
+
+    public TodoListItem GetTodoListItem(string id) => TodoListItemsRepository.todoListItems.FirstOrDefault(item => item.Id == id);
+
+    public TodoListItem CreateTodoListItem(string title, string description)
+    {
+        TodoListItem todoListItem = new TodoListItem
+        {
+            Title = title,
+            Description = description
+        };
+        TodoListItemsRepository.todoListItems.Add(todoListItem);
+        return todoListItem;
+    }
+
+    public void RemoveTodoListItem(string id) => TodoListItemsRepository.todoListItems.Remove(this.GetTodoListItem(id));
+
+    public void MarkTodoListItemAsFinished(string id) => this.GetTodoListItem(id).IsFinished = true;
+}
+```
+
+## Dependency injection
+
+The MVVM Framework has a powerful dependency injection mechanism, which automatically injects components into view models. The inversion of control container of
+choice is [Ninject](https://github.com/ninject/Ninject). This is the only inversion of control container which is currently supported by the MVVM Framework, but
+there plans to support a wide array of inversion of control containers in the future.
+
+In order to make our `TodoListItemsRepository` application-wide, head over to the `App.xaml.cs` and implement the `OnStartedAsync` method. Then bind the
+`TodoListItemsRepository` to the [Ninject](https://github.com/ninject/Ninject) kernel. `InSingletonScope` is used so that all our view models use the same instance
+of the repository.
+
+```csharp
+protected override Task OnStartedAsync(ApplicationStartedEventArgs eventArguments)
+{
+    this.Kernel.Bind<TodoListItemsRepository>().ToSelf().InSingletonScope();
+    return Task.FromResult(0);
+}
+```
+
+Use the `OnStartedAsync` to bind all your services to the [Ninject](https://github.com/ninject/Ninject) kernel. I you haven't used Ninject (or dependency injection)
+before, then head over to [Ninject.org](http://www.ninject.org/). They have a lot of comprehensive tutorials explaining the concepts behind inversion of control and
+the usage of [Ninject](https://github.com/ninject/Ninject).
+
 ## The view model
+
+Now we're ready to implement our first view model. View models have severl lifecycle callback methods as well:
+
+- **`OnActivateAsync`** - Is called when the view model is created (before the user is navigated to the view and before the `OnNavigateToAsync` event is called). After the view model was created, it is cached and reused until it is destroyed, therefore `OnActivateAsync` is only called once in the life cycle of a view model.
+- **`OnNavigateToAsync`** - Is called before the view model is navigated to. Other than `OnActivateAsync`, `OnNavigateToAsync` is called everytime the user navigates to this view model.
+- **`OnNavigateFromAsync`** - Is called before the view model is navigated away from. Other than `OnDeactivateAsync`, `OnNavigateFromAsync` is called everytime the user navigates away from this view model.
+- **`OnDeactivateAsync`** - Is called when the view model gets deactivated. The view model only gets deactivated when the navigation stack of the window, that contains the view of this view model, is cleared, or when the windows, containing the view of this view model, is closed. Therefore `OnDeactivateAsync` is only called once in the lifecycle of a view model.
+
+All view models have to implement the `IViewModel` interface. As mentioned before, the MVVM Framework builds upon [ReactiveUI](https://github.com/reactiveui/ReactiveUI),
+so there is standard implementation for the use with [ReactiveUI](https://github.com/reactiveui/ReactiveUI): `ReactiveViewModel`. You should always derive your view
+models from `ReactiveViewModel`, because it has a lot of additional utility functions. As far as the navigation sub-system of the MVVM Framework is concerned, the only
+requirement of a view model is to implement `IViewModel`.
+
+At first we want to implement a simple view model, which just loads all todo list items and makes it possible to mark them as finished. Please not that the
+`TodoListItemsRepository` is passed to the view model via the constructor. The constructor arguments are automatically injected into the view model by the navigation
+sub-system of the MVVM Framework.
+
+```csharp
+
+```
 
 ## The view
 
-## navigation
+## Navigation
 
 # The broader picture
 
