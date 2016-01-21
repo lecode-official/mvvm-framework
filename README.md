@@ -30,3 +30,8 @@ git pull https://github.com/lecode-official/mvvm-framework.git
 The solution is split up in several light-weight projects, which each contain a small portion of the functionality.
 
 For more information, please refer to the [Documentation](https://github.com/lecode-official/mvvm-framework/blob/master/Documentation/Documentation.md).
+
+## Contributions
+
+Currently we are accepting no official contributors, but you want to help anyway, we would greatly appreciate feedback and bug reports. To file a bug, please use
+GitHub's issue system. Alternatively you can clone the repository and send us a pull request.
