@@ -176,6 +176,8 @@ namespace System.Windows.Mvvm.Services.Navigation
 
                     // Removes the navigation manager from the list of window navigation managers
                     this.navigationServices.Remove(navigationService);
+                    if (this.WindowClosed != null)
+                        this.WindowClosed(this, new WindowEventArgs(navigationService));
                 };
 
                 // Returns the result
@@ -243,6 +245,8 @@ namespace System.Windows.Mvvm.Services.Navigation
 
             // Adds the new navigation service to the list of navigation services
             this.navigationServices.Add(result.NavigationService);
+            if (this.WindowCreated != null)
+                this.WindowCreated(this, new WindowEventArgs(result.NavigationService));
 
             // Sets the window as the new main window, if the user requested us to do so
             if (Application.Current != null)
@@ -306,6 +310,8 @@ namespace System.Windows.Mvvm.Services.Navigation
 
             // Creates and adds the new navigation manager to the list of navigation managers
             this.navigationServices.Add(result.NavigationService);
+            if (this.WindowCreated != null)
+                this.WindowCreated(this, new WindowEventArgs(result.NavigationService));
 
             // Sets the window as the new main window, if the user requested us to do so
             if (Application.Current != null)
@@ -496,6 +502,8 @@ namespace System.Windows.Mvvm.Services.Navigation
 
             // Removes the navigation manager from the list of window navigation managers
             this.navigationServices.Remove(navigationService);
+            if (this.WindowClosed != null)
+                this.WindowClosed(this, new WindowEventArgs(navigationService));
 
             // Since the window was closed, navigated is returned
             return NavigationResult.Navigated;
@@ -529,6 +537,20 @@ namespace System.Windows.Mvvm.Services.Navigation
             await Task.WhenAll(this.navigationServices.Select(navigationService => navigationService.CloseWindowAsync(false, NavigationReason.ApplicationExit)));
             this.navigationServices.Clear();
         }
+
+        #endregion
+
+        #region Public Events
+
+        /// <summary>
+        /// Is raised when the window navigation service created a new window.
+        /// </summary>
+        public event EventHandler<WindowEventArgs> WindowCreated;
+
+        /// <summary>
+        /// Is raised when the window navigation service closes a window.
+        /// </summary>
+        public event EventHandler<WindowEventArgs> WindowClosed;
 
         #endregion
 
