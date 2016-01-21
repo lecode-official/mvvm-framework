@@ -41,7 +41,7 @@
     <Owners>David Neumann, Lukas Rögner</Owners>
     <Summary>This MVVM framework was build on top of ReactiveUI. It enhances ReactiveUI with a lot of utility functions such as windowing and navigation services.</Summary>
     <Description>This MVVM framework was build on top of ReactiveUI. It enhances ReactiveUI with a lot of utility functions such as windowing and navigation services. This project aims at building on those features that ReactiveUI shines in and provide extra functionality to make implementing an application on the basis of the MVVM pattern easier.</Description>
-    <ReleaseNotes>Fixed another bug in the WindowNavigationService and added another utility method to it, which makes it easier to see what windows are currently open.</ReleaseNotes>
+    <ReleaseNotes>Fixed a bug in the WindowNavigationService and the NavigationService, which caused the app to crash when no view model was specfied. Also added some utility methods and events to it, which makes it easier to see what windows are currently open.</ReleaseNotes>
     <ProjectUrl>https://github.com/lecode-official/mvvm-framework</ProjectUrl>
     <LicenseUrl>https://github.com/lecode-official/mvvm-framework/blob/master/LICENSE</LicenseUrl>
     <Copyright>Copyright © David Neumann &amp; Lukas Rögner</Copyright>
