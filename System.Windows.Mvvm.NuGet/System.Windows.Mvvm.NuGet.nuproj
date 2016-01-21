@@ -35,13 +35,13 @@
   <Import Project="$(NuProjPath)\NuProj.props" Condition="Exists('$(NuProjPath)\NuProj.props')" />
   <PropertyGroup Label="Configuration">
     <Id>System.Windows.Mvvm</Id>
-    <Version>0.1.4</Version>
+    <Version>0.1.5</Version>
     <Title>MVVM Framework</Title>
     <Authors>David Neumann, Lukas Rögner</Authors>
     <Owners>David Neumann, Lukas Rögner</Owners>
     <Summary>This MVVM framework was build on top of ReactiveUI. It enhances ReactiveUI with a lot of utility functions such as windowing and navigation services.</Summary>
     <Description>This MVVM framework was build on top of ReactiveUI. It enhances ReactiveUI with a lot of utility functions such as windowing and navigation services. This project aims at building on those features that ReactiveUI shines in and provide extra functionality to make implementing an application on the basis of the MVVM pattern easier.</Description>
-    <ReleaseNotes>Fixed bug in the WindowNavigationService, which caused the view models to not be deactivated when the user clicked the closing button of the window.</ReleaseNotes>
+    <ReleaseNotes>Fixed another bug in the WindowNavigationService and added another utility method to it, which makes it easier to see what windows are currently open.</ReleaseNotes>
     <ProjectUrl>https://github.com/lecode-official/mvvm-framework</ProjectUrl>
     <LicenseUrl>https://github.com/lecode-official/mvvm-framework/blob/master/LICENSE</LicenseUrl>
     <Copyright>Copyright © David Neumann &amp; Lukas Rögner</Copyright>
