@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IViewModel.cs" />
+    <Compile Include="WindowEventArgs.cs" />
     <Compile Include="NavigationEventArgs.cs" />
     <Compile Include="NavigationReason.cs" />
     <Compile Include="NavigationResult.cs" />
