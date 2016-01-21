@@ -520,12 +520,13 @@ namespace System.Windows.Mvvm.Services.Navigation
         }
 
         /// <summary>
-        /// Gets all navigation services of windows that are currently opened.
+        /// Retrieves the navigation services for the specified type of window.
         /// </summary>
-        /// <returns>Returns all navigation services.</returns>
-        public IEnumerable<NavigationService> GetNavigationServices()
+        /// <typeparam name="TWindow">The type of the window for which existing navigation services are to be retrieved.</typeparam>
+        /// <returns>Returns the navigation services for the type of window.</returns>
+        public IEnumerable<NavigationService> GetNavigationServices<TWindow>() where TWindow : Window
         {
-            return this.navigationServices;
+            return this.navigationServices.Where(navigationService => navigationService.Window != null && navigationService.Window is TWindow).ToList();
         }
 
         /// <summary>
