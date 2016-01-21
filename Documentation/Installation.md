@@ -1,6 +1,6 @@
 # Thank you for installing the MVVM Framework
 
-![MVVM Framework Logo](https://github.com/lecode-official/mvvm-framework/blob/master/Documentation/Images/Logo1024x1024.png "MVVM Framework Logo")
+![MVVM Framework Logo](https://github.com/lecode-official/mvvm-framework/blob/master/Documentation/Images/LogoHeader.png "MVVM Framework Logo")
 
 This MVVM Framework was build on top of [ReactiveUI](https://github.com/reactiveui/ReactiveUI). It enhances ReactiveUI with a lot of utility functions such as
 windowing and navigation services. This project aims at building on those features that [ReactiveUI](https://github.com/reactiveui/ReactiveUI) shines in and
