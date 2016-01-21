@@ -7,6 +7,7 @@ using System.Windows.Mvvm.Application;
 using System.Windows.Mvvm.Sample.Repositories;
 using System.Windows.Mvvm.Sample.Views;
 using System.Windows.Mvvm.Services.Application;
+using System.Windows.Mvvm.Services.Dialog;
 using System.Windows.Mvvm.Services.Navigation;
 
 #endregion
@@ -26,10 +27,11 @@ namespace System.Windows.Mvvm.Sample
         /// <param name="eventArguments">The event arguments, that contains all necessary information about the application startup like the command line arguments.</param>
         protected override async Task OnStartedAsync(ApplicationStartedEventArgs eventArguments)
         {
-            // Binds the todo list item repository to the Ninject kernel, so that it can be automatically injected into view models
+            // Binds the todo list item repository and some services to the Ninject kernel, so that it can be automatically injected into view models
             this.Kernel.Bind<TodoListItemsRepository>().ToSelf().InSingletonScope();
             this.Kernel.Bind<WindowNavigationService>().ToSelf().InSingletonScope();
             this.Kernel.Bind<ApplicationService>().ToSelf().InSingletonScope();
+            this.Kernel.Bind<DialogService>().ToSelf().InSingletonScope();
 
             // Navigates the user to the main view
             WindowNavigationService windowNavigationService = this.Kernel.Get<WindowNavigationService>();

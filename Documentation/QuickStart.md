@@ -634,10 +634,62 @@ The finished result should look like this:
 
 ## Dialog service
 
+There is another useful service that the MVVM Framework has in store for you: the `DialogService`. The `DialogService` provides an easy to use API for using the
+various dialogs, e.g. message box, open file dialog, and open directory dialog, that Windows offers.
 
+In this last section we want to use the dialog service to ask users if they really want to cancel the creation of a todo list item. By now you probably know The
+drill, in order to use the `DialogService` you have to bind it to the [Ninject](https://github.com/ninject/Ninject) kernel in the `OnStartedAsync` method of the
+`App` class. Just add the following line to the `OnStartedAsync` method:
+
+```csharp
+this.Kernel.Bind<DialogService>().ToSelf().InSingletonScope();
+```
+
+Now we can get it injected into the constructor of the `CreateTodoListItemViewModel`:
+
+```csharp
+public CreateTodoListItemViewModel(NavigationService navigationService, DialogService dialogService, TodoListItemsRepository todoListItemsRepository)
+{
+    this.navigationService = navigationService;
+    this.dialogService = dialogService;
+    this.todoListItemsRepository = todoListItemsRepository;
+}
+
+private readonly NavigationService navigationService;
+private readonly DialogService dialogService;
+private readonly TodoListItemsRepository todoListItemsRepository;
+```
+
+Finally we can adapt the `CancelCommand` to use the dialog service:
+
+```csharp
+public ReactiveCommand<Unit> CancelCommand { get; private set; }
+public ReactiveCommand<NavigationResult> SaveCommand { get; private set; }
+
+public override Task OnActivateAsync()
+{
+    this.CancelCommand = ReactiveCommand.CreateAsyncTask(async x =>
+    {
+        if (await this.dialogService.ShowMessageBoxDialogAsync("Do you really want to cancel the creation of the todo list item.", "Confirm cancellation", Services.Dialog.MessageBoxButton.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            await this.navigationService.NavigateBackAsync();
+    });
+
+    this.SaveCommand = ReactiveCommand.CreateAsyncTask(async x =>
+    {
+        this.todoListItemsRepository.CreateTodoListItem(this.Title, this.Description);
+        return await this.navigationService.NavigateBackAsync();
+    });
+
+    return Task.FromResult(0);
+}
+```
+
+The finished result should look like this:
+
+![Demonstrating the dialog service](https://github.com/lecode-official/mvvm-framework/blob/master/Documentation/Images/DialogService.jpg "Demonstrating the dialog service")
 
 # The broader picture
 
-There are many more features that come with the MVVM Framework that are out of scope of this quick start guide. If you want to dive deeper then head over to the
-[Documentation](https://github.com/lecode-official/mvvm-framework/blob/master/Documentation/Documentation.md), which has detailed instructions for all of the
-features of the MVVM framework.
+Now you should be equipped to start developing applications using the MVVM Framework. There are many more features that come with the MVVM Framework that are out
+of scope of this quick start guide. If you want to dive deeper then head over to the [Documentation](https://github.com/lecode-official/mvvm-framework/blob/master/Documentation/Documentation.md),
+which has detailed instructions for all of the features of the MVVM framework.
