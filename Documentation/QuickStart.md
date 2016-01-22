@@ -2,7 +2,7 @@
 
 The MVVM Framework builds upon the work done by [ReactiveUI](https://github.com/reactiveui/ReactiveUI). It adds several utility functions, such
 as application lifecycle management, navigation, and services most applications need. This makes it much easier to implement MVVM-based applications. Right now the
-project only supports WPF projects, but this might change in the future and may libraries for mobile applications may be added.
+project only supports WPF projects, but this might change in the future and libraries for mobile applications may be added.
 
 Many parts of the source code were left out for brevity. The code samples have also been stripped of all comments. If you want to view the whole source code for the
 sample application, you can find it [here](https://github.com/lecode-official/mvvm-framework/tree/master/System.Windows.Mvvm.Sample).
@@ -120,10 +120,10 @@ public class TodoListItemsRepository
 ## Dependency Injection
 
 The MVVM Framework has a powerful dependency injection mechanism, which automatically injects components into view models. The inversion of control container of
-choice is [Ninject](https://github.com/ninject/Ninject). This is the only inversion of control container which is currently supported by the MVVM Framework, but
+choice is [Ninject](https://github.com/ninject/Ninject). This is the only inversion of control container that is currently supported by the MVVM Framework, but
 there plans to support a wide array of inversion of control containers in the future.
 
-In order to make our `TodoListItemsRepository` application-wide, head over to the `App.xaml.cs` and implement the `OnStartedAsync` method. Then bind the
+In order to make our `TodoListItemsRepository` available application-wide, head over to the `App.xaml.cs` and implement the `OnStartedAsync` method. Then bind the
 `TodoListItemsRepository` to the [Ninject](https://github.com/ninject/Ninject) kernel. `InSingletonScope` is used so that all our view models use the same instance
 of the repository.
 
@@ -135,9 +135,9 @@ protected override Task OnStartedAsync(ApplicationStartedEventArgs eventArgument
 }
 ```
 
-Use the `OnStartedAsync` to bind all your services to the [Ninject](https://github.com/ninject/Ninject) kernel. I you haven't used Ninject (or dependency injection)
-before, then head over to [Ninject.org](http://www.ninject.org/). They have a lot of comprehensive tutorials explaining the concepts behind inversion of control and
-the usage of [Ninject](https://github.com/ninject/Ninject).
+Use the `OnStartedAsync` to bind all your services to the [Ninject](https://github.com/ninject/Ninject) kernel. I you haven't used Ninject (or dependency injection
+in general) before, then head over to [Ninject.org](http://www.ninject.org/). They have a lot of comprehensive tutorials explaining the concepts behind inversion of
+control and the usage of [Ninject](https://github.com/ninject/Ninject).
 
 ## The View Model
 
@@ -146,7 +146,7 @@ Now we're ready to implement our first view model. View models have several life
 - **`OnActivateAsync`** - Is called when the view model is created (before the user is navigated to the view and before the `OnNavigateToAsync` event is called). After the view model was created, it is cached and reused until it is destroyed, therefore `OnActivateAsync` is only called once in the life cycle of a view model.
 - **`OnNavigateToAsync`** - Is called before the view model is navigated to. Other than `OnActivateAsync`, `OnNavigateToAsync` is called everytime the user navigates to this view model.
 - **`OnNavigateFromAsync`** - Is called before the view model is navigated away from. Other than `OnDeactivateAsync`, `OnNavigateFromAsync` is called everytime the user navigates away from this view model.
-- **`OnDeactivateAsync`** - Is called when the view model gets deactivated. The view model only gets deactivated when the navigation stack of the window, that contains the view of this view model, is cleared, or when the windows, containing the view of this view model, is closed. Therefore `OnDeactivateAsync` is only called once in the lifecycle of a view model.
+- **`OnDeactivateAsync`** - Is called when the view model gets deactivated. The view model only gets deactivated when the navigation stack of the window, that contains the view of this view model, is cleared, or when the window, containing the view of this view model, is closed. Therefore `OnDeactivateAsync` is only called once in the lifecycle of a view model.
 
 All view models have to implement the `IViewModel` interface. As mentioned before, the MVVM Framework builds upon [ReactiveUI](https://github.com/reactiveui/ReactiveUI),
 so there is standard implementation for the use with [ReactiveUI](https://github.com/reactiveui/ReactiveUI): `ReactiveViewModel`. You should always derive your view
@@ -155,7 +155,7 @@ requirement of a view model is to implement `IViewModel`.
 
 At first we have to create a view model for our todo list items. The todo list item view model is a reactive view on the model layer of out sample application. Since
 this is just a container view model, no view model lifecycle management is needed. This is reflected by the fact, that the view model does not not derive from
-`ReactiveViewModel` but `ReactiveObject` which is [ReactiveUI](https://github.com/reactiveui/ReactiveUI)'s UI of making reactive classes. If you are not yet familiar
+`ReactiveViewModel` but `ReactiveObject` which is [ReactiveUI](https://github.com/reactiveui/ReactiveUI)'s way of making a class reactive. If you are not yet familiar
 with [ReactiveUI](https://github.com/reactiveui/ReactiveUI), then I recommend, that you head over to [RectiveUI.net](http://reactiveui.net/) and have a look at it
 first, because the MVVM Framework is heavily influenced by and build on [ReactiveUI](https://github.com/reactiveui/ReactiveUI).
 
@@ -192,7 +192,7 @@ public class TodoListItemViewModel : ReactiveObject
 }
 ```
 
-At first we want to implement a simple view model, which just loads all todo list items and makes it possible to mark them as finished. Please not that the
+Next we want to implement a simple view model, which just loads all todo list items and makes it possible to remove them or mark them as finished. Please not that the
 `TodoListItemsRepository` is passed to the view model via the constructor. The constructor arguments are automatically injected into the view model by the navigation
 sub-system of the MVVM Framework.
 
@@ -260,7 +260,7 @@ public class MainViewModel : ReactiveViewModel
 
 The MVVM Framework supports a wide array of view scenarios from single-window applications, where only one main window exists that hosts all views, to
 multi-window applications where each view is a different window. Of course a mixture of both paradigms is possible as well. Our sample application will
-have one main window, which will host our views. The views are hosted within `Frame` that is contained in the window. This makes scenarios possible, where
+have one main window, which will host our views. The views are hosted within a `Frame` that is contained in the window. This makes scenarios possible, where
 the window can have its own UI components. The navigation sub-system of the MVVM Framework automatically detects the `Frame` within a window. If no `Frame` is
 found, then the window does not support navigation. So please open the `MainWindow.xaml` that was created when the project was created and add a frame as its
 only control:
@@ -277,7 +277,7 @@ only control:
 </Window>
 ```
 
-Now we have to create the main view, which displays our todo list. All views have to be of type `Page` (or be derived from `Page`). So please go ahead and add about
+Now we have to create the main view, which displays our todo list. All views have to be of type `Page` (or be derived from `Page`). So please go ahead and add the
 `MainView.xaml`. At first you have to tell the MVVM Framework which view model belongs to the view, so that the correct view model can be instantiated when navigating
 to the view. This is done via the `ViewModelAttribute`:
 
@@ -330,8 +330,8 @@ Now go ahead and open the `MainView.xaml` view and add the following content:
 </Page>
 ```
 
-As you can see, we're using some value converters. The MVVM Framework provides with a small selection of built-in value converters. In order to be able to use them
-application-wide, you have to add them to the application resources, so go ahead, open the `App.xaml` file and apply the following changes (do not forgot to add the
+As you can see, we're using some value converters. The MVVM Framework comes with a small selection of built-in value converters. In order to be able to use them
+application-wide, you'll have to add them to the application resources, so go ahead, open the `App.xaml` file and apply the following changes (do not forgot to add the
 new namespace):
 
 ```xaml
@@ -553,11 +553,11 @@ The `WindowNavigationService` and the `NavigationService` are not the only servi
 that are helpful to all kinds of applications. One such service is the `ApplicationService`, which provides helpful lifecycle events, that can be subscribed to from anywhere
 in the application. It also provides some utility methods to shutdown and restart the application.
 
-We`ll use the `ApplicationService` to add a quit button to the application. This is also the perfect moment to introduce you to another helpful feature of the MVVM Framework:
-window view models. Windows may, just as views, have their own view model. As stated above, windows may have more UI than just the `Frame` for hosting views. We`ll add the
-quit button directly to the `MainWindow` because from there it is accessible from everywhere in the application.
+We'll use the `ApplicationService` to add a quit button to the application. This is also the perfect moment to introduce you to another helpful feature of the MVVM Framework:
+window view models. Windows may, just as views, have their own view model. As stated above, windows may have more UI than just the `Frame` for hosting views. We'll add the
+quit button directly to the `MainWindow` because from there it is accessible from anywhere in the application.
 
-Firstly we have to add a new view model for the `MainWindow` to the project - `MainWindowViewModel`:
+At first we have to add a new view model for the `MainWindow` to the project - `MainWindowViewModel`:
 
 ```csharp
 public class MainWindowViewModel : ReactiveViewModel
@@ -583,7 +583,7 @@ public class MainWindowViewModel : ReactiveViewModel
 }
 ```
 
-In order to be able to get the `applicationService` injected, it must be bound to the [Ninject](https://github.com/ninject/Ninject) kernel, so head over to the `App.xaml.cs`
+In order to be able to get the `ApplicationService` injected, it must be bound to the [Ninject](https://github.com/ninject/Ninject) kernel, so head over to the `App.xaml.cs`
 and add the following line to the `OnStartedAsync` method:
 
 ```csharp
@@ -637,7 +637,7 @@ The finished result should look like this:
 There is another useful service that the MVVM Framework has in store for you: the `DialogService`. The `DialogService` provides an easy to use API for using the
 various dialogs, e.g. message box, open file dialog, and open directory dialog, that Windows offers.
 
-In this last section we want to use the dialog service to ask users if they really want to cancel the creation of a todo list item. By now you probably know The
+In this last section we want to use the dialog service to ask users if they really want to cancel the creation of a todo list item. By now you probably know the
 drill, in order to use the `DialogService` you have to bind it to the [Ninject](https://github.com/ninject/Ninject) kernel in the `OnStartedAsync` method of the
 `App` class. Just add the following line to the `OnStartedAsync` method:
 
@@ -690,6 +690,6 @@ The finished result should look like this:
 
 # The Broader Picture
 
-Now you should be equipped to start developing applications using the MVVM Framework. There are many more features that come with the MVVM Framework that are out
+Now you should be equipped to start developing applications using the MVVM Framework. But there are many more features that come with the MVVM Framework that are out
 of scope of this quick start guide. If you want to dive deeper then head over to the [Documentation](https://github.com/lecode-official/mvvm-framework/blob/master/Documentation/Documentation.md),
 which has detailed instructions for all of the features of the MVVM framework.
