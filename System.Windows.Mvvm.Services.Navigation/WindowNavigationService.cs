@@ -255,7 +255,7 @@ namespace System.Windows.Mvvm.Services.Navigation
             {
                 if (isMainWindow)
                     Application.Current.MainWindow = result.Window;
-                else if (Application.Current.MainWindow != null)
+                else if (Application.Current.MainWindow != null && result.Window != Application.Current.MainWindow)
                     result.Window.Owner = Application.Current.MainWindow;
             }
 
