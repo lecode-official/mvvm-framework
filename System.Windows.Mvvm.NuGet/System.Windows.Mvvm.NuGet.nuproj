@@ -35,13 +35,13 @@
   <Import Project="$(NuProjPath)\NuProj.props" Condition="Exists('$(NuProjPath)\NuProj.props')" />
   <PropertyGroup Label="Configuration">
     <Id>System.Windows.Mvvm</Id>
-    <Version>0.1.6</Version>
+    <Version>0.1.7</Version>
     <Title>MVVM Framework</Title>
     <Authors>David Neumann, Lukas Rögner</Authors>
     <Owners>David Neumann, Lukas Rögner</Owners>
     <Summary>This MVVM framework was build on top of ReactiveUI. It enhances ReactiveUI with a lot of utility functions such as windowing and navigation services.</Summary>
     <Description>This MVVM framework was build on top of ReactiveUI. It enhances ReactiveUI with a lot of utility functions such as windowing and navigation services. This project aims at building on those features that ReactiveUI shines in and provide extra functionality to make implementing an application on the basis of the MVVM pattern easier.</Description>
-    <ReleaseNotes>Fixed a bug in the WindowNavigationService which caused the app to crash in some cases. Also updated the reactive lists and the reactive database context to better preserve object identity and increase performance. Finally a new method was added to the WindowNavigationService, which makes it possible to view windows as dialogs.</ReleaseNotes>
+    <ReleaseNotes>The configuration context is now decoupled from the way it is persisted. A persistation algorithm can be implemented by the user. Also added a symbol package to the NuGet package.</ReleaseNotes>
     <ProjectUrl>https://github.com/lecode-official/mvvm-framework</ProjectUrl>
     <LicenseUrl>https://github.com/lecode-official/mvvm-framework/blob/master/LICENSE</LicenseUrl>
     <Copyright>Copyright © David Neumann &amp; Lukas Rögner</Copyright>
