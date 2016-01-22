@@ -2,7 +2,7 @@
 
 The MVVM Framework was build on top of [ReactiveUI](https://github.com/reactiveui/ReactiveUI). It enhances [ReactiveUI](https://github.com/reactiveui/ReactiveUI)
 with a lot of utility functions such as windowing and navigation services. This project aims at building on those features that
-[ReactiveUI](https://github.com/reactiveui/ReactiveUI) shines in and provide extra functionality to make implementing an application on the basis of the MVVM
+[ReactiveUI](https://github.com/reactiveui/ReactiveUI) shines at and provides extra functionality to make implementing an application on the basis of the MVVM
 pattern easier.
 
 As stated above, the MVVM Framework builds upon the work done by [ReactiveUI](https://github.com/reactiveui/ReactiveUI). It adds several utility functions, such
@@ -14,7 +14,7 @@ start guide, so that you are able to start using the framework.
 
 This documentation aims at giving you an overview of the means this framework provides to increase your productivity when implementing an MVVM-based applications.
 To get a quick look at the most important features, you should head over to the [Quick Start](https://github.com/lecode-official/mvvm-framework/blob/master/Documentation/QuickStart.md).
-Once you have made yourself familiar with the basics and you want to dig deeper, then you should definitely check out the other parts of the documentation.
+Once you have made yourself familiar with the basics and you want to dig deeper, you should definitely check out the other parts of the documentation.
 
 # Table of Contents
 
