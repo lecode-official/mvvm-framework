@@ -131,7 +131,7 @@ namespace System.Windows.Mvvm.Reactive
         /// <param name="policy">The detection policy that should be applied to the observable.</param>
         /// <typeparam name="T">The entity type.</typeparam>
         /// <returns>Returns the observable object that can be used to detect changes.</returns>
-        public ReactiveDbSet<T> ObservableFor<T>() where T : class => this.ObservableFor<T>(ChangeDetectionPolicy.Property | ChangeDetectionPolicy.NavigationProperty | ChangeDetectionPolicy.CollectionNavigationProperty);
+        public ReactiveDbSet<T> ObservableFor<T>() where T : class => this.ObservableFor<T>(ChangeDetectionPolicy.Property);
 
         /// <summary>
         /// Gets an observable object for the specified entity type.
