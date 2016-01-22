@@ -9,7 +9,7 @@ sample application, you can find it [here](https://github.com/lecode-official/mv
 
 # Using the MVVM Framework
 
-## Creating a new project
+## Creating a New Project
 
 Right now the MVVM Framework does not support any framework other than WPF. This might change in the future. To get started using the framework you should start by
 opening Visual Studio and creating a new C# WPF project.
@@ -22,7 +22,7 @@ To install the MVVM Framework you can use the NuGet package manager or use the N
 PM> Install-Package System.Windows.Mvvm
 ```
 
-## Application lifecycle management
+## Application Lifecycle Management
 
 In order to properly manage the lifecycle of the MVVM application, the MVVM Framework provides a base class for your application: `MvvmApplication`. Therefore you
 have to open the `App.xaml` and perform a couple of changes. First of all the navigation is performed by the framework, so you can remove the `StartupUri` property.
@@ -61,7 +61,7 @@ and there is a `Dispose` method which you can override.
 At the very least you'll have to implement the `OnStartedAsync` method, which is the entry-point to the application and should be used to set up the Application
 and navigate to the initial view of the application.
 
-## The model
+## The Model
 
 The sample application we are building is the canonical todo list app. First we start with the model, which is fairly easy. For the sake of briefness the model layer
 of the application only consists of an in-memory store. In a real-world application a database or a file-based storage system should be used. The model layer consists
@@ -117,7 +117,7 @@ public class TodoListItemsRepository
 }
 ```
 
-## Dependency injection
+## Dependency Injection
 
 The MVVM Framework has a powerful dependency injection mechanism, which automatically injects components into view models. The inversion of control container of
 choice is [Ninject](https://github.com/ninject/Ninject). This is the only inversion of control container which is currently supported by the MVVM Framework, but
@@ -139,7 +139,7 @@ Use the `OnStartedAsync` to bind all your services to the [Ninject](https://gith
 before, then head over to [Ninject.org](http://www.ninject.org/). They have a lot of comprehensive tutorials explaining the concepts behind inversion of control and
 the usage of [Ninject](https://github.com/ninject/Ninject).
 
-## The view model
+## The View Model
 
 Now we're ready to implement our first view model. View models have several lifecycle callback methods as well:
 
@@ -256,7 +256,7 @@ public class MainViewModel : ReactiveViewModel
 }
 ```
 
-## The view
+## The View
 
 The MVVM Framework supports a wide array of view scenarios from single-window applications, where only one main window exists that hosts all views, to
 multi-window applications where each view is a different window. Of course a mixture of both paradigms is possible as well. Our sample application will
@@ -379,7 +379,7 @@ Now we are ready to test our sample application for the first time. After starti
 
 ![Sample application main view](https://github.com/lecode-official/mvvm-framework/blob/master/Documentation/Images/SampleApplicationMainView.jpg "Sample application main view")
 
-## Navigation service
+## The Navigation Service
 
 The navigation sub-system of the MVVM Framework is comprised of two services: `WindowNavigationService` and `NavigationService`. The `WindowNavigationService` is for creating
 new windows and opening them. When a window supports navigation (which is when it contains a `Frame`), then the window is a assigned an instance of `NavigationService`,
@@ -547,7 +547,7 @@ The end result should look somtehing like this:
 
 ![Sample application create todo list item view](https://github.com/lecode-official/mvvm-framework/blob/master/Documentation/Images/SampleApplicationCreateTodoListItemView.jpg "Sample application create todo list item view")
 
-## Application service
+## The Application Service
 
 The `WindowNavigationService` and the `NavigationService` are not the only services that come with the MVVM Framework. The MVVM Framework provides a wide array of services,
 that are helpful to all kinds of applications. One such service is the `ApplicationService`, which provides helpful lifecycle events, that can be subscribed to from anywhere
@@ -632,7 +632,7 @@ The finished result should look like this:
 
 ![Sample application main window](https://github.com/lecode-official/mvvm-framework/blob/master/Documentation/Images/SampleApplicationMainWindow.jpg "Sample application main window")
 
-## Dialog service
+## The Dialog Service
 
 There is another useful service that the MVVM Framework has in store for you: the `DialogService`. The `DialogService` provides an easy to use API for using the
 various dialogs, e.g. message box, open file dialog, and open directory dialog, that Windows offers.
@@ -688,7 +688,7 @@ The finished result should look like this:
 
 ![Demonstrating the dialog service](https://github.com/lecode-official/mvvm-framework/blob/master/Documentation/Images/DialogService.jpg "Demonstrating the dialog service")
 
-# The broader picture
+# The Broader Picture
 
 Now you should be equipped to start developing applications using the MVVM Framework. There are many more features that come with the MVVM Framework that are out
 of scope of this quick start guide. If you want to dive deeper then head over to the [Documentation](https://github.com/lecode-official/mvvm-framework/blob/master/Documentation/Documentation.md),
