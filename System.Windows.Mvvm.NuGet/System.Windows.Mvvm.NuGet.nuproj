@@ -46,7 +46,7 @@
     <LicenseUrl>https://github.com/lecode-official/mvvm-framework/blob/master/LICENSE</LicenseUrl>
     <Copyright>Copyright © David Neumann &amp; Lukas Rögner</Copyright>
     <Tags>MVVM, WPF, Framework, ReactiveUI</Tags>
-    <GenerateSymbolPackage>false</GenerateSymbolPackage>
+    <GenerateSymbolPackage>true</GenerateSymbolPackage>
     <IconUrl>https://raw.githubusercontent.com/lecode-official/mvvm-framework/master/Documentation/Images/Logo128x128.png</IconUrl>
   </PropertyGroup>
   <Import Project="$(NuProjPath)\NuProj.targets" />
