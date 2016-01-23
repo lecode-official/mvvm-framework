@@ -24,7 +24,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="License.txt" />
-    <Content Include="tools\install.ps1" />
+    <Content Include="tools\init.ps1" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>2ae7d561-d045-4e97-9948-bb294bb3eab2</ProjectGuid>
