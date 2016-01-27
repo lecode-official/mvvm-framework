@@ -254,7 +254,7 @@ namespace System.Windows.Mvvm.Services.Navigation
         public async Task ClearNavigationStackAsync()
         {
             // Cylces over all views and view models that are on the navigation stack
-            for (int i = 0; i < this.navigationStack.Count; i++)
+            while (this.navigationStack.Any())
             {
                 // Gets the view and the view model
                 KeyValuePair<Page, IViewModel> viewViewModelPair = this.navigationStack.Pop();
