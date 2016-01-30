@@ -35,6 +35,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 	ProjectSection(SolutionItems) = preProject
 		Documentation\Documentation.md = Documentation\Documentation.md
 		Documentation\Installation.md = Documentation\Installation.md
+		Documentation\ProjectStructure.md = Documentation\ProjectStructure.md
 		Documentation\QuickStart.md = Documentation\QuickStart.md
 	EndProjectSection
 EndProject
