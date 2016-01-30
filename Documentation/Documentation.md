@@ -19,7 +19,7 @@ Once you have made yourself familiar with the basics and you want to dig deeper,
 # Table of Contents
 
 1. [Quick Start](https://github.com/lecode-official/mvvm-framework/blob/master/Documentation/QuickStart.md)
-2. Project Structure
+2. [Project Structure](https://github.com/lecode-official/mvvm-framework/blob/master/Documentation/ProjectStructure.md)
 3. Application Lifecycle
 4. View Model Lifecycle
 5. Services
