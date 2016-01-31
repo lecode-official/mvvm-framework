@@ -20,7 +20,7 @@ projects:
 
 ## Using the Project
 
-The project is available on NuGet: https://www.nuget.org/packages/System.Windows.Mvvm/0.1.7.
+The project is available on NuGet: https://www.nuget.org/packages/System.Windows.Mvvm/0.1.8.
 
 ```batch
 PM> Install-Package System.Windows.Mvvm
