@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters;
 using System.Threading.Tasks;
+using System.Windows.Mvvm.Configuration.Stores;
 
 #endregion
 
@@ -24,20 +25,27 @@ namespace System.Windows.Mvvm.Configuration
         /// <summary>
         /// Initializes a new <see cref="ConfigContext"/> instance.
         /// </summary>
-        /// <param name="fileName">The name of the configuration file.</param>
-        public ConfigContext(string fileName)
+        public ConfigContext()
+            : this(null)
+        { }
+
+        /// <summary>
+        /// Initializes a new <see cref="ConfigContext"/> instance.
+        /// </summary>
+        /// <param name="store">The store that is used by the configuration context to load and store data.</param>
+        public ConfigContext(IStore store)
         {
-            this.fileName = fileName;
+            this.Store = store;
         }
 
         #endregion
 
-        #region Private Fields
+        #region Public Properties
 
         /// <summary>
-        /// Contains the name of the configuration file.
+        /// Gets or sets the store that is used by the configuration context to load and store data.
         /// </summary>
-        private string fileName;
+        public IStore Store { get; set; }
 
         #endregion
 
@@ -48,17 +56,33 @@ namespace System.Windows.Mvvm.Configuration
         /// </summary>
         public virtual async Task LoadAsync()
         {
-            if (!File.Exists(this.fileName))
-                await this.SaveChangesAsync();
-            await Task.Run(() => JsonConvert.PopulateObject(File.ReadAllText(this.fileName), this));
+            // If no store is set, the data is not persisted
+            if (this.Store == null)
+                return;
+
+            // Gets the data from the store
+            string data = await this.Store.LoadAsync();
+            if (string.IsNullOrWhiteSpace(data))
+                return;
+
+            // Deserializes the data
+            await Task.Run(() => JsonConvert.PopulateObject(data, this));
         }
 
         /// <summary>
         /// Saves all changes made to the context to the configuration file.
         /// </summary>
-        public virtual Task SaveChangesAsync()
+        public virtual async Task SaveChangesAsync()
         {
-            return Task.Run(() => File.WriteAllText(this.fileName, JsonConvert.SerializeObject(this, new JsonSerializerSettings { ContractResolver = new WritablePropertiesOnlyResolver(), TypeNameHandling = TypeNameHandling.Auto, TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple })));
+            // If no store is set, the data is not persisted
+            if (this.Store == null)
+                return;
+
+            // Serializes the data
+            string data = await Task.Run(() => JsonConvert.SerializeObject(this, new JsonSerializerSettings { ContractResolver = new WritablePropertiesOnlyResolver(), TypeNameHandling = TypeNameHandling.Auto, TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple }));
+
+            // Stores the data
+            await this.Store.StoreAsync(data);
         }
 
         #endregion

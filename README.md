@@ -1,10 +1,10 @@
 # MVVM Framework
 
-![MVVM Framework Logo](https://github.com/lecode-official/mvvm-framework/blob/master/Documentation/Images/LogoHeader.png "MVVM Framework Logo")
+![MVVM Framework Logo](https://github.com/lecode-official/mvvm-framework/blob/master/Documentation/Images/Banner.png "MVVM Framework Logo")
 
 The MVVM Framework was build on top of [ReactiveUI](https://github.com/reactiveui/ReactiveUI). It enhances [ReactiveUI](https://github.com/reactiveui/ReactiveUI)
 with a lot of utility functions such as windowing and navigation services. This project aims at building on those features that
-[ReactiveUI](https://github.com/reactiveui/ReactiveUI) shines in and provide extra functionality to make implementing an application on the basis of the MVVM
+[ReactiveUI](https://github.com/reactiveui/ReactiveUI) shines at and provides extra functionality to make implementing an application on the basis of the MVVM
 pattern easier.
 
 ## Acknowledgments
@@ -20,7 +20,7 @@ projects:
 
 ## Using the Project
 
-The project is available on NuGet: https://www.nuget.org/packages/System.Windows.Mvvm/0.1.6.
+The project is available on NuGet: https://www.nuget.org/packages/System.Windows.Mvvm.
 
 ```batch
 PM> Install-Package System.Windows.Mvvm
@@ -35,11 +35,11 @@ package). Just clone the Git repository, open the solution in Visual Studio, and
 git pull https://github.com/lecode-official/mvvm-framework.git
 ```
 
-The solution is split up into several light-weight projects, which each contain a small portion of the functionality.
+The solution is split up into several light-weight projects, each of them containing a small portion of the functionality.
 
 For more information, please refer to the [Documentation](https://github.com/lecode-official/mvvm-framework/blob/master/Documentation/Documentation.md).
 
 ## Contributions
 
 Currently we are not accepting any contributors, but if you want to help, we would greatly appreciate feedback and bug reports. To file a bug, please use GitHub's
-issue system. Alternatively you can clone the repository and send us a pull request.
+issue system. Alternatively, you can clone the repository and send us a pull request.
