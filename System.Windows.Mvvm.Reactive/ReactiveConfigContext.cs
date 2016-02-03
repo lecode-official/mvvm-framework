@@ -5,6 +5,7 @@ using System.Windows.Mvvm.Configuration;
 using System;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
+using System.Windows.Mvvm.Configuration.Stores;
 
 #endregion
 
@@ -20,14 +21,22 @@ namespace System.Windows.Mvvm.Reactive
         /// <summary>
         /// Initializes a new <see cref="ReactiveConfigContext"/> instance.
         /// </summary>
-        /// <param name="fileName">The name of the configuration file.</param>
-        public ReactiveConfigContext(string fileName)
-            : base(fileName) { }
+        public ReactiveConfigContext()
+            : base()
+        { }
+
+        /// <summary>
+        /// Initializes a new <see cref="ReactiveConfigContext"/> instance.
+        /// </summary>
+        /// <param name="store">The store that is used by the configuration context to load and store data.</param>
+        public ReactiveConfigContext(IStore store)
+            : base(store)
+        { }
 
         #endregion
 
         #region Public Properties
-        
+
         /// <summary>
         /// Contains the object that observes whether items are to be added, removed or changed.
         /// </summary>

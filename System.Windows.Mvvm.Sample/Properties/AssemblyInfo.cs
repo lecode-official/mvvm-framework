@@ -32,7 +32,7 @@ using System.Windows;
 
 #region Assembly Version Information
 
-[assembly: AssemblyVersion("0.1.6.*")]
-[assembly: AssemblyFileVersion("0.1.6.0")]
+[assembly: AssemblyVersion("0.1.8.*")]
+[assembly: AssemblyFileVersion("0.1.8.0")]
 
 #endregion
