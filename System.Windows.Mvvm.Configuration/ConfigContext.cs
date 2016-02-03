@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters;
 using System.Threading.Tasks;
 
 #endregion
@@ -57,7 +58,7 @@ namespace System.Windows.Mvvm.Configuration
         /// </summary>
         public virtual Task SaveChangesAsync()
         {
-            return Task.Run(() => File.WriteAllText(this.fileName, JsonConvert.SerializeObject(this, new JsonSerializerSettings { ContractResolver = new WritablePropertiesOnlyResolver(), TypeNameHandling = TypeNameHandling.All })));
+            return Task.Run(() => File.WriteAllText(this.fileName, JsonConvert.SerializeObject(this, new JsonSerializerSettings { ContractResolver = new WritablePropertiesOnlyResolver(), TypeNameHandling = TypeNameHandling.Auto, TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple })));
         }
 
         #endregion
