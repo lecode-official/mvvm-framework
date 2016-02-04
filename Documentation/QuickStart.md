@@ -123,14 +123,12 @@ The MVVM Framework has a powerful dependency injection mechanism, which automati
 IoC containers, the MVVM Framework uses an abstraction layer. This allows you to choose an IoC container, which suits your needs.
 
 In order to make our `TodoListItemsRepository` available application-wide, head over to the `App.xaml.cs` and implement the `OnStartedAsync` method. Then bind the
-`TodoListItemsRepository` to the IoC container. `InSingletonScope` is used so that all our view models use the same instance
-of the repository.
+`TodoListItemsRepository` to the IoC container. `InSingletonScope` is used so that all our view models use the same instance of the repository.
 
 ```csharp
 protected override Task OnStartedAsync(ApplicationStartedEventArgs eventArguments)
 {
     this.iocContainer = new SimpleIocContainer();
-    this.iocContainer.RegisterType<IReadOnlyIocContainer>(() => this.iocContainer);
     this.iocContainer.RegisterType<TodoListItemsRepository>(Scope.Singleton);
     return Task.FromResult(0);
 }
@@ -343,12 +341,12 @@ new namespace):
                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                       xmlns:local="clr-namespace:System.Windows.Mvvm.Sample"
                       xmlns:mvvm="clr-namespace:System.Windows.Mvvm.Application;assembly=System.Windows.Mvvm.Application"
-                      xmlns:mvvmUIValueConverters="clr-namespace:System.Windows.Mvvm.UI.ValueConverters;assembly=System.Windows.Mvvm.UI.ValueConverters">
+                      xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows">
     <mvvm:MvvmApplication.Resources>
         <ResourceDictionary>
 
-            <mvvmUIValueConverters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-            <mvvmUIValueConverters:InvertedBooleanToVisibilityConverter x:Key="InvertedBooleanToVisibilityConverter" />
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <controls:InvertedBooleanToVisibilityConverter x:Key="InvertedBooleanToVisibilityConverter" />
 
         </ResourceDictionary>
     </mvvm:MvvmApplication.Resources>
@@ -376,6 +374,10 @@ protected override async Task OnStartedAsync(ApplicationStartedEventArgs eventAr
     await windowNavigationService.NavigateAsync<MainWindow, MainView>(null, true);
 }
 ```
+
+As you have probably noticed, we are binding the IoC container to itself. The navigation sub-system actually does not care which IoC container we are using, therefore,
+the IoC container itself is injected into it. In order to be able to instantiate the `WindowNavigationService`, the IoC container has to be bound so that it can be
+injected into the navigation sub-system.
 
 Now we are ready to test our sample application for the first time. After starting the application, you should see something like this:
 
