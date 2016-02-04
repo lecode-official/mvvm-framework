@@ -3,7 +3,6 @@
 
 using System.Windows.Mvvm.Services.Navigation;
 using ReactiveUI;
-using System;
 using System.Threading.Tasks;
 
 #endregion

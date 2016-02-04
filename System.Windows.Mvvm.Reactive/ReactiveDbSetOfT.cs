@@ -1,13 +1,10 @@
 ﻿
 #region Using Directives
 
-using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Core.Metadata.Edm;
 using System.Data.Entity.Core.Objects;
-using System.Data.Entity.Core.Objects.DataClasses;
-using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;

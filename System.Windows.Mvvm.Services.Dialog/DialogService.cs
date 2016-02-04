@@ -77,7 +77,7 @@ namespace System.Windows.Mvvm.Services.Dialog
         {
             // Validates the parameters
             if (filter == null)
-                throw new ArgumentNullException("filter");
+                throw new ArgumentNullException(nameof(filter));
 
             // Since the dialog box must be invoked on the UI thread, the invocation is dispatched to the UI thread
             return await this.applicationService.CurrentDispatcher.InvokeAsync(() =>
@@ -111,7 +111,7 @@ namespace System.Windows.Mvvm.Services.Dialog
         {
             // Validates the parameters
             if (filter == null)
-                throw new ArgumentNullException("filter");
+                throw new ArgumentNullException(nameof(filter));
 
             // Since the dialog box must be invoked on the UI thread, the invocation is dispatched to the UI thread
             return await this.applicationService.CurrentDispatcher.InvokeAsync(() =>

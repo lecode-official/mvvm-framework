@@ -3,7 +3,6 @@
 
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows;
 using System.Windows.Markup;
 
 #endregion
@@ -13,7 +12,7 @@ namespace System.Windows.Mvvm.UI.Controls
     /// <summary>
     /// Represents a generic data template selector.
     /// </summary>
-    [ContentProperty("Templates")]
+    [ContentProperty(nameof(Templates))]
     public class DataTemplateSelector : System.Windows.Controls.DataTemplateSelector
     {
         #region Public Properties

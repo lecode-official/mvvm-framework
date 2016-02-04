@@ -1,9 +1,7 @@
 ﻿
 #region Using Directives
 
-using System;
 using System.Reflection;
-using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Markup;
@@ -80,7 +78,7 @@ namespace System.Windows.Mvvm.UI.Markup
         {
             // Validates the argument
             if (serviceProvider == null)
-                throw new ArgumentNullException("serviceProvider");
+                throw new ArgumentNullException(nameof(serviceProvider));
 
             // Uses the service provider to retrieve a target provider, which is able to provide the target property to which the command is to be bound, if the target provider is null, an invalid operation exception is thrown
             IProvideValueTarget targetProvider = serviceProvider.GetService(typeof(IProvideValueTarget)) as IProvideValueTarget;
