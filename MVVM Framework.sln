@@ -17,7 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Windows.Mvvm.Service
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Windows.Mvvm.Configuration", "System.Windows.Mvvm.Configuration\System.Windows.Mvvm.Configuration.csproj", "{4BF2CE70-E68E-4413-B229-180EF613F33A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Project Items", "Project Items", "{E10DE234-2565-4642-A9C1-7412E05928F6}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E10DE234-2565-4642-A9C1-7412E05928F6}"
 	ProjectSection(SolutionItems) = preProject
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
@@ -32,10 +32,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 		Documentation\ProjectStructure.md = Documentation\ProjectStructure.md
 		Documentation\QuickStart.md = Documentation\QuickStart.md
 	EndProjectSection
-EndProject
-Project("{FF286327-C783-4F7A-AB73-9BCBAD0D4460}") = "System.Windows.Mvvm.NuGet", "System.Windows.Mvvm.NuGet\System.Windows.Mvvm.NuGet.nuproj", "{2AE7D561-D045-4E97-9948-BB294BB3EAB2}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Windows.Mvvm.Sample", "System.Windows.Mvvm.Sample\System.Windows.Mvvm.Sample.csproj", "{E65CD314-34D9-48B6-A71F-512BA0ED43FC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Images", "Images", "{263D3AEF-5532-487E-9B2F-592848FCAE13}"
 	ProjectSection(SolutionItems) = preProject
@@ -56,6 +52,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Images", "Images", "{263D3A
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Windows", "System.Windows\System.Windows.csproj", "{CF0D2326-4C2F-4F02-999C-49E5CBB43726}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{5BD95894-83FE-497F-B046-9F16D2339A02}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{A80B66D5-83A3-4645-9766-C094082D3EE8}"
+EndProject
+Project("{FF286327-C783-4F7A-AB73-9BCBAD0D4460}") = "System.Windows.Mvvm", "NuGet\System.Windows.Mvvm\System.Windows.Mvvm.nuproj", "{2AE7D561-D045-4E97-9948-BB294BB3EAB2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvvmFramework.Samples.Wpf", "Samples\MvvmFramework.Samples.Wpf\MvvmFramework.Samples.Wpf.csproj", "{E65CD314-34D9-48B6-A71F-512BA0ED43FC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -91,6 +95,10 @@ Global
 		{4BF2CE70-E68E-4413-B229-180EF613F33A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4BF2CE70-E68E-4413-B229-180EF613F33A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4BF2CE70-E68E-4413-B229-180EF613F33A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF0D2326-4C2F-4F02-999C-49E5CBB43726}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF0D2326-4C2F-4F02-999C-49E5CBB43726}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF0D2326-4C2F-4F02-999C-49E5CBB43726}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF0D2326-4C2F-4F02-999C-49E5CBB43726}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2AE7D561-D045-4E97-9948-BB294BB3EAB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2AE7D561-D045-4E97-9948-BB294BB3EAB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2AE7D561-D045-4E97-9948-BB294BB3EAB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -99,10 +107,6 @@ Global
 		{E65CD314-34D9-48B6-A71F-512BA0ED43FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E65CD314-34D9-48B6-A71F-512BA0ED43FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E65CD314-34D9-48B6-A71F-512BA0ED43FC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CF0D2326-4C2F-4F02-999C-49E5CBB43726}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CF0D2326-4C2F-4F02-999C-49E5CBB43726}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CF0D2326-4C2F-4F02-999C-49E5CBB43726}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CF0D2326-4C2F-4F02-999C-49E5CBB43726}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -110,5 +114,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{0C94849C-3898-444D-827F-3E1137BD2728} = {E10DE234-2565-4642-A9C1-7412E05928F6}
 		{263D3AEF-5532-487E-9B2F-592848FCAE13} = {0C94849C-3898-444D-827F-3E1137BD2728}
+		{2AE7D561-D045-4E97-9948-BB294BB3EAB2} = {A80B66D5-83A3-4645-9766-C094082D3EE8}
+		{E65CD314-34D9-48B6-A71F-512BA0ED43FC} = {5BD95894-83FE-497F-B046-9F16D2339A02}
 	EndGlobalSection
 EndGlobal
