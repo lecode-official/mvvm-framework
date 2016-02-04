@@ -1,12 +1,9 @@
 ﻿
 #region Using Directives
 
-using Ninject;
-using System;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
 
 #endregion
 
@@ -23,15 +20,6 @@ namespace System.Windows.Mvvm.Application
         /// Contains a mutex that is used to prevent an application to open twice.
         /// </summary>
         private Mutex singleInstanceMutex = null;
-
-        #endregion
-
-        #region Protected Properties
-
-        /// <summary>
-        /// Gets the Ninject kernel, which is used to instantiate views and view models.
-        /// </summary>
-        protected IKernel Kernel { get; private set; }
 
         #endregion
 
@@ -83,25 +71,7 @@ namespace System.Windows.Mvvm.Application
         {
             // Calls the base implementation of this method
             base.OnStartup(e);
-
-            // Safely instantiates the Ninject kernel (since it implements IDisposible we are using the pattern suggested in the documentation of the CA2000)
-            StandardKernel temporaryKernel = null;
-            try
-            {
-                // Creates the new kernel
-                temporaryKernel = new StandardKernel();
-
-                // Swaps the temporary kernel with the final one
-                this.Kernel = temporaryKernel;
-                temporaryKernel = null;
-            }
-            finally
-            {
-                // Checks if the temporary kernel is not null, this can only happen if an error occurred, if so the temporary kernel is disposed of, so that all resources are safely removed from memory
-                if (temporaryKernel != null)
-                    temporaryKernel.Dispose();
-            }
-
+            
             // Signs up for the unhandled exception event, which is raised when an exception was thrown, which was not handled by user-code
             AppDomain.CurrentDomain.UnhandledException += async (sender, eventArguments) => await this.OnUnhandledExceptionAsync(eventArguments);
 
@@ -152,13 +122,6 @@ namespace System.Windows.Mvvm.Application
             // Checks if managed resources should be disposed of
             if (disposing)
             {
-                // Disposes of the kernel if it has not been disposed of, yet
-                if (this.Kernel != null && !this.Kernel.IsDisposed)
-                {
-                    this.Kernel.Dispose();
-                    this.Kernel = null;
-                }
-
                 // Disposes of the mutex, which was created to determine whether this instance is the first instance of the application
                 if (this.singleInstanceMutex != null)
                 {
