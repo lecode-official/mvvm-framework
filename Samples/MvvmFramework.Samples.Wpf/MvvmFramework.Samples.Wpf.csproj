@@ -180,9 +180,9 @@
       <Project>{156941f4-1b21-4831-8d2c-4012bf15f913}</Project>
       <Name>System.Windows.Mvvm.Services.OperatingSystem</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\System.Windows\System.Windows.csproj">
+    <ProjectReference Include="..\..\System.Windows.Mvvm.UI\System.Windows.Mvvm.UI.csproj">
       <Project>{cf0d2326-4c2f-4f02-999c-49e5cbb43726}</Project>
-      <Name>System.Windows</Name>
+      <Name>System.Windows.Mvvm.UI</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
