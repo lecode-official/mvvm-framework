@@ -1,9 +1,5 @@
 # Introduction
 
-The MVVM Framework builds upon the work done by [ReactiveUI](https://github.com/reactiveui/ReactiveUI). It adds several utility functions, such
-as application lifecycle management, navigation, and services most applications need. This makes it much easier to implement MVVM-based applications. Right now the
-project only supports WPF projects, but this might change in the future and libraries for mobile applications may be added.
-
 Many parts of the source code were left out for brevity. The code samples have also been stripped of all comments. If you want to view the whole source code for the
 sample application, you can find it [here](https://github.com/lecode-official/mvvm-framework/tree/master/System.Windows.Mvvm.Sample).
 
@@ -149,7 +145,7 @@ Now we're ready to implement our first view model. View models have several life
 - **`OnNavigateFromAsync`** - Is called before the view model is navigated away from. Other than `OnDeactivateAsync`, `OnNavigateFromAsync` is called everytime the user navigates away from the view model.
 - **`OnDeactivateAsync`** - Is called when the view model gets deactivated. The view model only gets deactivated when the navigation stack of the window, that contains the view of this view model, is cleared, or when the window, containing the view of this view model, is closed. Therefore `OnDeactivateAsync` is only called once in the lifecycle of a view model.
 
-All view models have to implement the `IViewModel` interface. As mentioned before, the MVVM Framework builds upon [ReactiveUI](https://github.com/reactiveui/ReactiveUI),
+All view models have to implement the `IViewModel` interface. As mentioned before, the MVVM Framework has strong ties to [ReactiveUI](https://github.com/reactiveui/ReactiveUI),
 so there is standard implementation for the use with [ReactiveUI](https://github.com/reactiveui/ReactiveUI): `ReactiveViewModel`. You should always derive your view
 models from `ReactiveViewModel`, because it has a lot of additional utility functions. As far as the navigation sub-system of the MVVM Framework is concerned, the only
 requirement of a view model is to implement `IViewModel`.
@@ -157,8 +153,7 @@ requirement of a view model is to implement `IViewModel`.
 At first we have to create a view model for our todo list items. The todo list item view model is a reactive view on the model layer of our sample application. Since
 this is just a container view model, no view model lifecycle management is needed. This is reflected by the fact, that the view model does not derive from
 `ReactiveViewModel` but `ReactiveObject` which is [ReactiveUI](https://github.com/reactiveui/ReactiveUI)'s way of making a class reactive. If you are not yet familiar
-with [ReactiveUI](https://github.com/reactiveui/ReactiveUI), we would recommend that you head over to [RectiveUI.net](http://reactiveui.net/) and have a look at it
-first, because the MVVM Framework is heavily influenced by and build on [ReactiveUI](https://github.com/reactiveui/ReactiveUI).
+with [ReactiveUI](https://github.com/reactiveui/ReactiveUI), we would recommend that you head over to [RectiveUI.net](http://reactiveui.net/) and have a look at it.
 
 ```csharp
 public class TodoListItemViewModel : ReactiveObject

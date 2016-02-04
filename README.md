@@ -2,19 +2,26 @@
 
 ![MVVM Framework Logo](https://github.com/lecode-official/mvvm-framework/blob/master/Documentation/Images/Banner.png "MVVM Framework Logo")
 
-The MVVM Framework was build on top of [ReactiveUI](https://github.com/reactiveui/ReactiveUI). It enhances [ReactiveUI](https://github.com/reactiveui/ReactiveUI)
-with a lot of utility functions such as windowing and navigation services. This project aims at building on those features that
-[ReactiveUI](https://github.com/reactiveui/ReactiveUI) shines at and provides extra functionality to make implementing an application on the basis of the MVVM
-pattern easier.
+The MVVM Framework is a compact and simple, yet powerful implementation of the MVVM pattern. It provides a strong model for managing the application lifecycle
+and the navigation. It was build on three important core priciples:
+
+1. Decoupling operating system functionality from the application logic
+2. Asynchronous from top to bottom using the task awaitable pattern
+3. Playing nice with other frameworks
+
+The MVVM framework decouples operation system functionality from the application logic by providing a powerful service system, which abstracts away any platform
+specific code from the application logic. Everything in the framework was build with the task awaitable pattern in mind, from application lifecycle management to
+navigation. The framework plays nice with all kinds of frameworks, for example the dependency injection mechanism build into the framework does not care what
+kind of inversion of control container you are using.
 
 ## Acknowledgments
 
 My special thanks goes out to [Lukas Rögner](https://github.com/lukasroegner) who wrote a lot of the code and did a great deal of refactoring. Without him the
 project would not have happened.
 
-**[ReactiveUI](https://github.com/reactiveui/ReactiveUI)** - A MVVM framework that integrates with the Reactive Extensions for .NET to create elegant, testable
-User Interfaces that run on any mobile or desktop platform. Supports Xamarin.iOS, Xamarin.Android, Xamarin.Mac, Xamarin Forms, WPF, Windows Forms, Windows Phone 8,
-Windows Store and Universal Windows Platform (UWP).
+From its conception, the framework was designed to work beautifully with the reactive pattern. This is why the framework has strong ties to
+[ReactiveUI](https://github.com/reactiveui/ReactiveUI) and provides an optional bridge to it, which makes it super easy to implement an MVVM application using
+the reactive pattern.
 
 ## Using the Project
 
