@@ -119,25 +119,27 @@ public class TodoListItemsRepository
 
 ## Dependency Injection
 
-The MVVM Framework has a powerful dependency injection mechanism, which automatically injects components into view models. The inversion of control container of
-choice is [Ninject](https://github.com/ninject/Ninject). This is the only inversion of control container that is currently supported by the MVVM Framework, but
-there plans to support a wide array of inversion of control containers in the future.
+The MVVM Framework has a powerful dependency injection mechanism, which automatically injects components into view models. In order to support multiple different
+IoC containers, the MVVM Framework uses an abstraction layer. This allows you to choose an IoC container, which suits your needs.
 
 In order to make our `TodoListItemsRepository` available application-wide, head over to the `App.xaml.cs` and implement the `OnStartedAsync` method. Then bind the
-`TodoListItemsRepository` to the [Ninject](https://github.com/ninject/Ninject) kernel. `InSingletonScope` is used so that all our view models use the same instance
+`TodoListItemsRepository` to the IoC container. `InSingletonScope` is used so that all our view models use the same instance
 of the repository.
 
 ```csharp
 protected override Task OnStartedAsync(ApplicationStartedEventArgs eventArguments)
 {
-    this.Kernel.Bind<TodoListItemsRepository>().ToSelf().InSingletonScope();
+	this.iocContainer = new SimpleIocContainer();
+    this.iocContainer.RegisterType<TodoListItemsRepository>(Scope.Singleton);
     return Task.FromResult(0);
 }
 ```
 
-Use the `OnStartedAsync` to bind all your services to the [Ninject](https://github.com/ninject/Ninject) kernel. If you haven't used Ninject (or dependency injection
-in general) before, then head over to [Ninject.org](http://www.ninject.org/). They have a lot of comprehensive tutorials explaining the concepts behind inversion of
-control and the usage of [Ninject](https://github.com/ninject/Ninject).
+Use the `OnStartedAsync` to bind all your services to the IoC container. If you haven't used dependency injection before, then head over to
+[Ninject.org](http://www.ninject.org/). They have a lot of comprehensive tutorials explaining the concepts behind inversion of control. Alternatively you could take
+a look at our [Simple IoC](https://github.com/lecode-official/simple-ioc), which has a very simple, yet comprehensive
+[sample](https://github.com/lecode-official/simple-ioc/tree/master/Samples/SimpleIoc.Samples.Console) that showcases some of the most seen use cases of dependency
+injection.
 
 ## The View Model
 
@@ -355,18 +357,20 @@ new namespace):
 Finally we have to make an initial navigation to the view, which has to be done in the `OnStartedAsync` callback method in the `App.xaml.cs`. You have to specify the
 type of the view and the window to which you want to navigate. The navigation sub-system automatically figures out how to instantiate the window, the page, and the
 view model. It also automatically injects all services that the view model requires in its constructor. To use the navigation sub-system, the `WindowNavigationService`
-has to be bound to the [Ninject](https://github.com/ninject/Ninject) kernel. When navigating an (anonymous) object with parameters can be passed to the view model. The
-properties in this object are automatically matched by property name and assigned to the public properties of the view model. The second parameter of the
-`NavigateAsync` method determines whether the window is the main window of the application. The main window has the same lifetime as the application, once the main
-window is closed, the application is shut down as well (this can also be configured in the `App.xaml` via the `ShutdownMode` property).
+has to be bound to the IoC container. When navigating an (anonymous) object with parameters can be passed to the view model. The properties in this object are automatically
+matched by property name and assigned to the public properties of the view model. The second parameter of the `NavigateAsync` method determines whether the window is
+the main window of the application. The main window has the same lifetime as the application, once the main window is closed, the application is shut down as well
+(this can also be configured in the `App.xaml` via the `ShutdownMode` property).
 
 ```csharp
 protected override async Task OnStartedAsync(ApplicationStartedEventArgs eventArguments)
 {
-    this.Kernel.Bind<TodoListItemsRepository>().ToSelf().InSingletonScope();
-    this.Kernel.Bind<WindowNavigationService>().ToSelf().InSingletonScope();
+	this.iocContainer = new SimpleIocContainer();
 
-    WindowNavigationService windowNavigationService = this.Kernel.Get<WindowNavigationService>();
+    this.iocContainer.RegisterType<TodoListItemsRepository>(Scope.Singleton);
+    this.iocContainer.RegisterType<WindowNavigationService>(Scope.Singleton);
+
+    WindowNavigationService windowNavigationService = this.iocContainer.GetInstance<WindowNavigationService>();
     await windowNavigationService.NavigateAsync<MainWindow, MainView>(null, true);
 }
 ```
@@ -580,11 +584,11 @@ public class MainWindowViewModel : ReactiveViewModel
 }
 ```
 
-In order to be able to get the `ApplicationService` injected, it must be bound to the [Ninject](https://github.com/ninject/Ninject) kernel, so head over to the `App.xaml.cs`
-and add the following line to the `OnStartedAsync` method:
+In order to be able to get the `ApplicationService` injected, it must be bound to the IoC container, so head over to the `App.xaml.cs` and add the following line to the
+`OnStartedAsync` method:
 
 ```csharp
-this.Kernel.Bind<ApplicationService>().ToSelf().InSingletonScope();
+this.iocContainer.RegisterType<ApplicationService>(Scope.Singleton);
 ```
 
 Finally we have to add the quit button to the `MainWindow`:
@@ -635,11 +639,11 @@ There is another useful service that the MVVM Framework has in store for you: th
 various dialogs, e.g. message box, open file dialog, and open directory dialog, that Windows offers.
 
 In this last section we want to use the dialog service to ask users if they really want to cancel the creation of a todo list item. By now you probably know the
-drill: in order to use the `DialogService` you have to bind it to the [Ninject](https://github.com/ninject/Ninject) kernel in the `OnStartedAsync` method of the
-`App` class. Just add the following line to the `OnStartedAsync` method:
+drill: in order to use the `DialogService` you have to bind it to the IoC container in the `OnStartedAsync` method of the `App` class. Just add the following line to the
+`OnStartedAsync` method:
 
 ```csharp
-this.Kernel.Bind<DialogService>().ToSelf().InSingletonScope();
+this.iocContainer.RegisterType<DialogService>(Scope.Singleton);
 ```
 
 Now we can get it injected into the constructor of the `CreateTodoListItemViewModel`:
