@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 #region General Assembly Information
 
 [assembly: AssemblyTitle("MVVM Framework Reactive")]
-[assembly: AssemblyDescription("An MVVM Framework, which was build upon the basis of ReactiveUI and enhances it with several utility functions. This part of the framework contains several components which have been extended to support RX.")]
+[assembly: AssemblyDescription("The MVVM Framework is a compact and simple, yet powerful implementation of the MVVM pattern. This part of the framework contains several components which have been extended to support RX.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("MVVM Framework")]
