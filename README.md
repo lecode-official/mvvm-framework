@@ -12,11 +12,9 @@ pattern easier.
 My special thanks goes out to [Lukas Rögner](https://github.com/lukasroegner) who wrote a lot of the code and did a great deal of refactoring. Without him the
 project would not have happened.
 
-Also this project would not be possible without the great contributions of the open source community. The MVVM Framework was build using these awesome open source
-projects:
-
-- **[Ninject](https://github.com/ninject/Ninject)** - Ninject is a lightning-fast, ultra-lightweight dependency injector for .NET applications. It helps you split your application into a collection of loosely-coupled, highly-cohesive pieces, and then glue them back together in a flexible manner. By using Ninject to support your software's architecture, your code will become easier to write, reuse, test, and modify.
-- **[ReactiveUI](https://github.com/reactiveui/ReactiveUI)** - A MVVM framework that integrates with the Reactive Extensions for .NET to create elegant, testable User Interfaces that run on any mobile or desktop platform. Supports Xamarin.iOS, Xamarin.Android, Xamarin.Mac, Xamarin Forms, WPF, Windows Forms, Windows Phone 8, Windows Store and Universal Windows Platform (UWP).
+**[ReactiveUI](https://github.com/reactiveui/ReactiveUI)** - A MVVM framework that integrates with the Reactive Extensions for .NET to create elegant, testable
+User Interfaces that run on any mobile or desktop platform. Supports Xamarin.iOS, Xamarin.Android, Xamarin.Mac, Xamarin Forms, WPF, Windows Forms, Windows Phone 8,
+Windows Store and Universal Windows Platform (UWP).
 
 ## Using the Project
 
