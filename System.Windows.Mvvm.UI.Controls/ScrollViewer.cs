@@ -1,11 +1,4 @@
 ﻿
-#region Using Directives
-
-using System;
-using System.Windows;
-
-#endregion
-
 namespace System.Windows.Mvvm.UI.Controls
 {
     /// <summary>
@@ -42,7 +35,7 @@ namespace System.Windows.Mvvm.UI.Controls
         {
             // Validates the parameters
             if (scrollViewer == null)
-                throw new ArgumentNullException("scrollViewer");
+                throw new ArgumentNullException(nameof(scrollViewer));
 
             return (bool)scrollViewer.GetValue(ScrollViewer.IsHorizontalScrollingEnabledProperty);
         }
@@ -56,7 +49,7 @@ namespace System.Windows.Mvvm.UI.Controls
         {
             // Validates the parameters
             if (scrollViewer == null)
-                throw new ArgumentNullException("scrollViewer");
+                throw new ArgumentNullException(nameof(scrollViewer));
 
             scrollViewer.SetValue(ScrollViewer.IsHorizontalScrollingEnabledProperty, value);
         }

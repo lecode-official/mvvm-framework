@@ -355,8 +355,8 @@ new namespace):
 Finally we have to make an initial navigation to the view, which has to be done in the `OnStartedAsync` callback method in the `App.xaml.cs`. You have to specify the
 type of the view and the window to which you want to navigate. The navigation sub-system automatically figures out how to instantiate the window, the page, and the
 view model. It also automatically injects all services that the view model requires in its constructor. To use the navigation sub-system, the `WindowNavigationService`
-has to be bound to the [Ninject](https://github.com/ninject/Ninject) kernel. When navigating a `dynamic` object with parameters can be passed to the view model. The
-properties in the dynamic object are automatically matched by property name and assigned to the public properties of the view model. The second parameter of the
+has to be bound to the [Ninject](https://github.com/ninject/Ninject) kernel. When navigating an (anonymous) object with parameters can be passed to the view model. The
+properties in this object are automatically matched by property name and assigned to the public properties of the view model. The second parameter of the
 `NavigateAsync` method determines whether the window is the main window of the application. The main window has the same lifetime as the application, once the main
 window is closed, the application is shut down as well (this can also be configured in the `App.xaml` via the `ShutdownMode` property).
 
@@ -527,8 +527,8 @@ public override Task OnActivateAsync()
 }
 ```
 
-Here we use the `NavigateAsync` method. You have to specify the type of the view as the generic parameter. Optionally you could pass a `dynamic` object with parameters to the
-`NavigateAsync` method. The properties in the dynamic object are automatically matched by property name and assigned to the public properties of the view model.
+Here we use the `NavigateAsync` method. You have to specify the type of the view as the generic parameter. Optionally you could pass an (anonymous) object with parameters to the
+`NavigateAsync` method. The properties in this object are automatically matched by property name and assigned to the public properties of the view model.
 
 Finally, don't forget to add a new button to the main view, which navigates the user to the creation view:
 

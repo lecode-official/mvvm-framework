@@ -10,7 +10,7 @@ using System.Windows.Mvvm.Sample.Models;
 namespace System.Windows.Mvvm.Sample.Repositories
 {
     /// <summary>
-    /// Represents a simple in-memory repository for the 
+    /// Represents a simple in-memory repository for the <see cref="TodoListItem"/>s.
     /// </summary>
     public class TodoListItemsRepository
     {

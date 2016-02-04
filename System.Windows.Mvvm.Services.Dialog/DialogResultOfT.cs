@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 namespace System.Windows.Mvvm.Services.Dialog
 {
     /// <summary>

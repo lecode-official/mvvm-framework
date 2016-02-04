@@ -1,10 +1,8 @@
 ﻿
 #region Using Directives
 
-using Ninject;
-using Ninject.Parameters;
 using System.Collections.Generic;
-using System.ComponentModel;
+using System.InversionOfControl.Abstractions;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -25,11 +23,15 @@ namespace System.Windows.Mvvm.Services.Navigation
         /// <summary>
         /// Initializes a new <see cref="NavigationService"/> instance.
         /// </summary>
-        /// <param name="kernel">The Ninjet kernel, which is used to instantiate views and view models.</param>
-        internal NavigationService(IKernel kernel)
+        /// <param name="iocContainer">The IOC container which is used to instantiate the views and their corresponding view models.</param>
+        internal NavigationService(IReadOnlyIocContainer iocContainer)
         {
-            // Stores the kernel for later use
-            this.kernel = kernel;
+            // Validates the arguments
+            if (iocContainer == null)
+                throw new ArgumentNullException(nameof(iocContainer));
+
+            // Stores the IOC container for later use
+            this.iocContainer = iocContainer;
         }
 
         #endregion
@@ -37,9 +39,14 @@ namespace System.Windows.Mvvm.Services.Navigation
         #region Private Fields
 
         /// <summary>
-        /// Contains the Ninjet kernel, which is used to instantiate views and view models.
+        /// Contains the IOC container which is used to instantiate the views and their corresponding view models.
         /// </summary>
-        private IKernel kernel;
+        private IReadOnlyIocContainer iocContainer;
+
+        /// <summary>
+        /// Contains all cached types of the assembly. The types are used when activating a view model convention-based.
+        /// </summary>
+        private Type[] assemblyTypes = null;
 
         /// <summary>
         /// Contains the frame of the window in which the child views are to be displayed. If the window does not have a navigation frame, then the user cannot navigate in it.
@@ -50,11 +57,6 @@ namespace System.Windows.Mvvm.Services.Navigation
         /// Contains the stack of views for the backwards navigation.
         /// </summary>
         private Stack<KeyValuePair<Page, IViewModel>> navigationStack = new Stack<KeyValuePair<Page, IViewModel>>();
-        
-        /// <summary>
-        /// Contains all cached types of the assembly of a view that has been created.
-        /// </summary>
-        private Type[] assemblyTypes = null;
 
         #endregion
 
@@ -135,6 +137,15 @@ namespace System.Windows.Mvvm.Services.Navigation
 
         #endregion
 
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the naming convention for view models. The function gets the name of the view type and returns the name of the corresponding view model. This function is used for convention-based view model activation. The default implementation adds "Model" to the name of the view.
+        /// </summary>
+        public Func<string, string> ViewModelNamingConvention { get; set; } = viewName => string.Concat(viewName, "Model");
+
+        #endregion
+
         #region Private Methods
 
         /// <summary>
@@ -175,10 +186,7 @@ namespace System.Windows.Mvvm.Services.Navigation
         /// </summary>
         /// <param name="isCancellable">Determines whether the closing of the application can be cancelled by the view model.</param>
         /// <returns>Returns a value that determines whether the window was closed or its closing was cancelled. If <see cref="forceClose"/> is set to <c>true</c>, <c>NavigationResult.Navigated</c> is always returned.</returns>
-        internal async Task<NavigationResult> CloseWindowAsync(bool isCancellable)
-        {
-            return await this.CloseWindowAsync(isCancellable, !isCancellable ? NavigationReason.WindowClosed : NavigationReason.WindowClosing);
-        }
+        internal Task<NavigationResult> CloseWindowAsync(bool isCancellable) => this.CloseWindowAsync(isCancellable, !isCancellable ? NavigationReason.WindowClosed : NavigationReason.WindowClosing);
 
         /// <summary>
         /// Closes the window that is managed by this navigation manager.
@@ -186,10 +194,7 @@ namespace System.Windows.Mvvm.Services.Navigation
         /// <param name="isCancellable">Determines whether the closing of the application can be cancelled by the view model.</param>
         /// <param name="navigationReason">The navigation reason that is sent to the view model.</param>
         /// <returns>Returns a value that determines whether the window was closed or its closing was cancelled. If <see cref="isCancellable"/> is set to <c>false</c>, <c>NavigationResult.Navigated</c> is always returned.</returns>
-        internal async Task<NavigationResult> CloseWindowAsync(bool isCancellable, NavigationReason navigationReason)
-        {
-            return await this.CloseWindowAsync(isCancellable, navigationReason, true);
-        }
+        internal Task<NavigationResult> CloseWindowAsync(bool isCancellable, NavigationReason navigationReason) => this.CloseWindowAsync(isCancellable, navigationReason, true);
 
         /// <summary>
         /// Closes the window that is managed by this navigation manager.
@@ -274,10 +279,7 @@ namespace System.Windows.Mvvm.Services.Navigation
         /// <typeparam name="TView">The type of the view to which the user is to be navigated.</typeparam>
         /// <exception cref="InvalidOperationException">If the view or the view model can not be instantiated, or the window does not support navigation, an <see cref="InvalidOperationException"/> is thrown.</exception>
         /// <returns>Returns <see cref="NavigationResult.Navigated"/> if the user was successfully navigated and <see cref="NavigationResult.Canceled"/> otherwise.</returns>
-        public async Task<NavigationResult> NavigateAsync<TView>() where TView : Page
-        {
-            return await this.NavigateAsync<TView>(null);
-        }
+        public Task<NavigationResult> NavigateAsync<TView>() where TView : Page => this.NavigateAsync<TView>(null);
 
         /// <summary>
         /// Navigates the user to the specified view.
@@ -286,7 +288,7 @@ namespace System.Windows.Mvvm.Services.Navigation
         /// <typeparam name="TView">The type of the view to which the user is to be navigated.</typeparam>
         /// <exception cref="InvalidOperationException">If the view or the view model can not be instantiated, or the window does not support navigation, an <see cref="InvalidOperationException"/> is thrown.</exception>
         /// <returns>Returns <see cref="NavigationResult.Navigated"/> if the user was successfully navigated and <see cref="NavigationResult.Canceled"/> otherwise.</returns>
-        public async Task<NavigationResult> NavigateAsync<TView>(dynamic parameters) where TView : Page
+        public async Task<NavigationResult> NavigateAsync<TView>(object parameters) where TView : Page
         {
             // Checks if the current window supports navigation
             if (!this.SupportsNavigation)
@@ -304,7 +306,6 @@ namespace System.Windows.Mvvm.Services.Navigation
 
             // Determines the type of the view model, which can be done via attribute or convention
             Type viewModelType = null;
-            IViewModel viewModel = null;
             ViewModelAttribute viewModelAttribute = typeof(TView).GetCustomAttributes<ViewModelAttribute>().FirstOrDefault();
             if (viewModelAttribute != null)
             {
@@ -313,57 +314,27 @@ namespace System.Windows.Mvvm.Services.Navigation
             else
             {
                 this.assemblyTypes = this.assemblyTypes ?? typeof(TView).Assembly.GetTypes();
-                viewModelType = this.assemblyTypes.FirstOrDefault(type => type.Name == string.Concat(typeof(TView).Name, "Model"));
+                string viewModelName = this.ViewModelNamingConvention(typeof(TView).Name);
+                viewModelType = this.assemblyTypes.FirstOrDefault(type => type.Name == viewModelName);
             }
-            
-            // Checks if the view has a view model attribute, if so then the type specified in the attribute is used to instantiate a new view model for the view
+
+            // Instantiates the new view model
+            IViewModel viewModel = null;
             if (viewModelType != null)
             {
-                // Safely instantiates the corresponding view model for the view
-                object temporaryViewModel = null;
                 try
                 {
-                    try
-                    {
-                        // Creates the view model via dependency injection (the navigation service is injected as an optional constructor argument, this is helpful, because the view model does not have to retrieve it itself)
-                        TypeMatchingConstructorArgument constructorArgument = new TypeMatchingConstructorArgument(typeof(NavigationService), (context, target) => this);
-                        temporaryViewModel = this.kernel.Get(viewModelType, constructorArgument);
-                    }
-                    catch (ActivationException e)
-                    {
-                        throw new InvalidOperationException(Resources.Localization.NavigationService.ViewModelCouldNotBeInstantiatedExceptionMessage, e);
-                    }
-
-                    // Checks if the user provided any custom parameters
-                    if (parameters != null)
-                    {
-                        // Cycles through all properties of the parameters
-                        foreach (PropertyDescriptor parameter in TypeDescriptor.GetProperties(parameters))
-                        {
-                            // Gets the information about the parameter in the view model
-                            PropertyInfo parameterPropertyInfo = temporaryViewModel.GetType().GetProperty(parameter.Name);
-
-                            // Checks if the property was found, the types match and if the setter is implemented, if not then the value cannot be assigned and we turn to the next parameter
-                            if (parameterPropertyInfo == null || !parameterPropertyInfo.CanWrite || parameter.GetValue(parameters) == null)
-                                continue;
-
-                            // Sets the value of the parameter property in the view model to the value provided in the parameters
-                            parameterPropertyInfo.SetValue(temporaryViewModel, parameter.GetValue(parameters));
-                        }
-                    }
-
-                    // Converts the view model to the right base class and swaps the temporary view model with the final one
-                    viewModel = temporaryViewModel as IViewModel;
-                    if (viewModel == null)
-                        throw new InvalidOperationException(Resources.Localization.NavigationService.WrongViewModelTypeExceptionMessage);
-                    temporaryViewModel = null;
+                    // Lets the IOC container instantiate the view model, so that all dependencies can be injected (including the navigation service itself, which is set as an explitic constructor argument)
+                    viewModel = this.iocContainer.GetInstance(viewModelType, this).Inject(parameters) as IViewModel;
                 }
-                finally
+                catch (Exception e)
                 {
-                    // Checks if the temporary view model is not null, this only happens if an error occurred, therefore the view model is safely disposed of
-                    if (temporaryViewModel != null && temporaryViewModel is IDisposable)
-                        (temporaryViewModel as IDisposable).Dispose();
+                    throw new InvalidOperationException(Resources.Localization.NavigationService.ViewModelCouldNotBeInstantiatedExceptionMessage, e);
                 }
+
+                // Checks whether the view model implements the IViewModel interface
+                if (viewModel == null)
+                    throw new InvalidOperationException(Resources.Localization.NavigationService.WrongViewModelTypeExceptionMessage);
             }
 
             // Calls the activate event and then the navigate event of the view model
@@ -388,27 +359,44 @@ namespace System.Windows.Mvvm.Services.Navigation
             Page view = null;
             try
             {
-                view = this.kernel.Get<TView>();
-                if (!view.IsInitialized)
-                {
-                    MethodInfo initializeComponentMethod = view.GetType().GetMethod("InitializeComponent", BindingFlags.Public | BindingFlags.Instance);
-                    if (initializeComponentMethod != null)
-                        initializeComponentMethod.Invoke(view, new object[0]);
-                }
+                // Lets the IOC container instantiate the view, so that all dependencies can be injected
+                view = this.iocContainer.GetInstance<TView>();
             }
-            catch (ActivationException e)
+            catch (Exception e)
             {
+                // Since an error occurred, the new window view model is deactivated and disposed of
+                if (viewModel != null)
+                {
+                    await viewModel.OnDeactivateAsync();
+                    viewModel.Dispose();
+                }
+
+                // Rethrows the exception
                 throw new InvalidOperationException(Resources.Localization.NavigationService.ViewCouldNotBeInstantiatedExceptionMessage, e);
             }
 
-            // Navigates the user to the new view
+            // Since view is a framework element it must be properly initialized
+            if (!view.IsInitialized)
+            {
+                MethodInfo initializeComponentMethod = view.GetType().GetMethod("InitializeComponent", BindingFlags.Public | BindingFlags.Instance);
+                if (initializeComponentMethod != null)
+                    initializeComponentMethod.Invoke(view, new object[0]);
+            }
+
+            // Sets the view model as data context of the view
+            view.DataContext = viewModel;
+
+            // Adds the old view to the navigation stack
             if (this.CurrentViewModel != null)
                 this.CurrentViewModel.IsInView = false;
             if (this.CurrentView != null)
                 this.navigationStack.Push(new KeyValuePair<Page, IViewModel>(this.CurrentView, this.CurrentViewModel));
+
+            // Sets the current view and view model
             this.CurrentView = view;
             this.CurrentViewModel = viewModel;
-            this.CurrentView.DataContext = this.CurrentViewModel;
+
+            // Navigates the user to the new view
             this.navigationFrame.Navigate(this.CurrentView);
             if (this.CurrentViewModel != null)
                 this.CurrentViewModel.IsInView = true;

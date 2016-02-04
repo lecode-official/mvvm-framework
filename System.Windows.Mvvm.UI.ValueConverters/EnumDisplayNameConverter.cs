@@ -1,12 +1,9 @@
 ﻿
 #region Using Directives
 
-using System;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Resources;
-using System.Windows;
 using System.Windows.Data;
 
 #endregion

@@ -1,9 +1,7 @@
 ﻿
 #region Using Directives
 
-using System;
 using System.Text.RegularExpressions;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 
@@ -56,7 +54,7 @@ namespace System.Windows.Mvvm.UI.Controls
         {
             // Validates the argument
             if (frameworkElement == null)
-                throw new ArgumentNullException("frameworkElement");
+                throw new ArgumentNullException(nameof(frameworkElement));
 
             object objectValue = frameworkElement.GetValue(ComboBox.ValueRegexProperty);
             return objectValue == DependencyProperty.UnsetValue ? "*" : (string)objectValue;
@@ -71,7 +69,7 @@ namespace System.Windows.Mvvm.UI.Controls
         {
             // Validates the argument
             if (frameworkElement == null)
-                throw new ArgumentNullException("frameworkElement");
+                throw new ArgumentNullException(nameof(frameworkElement));
 
             frameworkElement.SetValue(ComboBox.ValueRegexProperty, value);
         }

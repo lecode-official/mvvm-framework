@@ -115,7 +115,7 @@ namespace System.Windows.Mvvm.Application
         /// Disposes of all managed and unmanaged resources that have been allocated. This method can be overridden by sub-classes in order to implement custom disposal logic.
         /// </summary>
         /// <param name="disposing">
-        /// Determines whether only unmanaged, or managed and unmaned resources should be disposed of. This is needed when the method is called from the destructor, because when the destructor is called all managed resources have already been disposed of.
+        /// Determines whether only unmanaged, or managed and unmanaged resources should be disposed of. This is needed when the method is called from the destructor, because when the destructor is called all managed resources have already been disposed of.
         /// </param>
         protected virtual void Dispose(bool disposing)
         {

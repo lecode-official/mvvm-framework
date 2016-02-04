@@ -2,7 +2,6 @@
 #region Using Directives
 
 using System.Windows.Mvvm.Configuration;
-using System;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using System.Windows.Mvvm.Configuration.Stores;

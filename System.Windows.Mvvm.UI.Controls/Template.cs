@@ -1,11 +1,4 @@
 ﻿
-#region Using Directives
-
-using System;
-using System.Windows;
-
-#endregion
-
 namespace System.Windows.Mvvm.UI.Controls
 {
     /// <summary>

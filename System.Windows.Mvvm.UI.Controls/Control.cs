@@ -1,8 +1,6 @@
 ﻿
 #region Using Directives
 
-using System;
-using System.Windows;
 using System.Windows.Input;
 
 #endregion
@@ -43,7 +41,7 @@ namespace System.Windows.Mvvm.UI.Controls
         {
             // Validates the parameters
             if (control == null)
-                throw new ArgumentNullException("control");
+                throw new ArgumentNullException(nameof(control));
 
             // Gets the value of the attached property
             return (bool)control.GetValue(Control.HasFocusProperty);
@@ -58,7 +56,7 @@ namespace System.Windows.Mvvm.UI.Controls
         {
             // Validates the parameters
             if (control == null)
-                throw new ArgumentNullException("control");
+                throw new ArgumentNullException(nameof(control));
 
             // Sets the value of the attached property
             control.SetValue(Control.HasFocusProperty, value);
@@ -82,7 +80,7 @@ namespace System.Windows.Mvvm.UI.Controls
         {
             // Validates the argument
             if (frameworkElement == null)
-                throw new ArgumentNullException("frameworkElement");
+                throw new ArgumentNullException(nameof(frameworkElement));
 
             return (bool)frameworkElement.GetValue(Control.IsValidProperty);
         }
@@ -96,7 +94,7 @@ namespace System.Windows.Mvvm.UI.Controls
         {
             // Validates the argument
             if (frameworkElement == null)
-                throw new ArgumentNullException("frameworkElement");
+                throw new ArgumentNullException(nameof(frameworkElement));
 
             frameworkElement.SetValue(Control.IsValidProperty, value);
         }

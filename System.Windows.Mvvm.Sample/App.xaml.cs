@@ -1,7 +1,8 @@
 ﻿
 #region Using Directives
 
-using Ninject;
+using System.InversionOfControl.Abstractions;
+using System.InversionOfControl.Abstractions.SimpleIoc;
 using System.Threading.Tasks;
 using System.Windows.Mvvm.Application;
 using System.Windows.Mvvm.Sample.Repositories;
@@ -19,6 +20,15 @@ namespace System.Windows.Mvvm.Sample
     /// </summary>
     public partial class App : MvvmApplication
     {
+        #region Private Fields
+
+        /// <summary>
+        /// Contains the IOC container which is used by the navigation service to activate the views and view models.
+        /// </summary>
+        private IIocContainer iocContainer;
+
+        #endregion
+
         #region MvvmApplication Implementation
 
         /// <summary>
@@ -27,15 +37,43 @@ namespace System.Windows.Mvvm.Sample
         /// <param name="eventArguments">The event arguments, that contains all necessary information about the application startup like the command line arguments.</param>
         protected override async Task OnStartedAsync(ApplicationStartedEventArgs eventArguments)
         {
-            // Binds the todo list item repository and some services to the Ninject kernel, so that it can be automatically injected into view models
-            this.Kernel.Bind<TodoListItemsRepository>().ToSelf().InSingletonScope();
-            this.Kernel.Bind<WindowNavigationService>().ToSelf().InSingletonScope();
-            this.Kernel.Bind<ApplicationService>().ToSelf().InSingletonScope();
-            this.Kernel.Bind<DialogService>().ToSelf().InSingletonScope();
+            // Initializes the IOC container; in this sample the Simple IOC is used
+            this.iocContainer = new SimpleIocContainer();
+
+            // Binds the todo list item repository and some services to the IOC container, so that it can be automatically injected into view models
+            this.iocContainer.RegisterType<TodoListItemsRepository>(Scope.Singleton);
+            this.iocContainer.RegisterType<WindowNavigationService>(Scope.Singleton);
+            this.iocContainer.RegisterType<ApplicationService>(Scope.Singleton);
+            this.iocContainer.RegisterType<DialogService>(Scope.Singleton);
 
             // Navigates the user to the main view
-            WindowNavigationService windowNavigationService = this.Kernel.Get<WindowNavigationService>();
+            WindowNavigationService windowNavigationService = this.iocContainer.GetInstance<WindowNavigationService>();
             await windowNavigationService.NavigateAsync<MainWindow, MainView>(null, true);
+        }
+
+        #endregion
+
+        #region IDisposable Implementation
+
+        /// <summary>
+        /// Disposes of all managed and unmanaged resources that have been allocated.
+        /// </summary>
+        /// <param name="disposing">
+        /// Determines whether only unmanaged, or managed and unmanaged resources should be disposed of. This is needed when the method is called from the destructor, because when the destructor is called all managed resources have already been disposed of.
+        /// </param>
+        protected override void Dispose(bool disposing)
+        {
+            // Calls the base implementation
+            base.Dispose(disposing);
+            
+            // Checks if managed resources should be disposed of
+            if (disposing)
+            {
+                // Disposes of the IOC container
+                if (this.iocContainer != null)
+                    this.iocContainer.Dispose();
+                this.iocContainer = null;
+            }
         }
 
         #endregion

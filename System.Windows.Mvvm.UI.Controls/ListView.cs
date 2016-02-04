@@ -1,8 +1,6 @@
 ﻿
 #region Using Directives
 
-using System;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -45,7 +43,7 @@ namespace System.Windows.Mvvm.UI.Controls
         {
             // Validates the argument
             if (frameworkElement == null)
-                throw new ArgumentNullException("frameworkElement");
+                throw new ArgumentNullException(nameof(frameworkElement));
 
             return (ICommand)frameworkElement.GetValue(ListView.ItemActivatedCommandProperty);
         }
@@ -59,7 +57,7 @@ namespace System.Windows.Mvvm.UI.Controls
         {
             // Validates the argument
             if (frameworkElement == null)
-                throw new ArgumentNullException("frameworkElement");
+                throw new ArgumentNullException(nameof(frameworkElement));
 
             frameworkElement.SetValue(ListView.ItemActivatedCommandProperty, value);
         }
@@ -91,7 +89,7 @@ namespace System.Windows.Mvvm.UI.Controls
         {
             // Validates the argument
             if (frameworkElement == null)
-                throw new ArgumentNullException("frameworkElement");
+                throw new ArgumentNullException(nameof(frameworkElement));
 
             return (bool)frameworkElement.GetValue(ListView.IsItemContextMenuProperty);
         }
@@ -105,7 +103,7 @@ namespace System.Windows.Mvvm.UI.Controls
         {
             // Validates the argument
             if (frameworkElement == null)
-                throw new ArgumentNullException("frameworkElement");
+                throw new ArgumentNullException(nameof(frameworkElement));
 
             frameworkElement.SetValue(ListView.IsItemContextMenuProperty, value);
         }

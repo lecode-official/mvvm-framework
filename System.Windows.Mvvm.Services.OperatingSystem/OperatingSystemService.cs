@@ -2,7 +2,6 @@
 #region Using Directives
 
 using System.Diagnostics;
-using System.Windows;
 
 #endregion
 

@@ -1,4 +1,6 @@
-﻿<mvvm:MvvmApplication x:Class="System.Windows.Mvvm.Sample.App"
+﻿
+<!-- Represents the MVVM application and serves as an entry-point to the application. -->    
+<mvvm:MvvmApplication x:Class="System.Windows.Mvvm.Sample.App"
                       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                       xmlns:local="clr-namespace:System.Windows.Mvvm.Sample"

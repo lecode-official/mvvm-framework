@@ -1,10 +1,8 @@
 ﻿
 #region Using Directives
 
-using Ninject;
-using Ninject.Parameters;
 using System.Collections.Generic;
-using System.ComponentModel;
+using System.InversionOfControl.Abstractions;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -24,15 +22,15 @@ namespace System.Windows.Mvvm.Services.Navigation
         /// <summary>
         /// Initializes a new <see cref="WindowNavigationService"/> instance.
         /// </summary>
-        /// <param name="kernel">The Ninject kernel, which is used to instantiate the views and their corresponding view models.</param>
-        public WindowNavigationService(IKernel kernel)
+        /// <param name="iocContainer">The IOC container which is used to instantiate the windows and their corresponding view models.</param>
+        public WindowNavigationService(IReadOnlyIocContainer iocContainer)
         {
             // Validates the arguments
-            if (kernel == null)
-                throw new ArgumentNullException("kernel");
+            if (iocContainer == null)
+                throw new ArgumentNullException(nameof(iocContainer));
 
-            // Stores the Ninject kernel for later use
-            this.kernel = kernel;
+            // Stores the IOC container for later use
+            this.iocContainer = iocContainer;
         }
 
         #endregion
@@ -40,19 +38,28 @@ namespace System.Windows.Mvvm.Services.Navigation
         #region Private Fields
 
         /// <summary>
-        /// Contains the Ninject kernel, which is used to instantiate the views and their corresponding view models.
+        /// Contains the IOC container which is used to instantiate the windows and their corresponding view models.
         /// </summary>
-        private IKernel kernel;
+        private IReadOnlyIocContainer iocContainer;
 
         /// <summary>
-        /// Contains the navigation managers of all open windows.
+        /// Contains the navigation services of all open windows.
         /// </summary>
         private ICollection<NavigationService> navigationServices = new List<NavigationService>();
 
         /// <summary>
-        /// Contains all cached types of the assembly of a window that has been created.
+        /// Contains all cached types of the assembly. The types are used when activating a view model convention-based.
         /// </summary>
         private Type[] assemblyTypes = null;
+
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the naming convention for view models. The function gets the name of the window type and returns the name of the corresponding view model. This function is used for convention-based view model activation. The default implementation adds "ViewModel" to the name of the window.
+        /// </summary>
+        public Func<string, string> ViewModelNamingConvention { get; set; } = windowName => string.Concat(windowName, "ViewModel");
 
         #endregion
 
@@ -65,73 +72,42 @@ namespace System.Windows.Mvvm.Services.Navigation
         /// <param name="parameters">The parameters that are passed to the window's view model.</param>
         /// <exception cref="InvalidOperationException">If the the window or it's view model can not be instantiated, an <see cref="InvalidOperationException"/> is thrown.</exception>
         /// <returns>Returns the navigation result, the new window, and the new view model of the window.</returns>
-        private async Task<WindowCreationResult> CreateWindowAsync<TWindow>(dynamic parameters) where TWindow : Window
+        private async Task<WindowCreationResult> CreateWindowAsync<TWindow>(object parameters) where TWindow : Window
         {
             // Creates a new navigation service for the window
-            NavigationService navigationService = new NavigationService(this.kernel);
+            NavigationService navigationService = new NavigationService(this.iocContainer);
 
             // Determines the type of the view model, which can be done via attribute or convention
             Type windowViewModelType = null;
-            IViewModel windowViewModel = null;
-            ViewModelAttribute windowViewModelAttribute = typeof(TWindow).GetCustomAttributes<ViewModelAttribute>().FirstOrDefault();
-            if (windowViewModelAttribute != null)
+            ViewModelAttribute viewModelAttribute = typeof(TWindow).GetCustomAttributes<ViewModelAttribute>().FirstOrDefault();
+            if (viewModelAttribute != null)
             {
-                windowViewModelType = windowViewModelAttribute.ViewModelType;
+                windowViewModelType = viewModelAttribute.ViewModelType;
             }
             else
             {
                 this.assemblyTypes = this.assemblyTypes ?? typeof(TWindow).Assembly.GetTypes();
-                windowViewModelType = this.assemblyTypes.FirstOrDefault(type => type.Name == string.Concat(typeof(TWindow).Name, "ViewModel"));
+                string viewModelName = this.ViewModelNamingConvention(typeof(TWindow).Name);
+                windowViewModelType = this.assemblyTypes.FirstOrDefault(type => type.Name == viewModelName);
             }
 
-            // Checks if the window has a view model attribute, if so then the type specified in the attribute is used to instantiate a new view model for the window
+            // Instantiates the new view model
+            IViewModel windowViewModel = null;
             if (windowViewModelType != null)
             {
-                // Safely instantiates the corresponding view model for the view
-                object temporaryWindowViewModel = null;
                 try
                 {
-                    try
-                    {
-                        // Creates the view model via dependency injection (the navigation service is injected as an optional constructor argument, this is helpful, because the view model does not have to retrieve it itself)
-                        TypeMatchingConstructorArgument constructorArgument = new TypeMatchingConstructorArgument(typeof(NavigationService), (context, target) => navigationService);
-                        temporaryWindowViewModel = this.kernel.Get(windowViewModelType, constructorArgument);
-                    }
-                    catch (ActivationException e)
-                    {
-                        throw new InvalidOperationException(Resources.Localization.WindowNavigationService.WindowViewModelCouldNotBeInstantiatedExceptionMessage, e);
-                    }
-
-                    // Checks if the user provided any custom parameters
-                    if (parameters != null)
-                    {
-                        // Cycles through all properties of the parameters
-                        foreach (PropertyDescriptor parameter in TypeDescriptor.GetProperties(parameters))
-                        {
-                            // Gets the information about the parameter in the window view model
-                            PropertyInfo parameterPropertyInfo = temporaryWindowViewModel.GetType().GetProperty(parameter.Name);
-
-                            // Checks if the property was found, the types match and if the setter is implemented, if not then the value cannot be assigned and we turn to the next parameter
-                            if (parameterPropertyInfo == null || !parameterPropertyInfo.CanWrite || parameter.GetValue(parameters) == null)
-                                continue;
-
-                            // Sets the value of the parameter property in the window view model to the value provided in the parameters
-                            parameterPropertyInfo.SetValue(temporaryWindowViewModel, parameter.GetValue(parameters));
-                        }
-                    }
-
-                    // Converts the view model to the right base class and swaps the temporary view model with the final one
-                    windowViewModel = temporaryWindowViewModel as IViewModel;
-                    if (windowViewModel == null)
-                        throw new InvalidOperationException(Resources.Localization.WindowNavigationService.WrongViewModelTypeExceptionMessage);
-                    temporaryWindowViewModel = null;
+                    // Lets the IOC container instantiate the view model, so that all dependencies can be injected
+                    windowViewModel = this.iocContainer.GetInstance(windowViewModelType).Inject(parameters) as IViewModel;
                 }
-                finally
+                catch (Exception e)
                 {
-                    // Checks if the temporary window view model is not null, this only happens if an error occurred, therefore the window view model is safely disposed of
-                    if (temporaryWindowViewModel != null && temporaryWindowViewModel is IDisposable)
-                        (temporaryWindowViewModel as IDisposable).Dispose();
+                    throw new InvalidOperationException(Resources.Localization.WindowNavigationService.WindowViewModelCouldNotBeInstantiatedExceptionMessage, e);
                 }
+
+                // Checks whether the view model implements the IViewModel interface
+                if (windowViewModel == null)
+                    throw new InvalidOperationException(Resources.Localization.WindowNavigationService.WrongViewModelTypeExceptionMessage);
             }
 
             // Calls the activate event and then the navigate event of the window view model
@@ -152,54 +128,60 @@ namespace System.Windows.Mvvm.Services.Navigation
                 }
             }
 
-            // Safely instantiates the new window
-            Exception exception = null;
+            // Instantiates the new window
             try
             {
-                // Instantiates the new window and sets the view model
-                navigationService.Window = this.kernel.Get<TWindow>();
-                if (!navigationService.Window.IsInitialized)
-                {
-                    MethodInfo initializeComponentMethod = navigationService.Window.GetType().GetMethod("InitializeComponent", BindingFlags.Public | BindingFlags.Instance);
-                    if (initializeComponentMethod != null)
-                        initializeComponentMethod.Invoke(navigationService.Window, new object[0]);
-                }
-                navigationService.Window.DataContext = windowViewModel;
-
-                // Subscribes to the closing event of the window, so that the window can be properly closed (with all the lifecycle callbacks)
-                navigationService.Window.Closing += (sender, e) =>
-                {
-                    // Calls the close window method in order to execute the lifecycle methods (the window is not closed within this call)
-                    if (navigationService.CloseWindowAsync(true, NavigationReason.WindowClosing, false).Result == NavigationResult.Canceled)
-                    {
-                        e.Cancel = true;
-                        return;
-                    }
-
-                    // Removes the navigation manager from the list of window navigation managers
-                    this.navigationServices.Remove(navigationService);
-                    if (this.WindowClosed != null)
-                        this.WindowClosed(this, new WindowEventArgs(navigationService));
-                };
-
-                // Returns the result
-                return new WindowCreationResult
-                {
-                    Window = navigationService.Window,
-                    ViewModel = windowViewModel,
-                    NavigationResult = NavigationResult.Navigated,
-                    NavigationService = navigationService
-                };
+                // Lets the IOC container instantiate the window, so that all dependencies can be injected
+                navigationService.Window = this.iocContainer.GetInstance<TWindow>();
             }
-            catch (ActivationException e)
+            catch (Exception e)
             {
-                exception = e;
+                // Since an error occurred, the new window view model is deactivated and disposed of
+                if (windowViewModel != null)
+                {
+                    await windowViewModel.OnDeactivateAsync();
+                    windowViewModel.Dispose();
+                }
+
+                // Rethrows the exception
+                throw new InvalidOperationException(Resources.Localization.WindowNavigationService.WindowCouldNotBeInstantiatedExceptionMessage, e);
             }
 
-            // Since an error occurred, the new window view model is deactivated, disposed of, and the exception is rethrown
-            await windowViewModel.OnDeactivateAsync();
-            windowViewModel.Dispose();
-            throw new InvalidOperationException(Resources.Localization.WindowNavigationService.WindowCouldNotBeInstantiatedExceptionMessage, exception);
+            // Since window is a framework element it must be properly initialized
+            if (!navigationService.Window.IsInitialized)
+            {
+                MethodInfo initializeComponentMethod = navigationService.Window.GetType().GetMethod("InitializeComponent", BindingFlags.Public | BindingFlags.Instance);
+                if (initializeComponentMethod != null)
+                    initializeComponentMethod.Invoke(navigationService.Window, new object[0]);
+            }
+
+            // Sets the view model as data context of the window
+            navigationService.Window.DataContext = windowViewModel;
+
+            // Subscribes to the closing event of the window, so that the window can be properly closed (with all the lifecycle callbacks)
+            navigationService.Window.Closing += (sender, e) =>
+            {
+                // Calls the close window method in order to execute the lifecycle methods (the window is not closed within this call)
+                if (navigationService.CloseWindowAsync(true, NavigationReason.WindowClosing, false).Result == NavigationResult.Canceled)
+                {
+                    e.Cancel = true;
+                    return;
+                }
+
+                // Removes the navigation manager from the list of window navigation managers
+                this.navigationServices.Remove(navigationService);
+                if (this.WindowClosed != null)
+                    this.WindowClosed(this, new WindowEventArgs(navigationService));
+            };
+
+            // Returns the result
+            return new WindowCreationResult
+            {
+                Window = navigationService.Window,
+                ViewModel = windowViewModel,
+                NavigationResult = NavigationResult.Navigated,
+                NavigationService = navigationService
+            };
         }
 
         #endregion
@@ -216,7 +198,7 @@ namespace System.Windows.Mvvm.Services.Navigation
         /// <param name="isMainWindow">Determines whether the new window is set as the main window of the application. If the main window is closed, the application is shut down.</param>
         /// <exception cref="InvalidOperationException">If the view, the window, or either of the view models can not be instantiated, or the window does not support navigation, an <see cref="InvalidOperationException"/> is thrown.</exception>
         /// <returns>Returns whether the navigation was successful or cancelled.</returns>
-        public async Task<WindowNavigationResult> NavigateAsync<TWindow, TView>(dynamic windowParameters, dynamic viewParameters, bool isMainWindow = false)
+        public async Task<WindowNavigationResult> NavigateAsync<TWindow, TView>(object windowParameters, object viewParameters, bool isMainWindow = false)
             where TWindow : Window
             where TView : Page
         {
@@ -286,11 +268,11 @@ namespace System.Windows.Mvvm.Services.Navigation
         /// <param name="isMainWindow">Determines whether the new window is set as the main window of the application. If the main window is closed, then the application is shut down.</param>
         /// <exception cref="InvalidOperationException">If the view, the window, or either of the view models can not be instantiated, or the window does not support navigation, an <see cref="InvalidOperationException"/> is thrown.</exception>
         /// <returns>Returns whether the navigation was successful or cancelled.</returns>
-        public async Task<WindowNavigationResult> NavigateAsync<TWindow, TView>(dynamic viewParameters, bool isMainWindow = false)
+        public Task<WindowNavigationResult> NavigateAsync<TWindow, TView>(object viewParameters, bool isMainWindow = false)
             where TWindow : Window
             where TView : Page
         {
-            return await this.NavigateAsync<TWindow, TView>(null, viewParameters, isMainWindow);
+            return this.NavigateAsync<TWindow, TView>(null, viewParameters, isMainWindow);
         }
 
         /// <summary>
@@ -301,7 +283,7 @@ namespace System.Windows.Mvvm.Services.Navigation
         /// <param name="isMainWindow">Determines whether the new window is set as the main window of the application. If the main window is closed, then the application is shut down.</param>
         /// <exception cref="InvalidOperationException">If the the window or it's view model can not be instantiated, an <see cref="InvalidOperationException"/> is thrown.</exception>
         /// <returns>Returns whether the navigation was successful or cancelled.</returns>
-        public async Task<WindowNavigationResult> NavigateAsync<TWindow>(dynamic parameters, bool isMainWindow) where TWindow : Window
+        public async Task<WindowNavigationResult> NavigateAsync<TWindow>(object parameters, bool isMainWindow) where TWindow : Window
         {
             // Creates the new window
             WindowCreationResult result = await this.CreateWindowAsync<TWindow>(parameters);
@@ -349,10 +331,7 @@ namespace System.Windows.Mvvm.Services.Navigation
         /// <param name="isMainWindow">Determines whether the new window is set as the main window of the application. If the main window is closed, then the application is shut down.</param>
         /// <exception cref="InvalidOperationException">If the the window or it's view model can not be instantiated, an <see cref="InvalidOperationException"/> is thrown.</exception>
         /// <returns>Returns whether the navigation was successful or cancelled.</returns>
-        public async Task<WindowNavigationResult> NavigateAsync<TWindow>(bool isMainWindow) where TWindow : Window
-        {
-            return await this.NavigateAsync<TWindow>(null, isMainWindow);
-        }
+        public Task<WindowNavigationResult> NavigateAsync<TWindow>(bool isMainWindow) where TWindow : Window => this.NavigateAsync<TWindow>(null, isMainWindow);
 
         /// <summary>
         /// Creates a new window and displays it.
@@ -360,10 +339,7 @@ namespace System.Windows.Mvvm.Services.Navigation
         /// <typeparam name="TWindow">The type of the window that is to be created.</typeparam>
         /// <exception cref="InvalidOperationException">If the the window or it's view model can not be instantiated, an <see cref="InvalidOperationException"/> is thrown.</exception>
         /// <returns>Returns whether the navigation was successful or cancelled.</returns>
-        public async Task<WindowNavigationResult> NavigateAsync<TWindow>() where TWindow : Window
-        {
-            return await this.NavigateAsync<TWindow>(null, false);
-        }
+        public Task<WindowNavigationResult> NavigateAsync<TWindow>() where TWindow : Window => this.NavigateAsync<TWindow>(null, false);
 
         /// <summary>
         /// Creates a new window, displays it, and navigates to a view within the window. It shows the window as a dialog and waits till the window has closed.
@@ -374,7 +350,7 @@ namespace System.Windows.Mvvm.Services.Navigation
         /// <param name="viewParameters">The parameters that are passeed to the view model of the view.</param>
         /// <exception cref="InvalidOperationException">If the view, the window, or either of the view models can not be instantiated, or the window does not support navigation, an <see cref="InvalidOperationException"/> is thrown.</exception>
         /// <returns>Returns whether the navigation was successful or cancelled.</returns>
-        public async Task<WindowNavigationResult> NavigateDialogAsync<TWindow, TView>(dynamic windowParameters, dynamic viewParameters)
+        public async Task<WindowNavigationResult> NavigateDialogAsync<TWindow, TView>(object windowParameters, object viewParameters)
           where TWindow : Window
           where TView : Page
         {
@@ -428,11 +404,11 @@ namespace System.Windows.Mvvm.Services.Navigation
         /// <param name="isMainWindow">Determines whether the new window is set as the main window of the application. If the main window is closed, then the application is shut down.</param>
         /// <exception cref="InvalidOperationException">If the view, the window, or either of the view models can not be instantiated, or the window does not support navigation, an <see cref="InvalidOperationException"/> is thrown.</exception>
         /// <returns>Returns whether the navigation was successful or cancelled.</returns>
-        public async Task<WindowNavigationResult> NavigateDialogAsync<TWindow, TView>(dynamic viewParameters)
+        public Task<WindowNavigationResult> NavigateDialogAsync<TWindow, TView>(object viewParameters)
             where TWindow : Window
             where TView : Page
         {
-            return await this.NavigateDialogAsync<TWindow, TView>(null, viewParameters);
+            return this.NavigateDialogAsync<TWindow, TView>(null, viewParameters);
         }
 
         /// <summary>
@@ -443,7 +419,7 @@ namespace System.Windows.Mvvm.Services.Navigation
         /// <param name="isMainWindow">Determines whether the new window is set as the main window of the application. If the main window is closed, then the application is shut down.</param>
         /// <exception cref="InvalidOperationException">If the the window or it's view model can not be instantiated, an <see cref="InvalidOperationException"/> is thrown.</exception>
         /// <returns>Returns whether the navigation was successful or cancelled.</returns>
-        public async Task<WindowNavigationResult> NavigateDialogAsync<TWindow>(dynamic parameters) where TWindow : Window
+        public async Task<WindowNavigationResult> NavigateDialogAsync<TWindow>(object parameters) where TWindow : Window
         {
             // Creates the new window
             WindowCreationResult result = await this.CreateWindowAsync<TWindow>(parameters);
@@ -475,10 +451,7 @@ namespace System.Windows.Mvvm.Services.Navigation
         /// <param name="isMainWindow">Determines whether the new window is set as the main window of the application. If the main window is closed, then the application is shut down.</param>
         /// <exception cref="InvalidOperationException">If the the window or it's view model can not be instantiated, an <see cref="InvalidOperationException"/> is thrown.</exception>
         /// <returns>Returns whether the navigation was successful or cancelled.</returns>
-        public async Task<WindowNavigationResult> NavigateDialogAsync<TWindow>() where TWindow : Window
-        {
-            return await this.NavigateDialogAsync<TWindow>(null);
-        }
+        public Task<WindowNavigationResult> NavigateDialogAsync<TWindow>() where TWindow : Window => this.NavigateDialogAsync<TWindow>(null);
 
         /// <summary>
         /// Gets the state of the window of the specified view model.
@@ -490,7 +463,7 @@ namespace System.Windows.Mvvm.Services.Navigation
         {
             // Validates the paramters
             if (viewModel == null)
-                throw new ArgumentNullException("viewModel");
+                throw new ArgumentNullException(nameof(viewModel));
 
             // Gets the navigation service for the specified view model, if no navigation service could be found, an invalid operation exception is thrown
             NavigationService navigationService = this.GetNavigationService(viewModel);
@@ -510,7 +483,7 @@ namespace System.Windows.Mvvm.Services.Navigation
         {
             // Validates the paramters
             if (navigationService == null)
-                throw new ArgumentNullException("navigationService");
+                throw new ArgumentNullException(nameof(navigationService));
 
             // Returns the window state of the window
             return navigationService.Window.WindowState;
@@ -527,7 +500,7 @@ namespace System.Windows.Mvvm.Services.Navigation
         {
             // Validates the paramters
             if (viewModel == null)
-                throw new ArgumentNullException("viewModel");
+                throw new ArgumentNullException(nameof(viewModel));
 
             // Gets the navigation service for the specified view model, if no navigation service could be found, an invalid operation exception is thrown
             NavigationService navigationService = this.GetNavigationService(viewModel);
@@ -548,7 +521,7 @@ namespace System.Windows.Mvvm.Services.Navigation
         {
             // Validates the paramters
             if (navigationService == null)
-                throw new ArgumentNullException("navigationService");
+                throw new ArgumentNullException(nameof(navigationService));
 
             // Sets the new window state of the window
             navigationService.Window.WindowState = newState;
@@ -561,10 +534,7 @@ namespace System.Windows.Mvvm.Services.Navigation
         /// <exception cref="ArgumentNullException">If the specified view model is <c>null</c>, an <see cref="ArgumentNullException"/> exception is thrown</exception>
         /// <exception cref="InvalidOperationException">If the view model does not belong to a window, an <see cref="InvalidOperationException"/> exception is thrown.</exception>
         /// <returns>Returns <c>NavigationResult.Navigated</c> if the window could be closed and <c>NavigationResult.Cancelled</c> if the navigation was cancelled.</returns>
-        public async Task<NavigationResult> CloseWindowAsync(IViewModel viewModel)
-        {
-            return await this.CloseWindowAsync(viewModel, false);
-        }
+        public Task<NavigationResult> CloseWindowAsync(IViewModel viewModel) => this.CloseWindowAsync(viewModel, false);
 
         /// <summary>
         /// Closes the window of the specified view model.
@@ -578,7 +548,7 @@ namespace System.Windows.Mvvm.Services.Navigation
         {
             // Validates the paramters
             if (viewModel == null)
-                throw new ArgumentNullException("viewModel");
+                throw new ArgumentNullException(nameof(viewModel));
 
             // Gets the navigation service for the specified view model, if no navigation service could be found, an invalid operation exception is thrown
             NavigationService navigationService = this.GetNavigationService(viewModel);
@@ -595,10 +565,7 @@ namespace System.Windows.Mvvm.Services.Navigation
         /// <param name="navigationService">The navigation manager whose window is to be closed.</param>
         /// <exception cref="ArgumentNullException">If the specified navigation manager is <c>null</c>, then an <see cref="ArgumentNullException"/> exception is thrown.</exception>
         /// <returns>Returns <c>NavigationResult.Navigated</c> if the window could be closed and <c>NavigationResult.Cancelled</c> if the navigation was cancelled.</returns>
-        public async Task<NavigationResult> CloseWindowAsync(NavigationService navigationService)
-        {
-            return await this.CloseWindowAsync(navigationService, false);
-        }
+        public Task<NavigationResult> CloseWindowAsync(NavigationService navigationService) => this.CloseWindowAsync(navigationService, false);
 
         /// <summary>
         /// Closes the window of the specified navigation manager.
@@ -611,7 +578,7 @@ namespace System.Windows.Mvvm.Services.Navigation
         {
             // Validates the parameters
             if (navigationService == null)
-                throw new ArgumentNullException("navigationService");
+                throw new ArgumentNullException(nameof(navigationService));
 
             // Closes the window
             if (await navigationService.CloseWindowAsync(!forceClose) == NavigationResult.Canceled)
@@ -631,20 +598,14 @@ namespace System.Windows.Mvvm.Services.Navigation
         /// </summary>
         /// <param name="viewModel">The view model for which the navigation service is to be retrieved.</param>
         /// <returns>Returns the navigation service for the view model if it exists.</returns>
-        public NavigationService GetNavigationService(IViewModel viewModel)
-        {
-            return this.navigationServices.SingleOrDefault(navigationManager => navigationManager.WindowViewModel == viewModel || navigationManager.CurrentViewModel == viewModel);
-        }
+        public NavigationService GetNavigationService(IViewModel viewModel) => this.navigationServices.SingleOrDefault(navigationManager => navigationManager.WindowViewModel == viewModel || navigationManager.CurrentViewModel == viewModel);
 
         /// <summary>
         /// Retrieves the navigation services for the specified type of window.
         /// </summary>
         /// <typeparam name="TWindow">The type of the window for which existing navigation services are to be retrieved.</typeparam>
         /// <returns>Returns the navigation services for the type of window.</returns>
-        public IEnumerable<NavigationService> GetNavigationServices<TWindow>() where TWindow : Window
-        {
-            return this.navigationServices.Where(navigationService => navigationService.Window != null && navigationService.Window is TWindow).ToList();
-        }
+        public IEnumerable<NavigationService> GetNavigationServices<TWindow>() where TWindow : Window => this.navigationServices.Where(navigationService => navigationService.Window != null && navigationService.Window is TWindow).ToList();
 
         /// <summary>
         /// Shuts down the window navigation service by closing all views and windows and destroying their view models.
