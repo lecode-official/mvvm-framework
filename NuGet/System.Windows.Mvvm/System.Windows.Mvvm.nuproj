@@ -22,7 +22,7 @@
     <ProjectReference Include="..\..\System.Windows.Mvvm.Services.Dialog\System.Windows.Mvvm.Services.Dialog.csproj" />
     <ProjectReference Include="..\..\System.Windows.Mvvm.Services.Navigation\System.Windows.Mvvm.Services.Navigation.csproj" />
     <ProjectReference Include="..\..\System.Windows.Mvvm.Services.OperatingSystem\System.Windows.Mvvm.Services.OperatingSystem.csproj" />
-    <ProjectReference Include="..\..\System.Windows\System.Windows.csproj" />
+    <ProjectReference Include="..\..\System.Windows.Mvvm.UI\System.Windows.Mvvm.UI.csproj" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>2ae7d561-d045-4e97-9948-bb294bb3eab2</ProjectGuid>
