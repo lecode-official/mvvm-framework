@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace System.Windows.Mvvm.UI.Markup.Resources.Localization {
+namespace System.Windows.Resources.Localization.Markup {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace System.Windows.Mvvm.UI.Markup.Resources.Localization {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("System.Windows.Mvvm.UI.Markup.Resources.Localization.CommandBindingExtension", typeof(CommandBindingExtension).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("System.Windows.Resources.Localization.Markup.CommandBindingExtension", typeof(CommandBindingExtension).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

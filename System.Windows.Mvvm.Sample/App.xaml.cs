@@ -41,6 +41,7 @@ namespace System.Windows.Mvvm.Sample
             this.iocContainer = new SimpleIocContainer();
 
             // Binds the todo list item repository and some services to the IOC container, so that it can be automatically injected into view models
+            this.iocContainer.RegisterType<IReadOnlyIocContainer>(() => this.iocContainer);
             this.iocContainer.RegisterType<TodoListItemsRepository>(Scope.Singleton);
             this.iocContainer.RegisterType<WindowNavigationService>(Scope.Singleton);
             this.iocContainer.RegisterType<ApplicationService>(Scope.Singleton);

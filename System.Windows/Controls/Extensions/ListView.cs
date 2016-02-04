@@ -1,14 +1,13 @@
 ﻿
 #region Using Directives
 
-using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 
 #endregion
 
-namespace System.Windows.Mvvm.UI.Controls
+namespace System.Windows.Controls.Extensions
 {
     /// <summary>
     /// Represents an attached property for advanced list view features.

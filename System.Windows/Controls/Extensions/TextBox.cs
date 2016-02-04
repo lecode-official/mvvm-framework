@@ -2,12 +2,11 @@
 #region Using Directives
 
 using System.Text.RegularExpressions;
-using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 
 #endregion
 
-namespace System.Windows.Mvvm.UI.Controls
+namespace System.Windows.Controls.Extensions
 {
     /// <summary>
     /// Represents an attached property for text box validation and input.

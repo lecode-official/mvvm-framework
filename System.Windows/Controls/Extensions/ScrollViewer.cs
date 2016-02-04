@@ -1,5 +1,5 @@
 ﻿
-namespace System.Windows.Mvvm.UI.Controls
+namespace System.Windows.Controls.Extensions
 {
     /// <summary>
     /// Represents a set of attached properties for scroll viewers.
