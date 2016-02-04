@@ -92,13 +92,12 @@ namespace System.Windows.Mvvm.Services.Navigation
             }
 
             // Instantiates the new view model
-            IViewModel windowViewModel = null;
             if (windowViewModelType != null)
             {
                 try
                 {
-                    // Lets the IOC container instantiate the view model, so that all dependencies can be injected
-                    windowViewModel = this.iocContainer.GetInstance(windowViewModelType).Inject(parameters) as IViewModel;
+                    // Lets the IOC container instantiate the view model, so that all dependencies can be injected (including the navigation service itself, which is set as an explitic constructor argument)
+                    navigationService.WindowViewModel = this.iocContainer.GetInstance(windowViewModelType, navigationService).Inject(parameters) as IViewModel;
                 }
                 catch (Exception e)
                 {
@@ -106,24 +105,24 @@ namespace System.Windows.Mvvm.Services.Navigation
                 }
 
                 // Checks whether the view model implements the IViewModel interface
-                if (windowViewModel == null)
+                if (navigationService.WindowViewModel == null)
                     throw new InvalidOperationException(Resources.Localization.WindowNavigationService.WrongViewModelTypeExceptionMessage);
             }
 
             // Calls the activate event and then the navigate event of the window view model
-            if (windowViewModel != null)
+            if (navigationService.WindowViewModel != null)
             {
                 // Raises the activate event of the new window view model
-                await windowViewModel.OnActivateAsync();
+                await navigationService.WindowViewModel.OnActivateAsync();
 
                 // Raises the on navigate to event of the new window view model, and checks if it allows to be navigated to
                 NavigationEventArgs eventArguments = new NavigationEventArgs(NavigationReason.WindowOpened);
-                await windowViewModel.OnNavigateToAsync(eventArguments);
+                await navigationService.WindowViewModel.OnNavigateToAsync(eventArguments);
                 if (eventArguments.Cancel)
                 {
                     // Since the window view model does not allow to be navigated to, the new window view model is deactivated, disposed of, and the navigation is aborted
-                    await windowViewModel.OnDeactivateAsync();
-                    windowViewModel.Dispose();
+                    await navigationService.WindowViewModel.OnDeactivateAsync();
+                    navigationService.WindowViewModel.Dispose();
                     return new WindowCreationResult { NavigationResult = NavigationResult.Canceled };
                 }
             }
@@ -137,10 +136,10 @@ namespace System.Windows.Mvvm.Services.Navigation
             catch (Exception e)
             {
                 // Since an error occurred, the new window view model is deactivated and disposed of
-                if (windowViewModel != null)
+                if (navigationService.WindowViewModel != null)
                 {
-                    await windowViewModel.OnDeactivateAsync();
-                    windowViewModel.Dispose();
+                    await navigationService.WindowViewModel.OnDeactivateAsync();
+                    navigationService.WindowViewModel.Dispose();
                 }
 
                 // Rethrows the exception
@@ -156,7 +155,7 @@ namespace System.Windows.Mvvm.Services.Navigation
             }
 
             // Sets the view model as data context of the window
-            navigationService.Window.DataContext = windowViewModel;
+            navigationService.Window.DataContext = navigationService.WindowViewModel;
 
             // Subscribes to the closing event of the window, so that the window can be properly closed (with all the lifecycle callbacks)
             navigationService.Window.Closing += (sender, e) =>
@@ -178,7 +177,7 @@ namespace System.Windows.Mvvm.Services.Navigation
             return new WindowCreationResult
             {
                 Window = navigationService.Window,
-                ViewModel = windowViewModel,
+                ViewModel = navigationService.WindowViewModel,
                 NavigationResult = NavigationResult.Navigated,
                 NavigationService = navigationService
             };

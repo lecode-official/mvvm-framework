@@ -135,10 +135,6 @@ namespace System.Windows.Mvvm.Services.Navigation
             }
         }
 
-        #endregion
-
-        #region Public Properties
-
         /// <summary>
         /// Gets or sets the naming convention for view models. The function gets the name of the view type and returns the name of the corresponding view model. This function is used for convention-based view model activation. The default implementation adds "Model" to the name of the view.
         /// </summary>
