@@ -180,17 +180,9 @@
       <Project>{156941f4-1b21-4831-8d2c-4012bf15f913}</Project>
       <Name>System.Windows.Mvvm.Services.OperatingSystem</Name>
     </ProjectReference>
-    <ProjectReference Include="..\System.Windows.Mvvm.UI.Controls\System.Windows.Mvvm.UI.Controls.csproj">
-      <Project>{4fb04a4c-ad2d-460a-a93b-efcc8bfa88ad}</Project>
-      <Name>System.Windows.Mvvm.UI.Controls</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\System.Windows.Mvvm.UI.Markup\System.Windows.Mvvm.UI.Markup.csproj">
-      <Project>{1116516a-43b9-45e7-be42-e88152282e74}</Project>
-      <Name>System.Windows.Mvvm.UI.Markup</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\System.Windows.Mvvm.UI.ValueConverters\System.Windows.Mvvm.UI.ValueConverters.csproj">
-      <Project>{b2c79ed3-0268-4eef-a59e-ae97d4f92049}</Project>
-      <Name>System.Windows.Mvvm.UI.ValueConverters</Name>
+    <ProjectReference Include="..\System.Windows\System.Windows.csproj">
+      <Project>{cf0d2326-4c2f-4f02-999c-49e5cbb43726}</Project>
+      <Name>System.Windows</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

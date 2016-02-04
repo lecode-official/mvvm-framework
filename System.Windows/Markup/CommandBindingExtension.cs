@@ -4,11 +4,10 @@
 using System.Reflection;
 using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Markup;
 
 #endregion
 
-namespace System.Windows.Mvvm.UI.Markup
+namespace System.Windows.Markup
 {
     /// <summary>
     /// Represents a custom markup extension, which is used to bind commands to events.
@@ -21,18 +20,14 @@ namespace System.Windows.Mvvm.UI.Markup
         /// Initializes a new <see cref="CommandBindingExtension"/> instance. No command is set.
         /// </summary>
         public CommandBindingExtension()
-            : this(null, false)
-        {
-        }
+            : this(null, false) { }
 
         /// <summary>
         /// Initializes a new <see cref="CommandBindingExtension"/> instance. The event arguments are not passed to the command.
         /// </summary>
         /// <param name="commandPath">The command to which the event is to be bound.</param>
         public CommandBindingExtension(PropertyPath commandPath)
-            : this(commandPath, false)
-        {
-        }
+            : this(commandPath, false) { }
 
         /// <summary>
         /// Initializes a new <see cref="CommandBindingExtension"/> instance.
@@ -83,7 +78,7 @@ namespace System.Windows.Mvvm.UI.Markup
             // Uses the service provider to retrieve a target provider, which is able to provide the target property to which the command is to be bound, if the target provider is null, an invalid operation exception is thrown
             IProvideValueTarget targetProvider = serviceProvider.GetService(typeof(IProvideValueTarget)) as IProvideValueTarget;
             if (targetProvider == null)
-                throw new InvalidOperationException(Resources.Localization.CommandBindingExtension.TargetProviderNullExceptionMessage);
+                throw new InvalidOperationException(Resources.Localization.Markup.CommandBindingExtension.TargetProviderNullExceptionMessage);
 
             // The target property could either be a plain old .NET event or a WPF routed event, in case of the .NET event, the target property is the event itself, in case of the WPF routed event, the target property is the AddHandler
             // method of the routed event, both target properties are retrieved, the one that is not null is the right target property
@@ -107,7 +102,7 @@ namespace System.Windows.Mvvm.UI.Markup
             else
             {
                 // The target property is not event at all, so an invalid operation exception is raised
-                throw new InvalidOperationException(Resources.Localization.CommandBindingExtension.TargetPropertyNoEventExceptionMessage);
+                throw new InvalidOperationException(Resources.Localization.Markup.CommandBindingExtension.TargetPropertyNoEventExceptionMessage);
             }
 
             // Creates the delegate, which is returned as the value

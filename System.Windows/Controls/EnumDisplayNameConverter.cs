@@ -2,13 +2,14 @@
 #region Using Directives
 
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Linq;
 using System.Resources;
 using System.Windows.Data;
 
 #endregion
 
-namespace System.Windows.Mvvm.UI.ValueConverters
+namespace System.Windows.Controls
 {
     /// <summary>
     /// Represents a value converter that is used to get the localized name of an enumeration value.
@@ -25,7 +26,7 @@ namespace System.Windows.Mvvm.UI.ValueConverters
         /// <param name="parameter">A paramter that is not used in this implementation.</param>
         /// <param name="culture">The culture information of the current culture, so that parsing can be adjusted to cultural conventions.</param>
         /// <returns>Returns the localized name of the enumeration value in the value parameter or an empty string if it either is not an enumeration value or if the enumeration value has no localization.</returns>
-        public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             // Checks if the value provided is null, if so then tells the converter that the value is unset
             if (value == null)
@@ -57,7 +58,7 @@ namespace System.Windows.Mvvm.UI.ValueConverters
         /// <param name="culture">Not supported in this implementation.</param>
         /// <exception cref="NotImplementedException">Since this functionality is unsupported, the method always throws a <see cref="NotImplementedException"/> exception.</exception>
         /// <returns>Returns nothing, since an <see cref="NotImplementedException"/> is raised.</returns>
-        public object ConvertBack(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }

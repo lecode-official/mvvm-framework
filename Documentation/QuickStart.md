@@ -129,7 +129,8 @@ of the repository.
 ```csharp
 protected override Task OnStartedAsync(ApplicationStartedEventArgs eventArguments)
 {
-	this.iocContainer = new SimpleIocContainer();
+    this.iocContainer = new SimpleIocContainer();
+    this.iocContainer.RegisterType<IReadOnlyIocContainer>(() => this.iocContainer);
     this.iocContainer.RegisterType<TodoListItemsRepository>(Scope.Singleton);
     return Task.FromResult(0);
 }
@@ -365,8 +366,9 @@ the main window of the application. The main window has the same lifetime as the
 ```csharp
 protected override async Task OnStartedAsync(ApplicationStartedEventArgs eventArguments)
 {
-	this.iocContainer = new SimpleIocContainer();
+    this.iocContainer = new SimpleIocContainer();
 
+    this.iocContainer.RegisterType<IReadOnlyIocContainer>(() => this.iocContainer);
     this.iocContainer.RegisterType<TodoListItemsRepository>(Scope.Singleton);
     this.iocContainer.RegisterType<WindowNavigationService>(Scope.Singleton);
 

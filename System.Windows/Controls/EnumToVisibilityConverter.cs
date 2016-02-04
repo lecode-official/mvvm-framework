@@ -6,7 +6,7 @@ using System.Windows.Data;
 
 #endregion
 
-namespace System.Windows.Mvvm.UI.ValueConverters
+namespace System.Windows.Controls
 {
     /// <summary>
     /// Converts an enum to the visible value, if the parameter has the same value as the enum value.
