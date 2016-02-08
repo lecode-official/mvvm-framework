@@ -17,10 +17,7 @@ namespace System.Windows.Mvvm.Services.OperatingSystem
         /// <summary>
         /// Shuts down the operating system.
         /// </summary>
-        public void Shutdown()
-        {
-            Process.Start("shutdown", "/s /t 0");
-        }
+        public void Shutdown() => Process.Start("shutdown", "/s /t 0");
 
         #endregion
 
@@ -33,12 +30,12 @@ namespace System.Windows.Mvvm.Services.OperatingSystem
         {
             add
             {
-                System.Windows.Application.Current.SessionEnding += value;
+                Application.Current.SessionEnding += value;
             }
 
             remove
             {
-                System.Windows.Application.Current.SessionEnding -= value;
+                Application.Current.SessionEnding -= value;
             }
         }
 
