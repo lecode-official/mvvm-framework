@@ -8,7 +8,6 @@ we will introduce you to the different projects and their function within the fr
 The application project contains the class `MvvmApplication`, which should be the starting point for most applications. `MvvmApplication` derives from `System.Windows.Application`
 and enhances it with several lifecycle callbacks.
 
-- **`OnStartedAsAdditionalInstanceAsync`** - Gets called when there already is another instance of the same application running. This callback method is called before `OnStartedAsync` is invoked.
 - **`OnStartedAsync`** - Gets called after the application startup. This can be overridden to implement custom startup logic and display views.
 - **`OnExitAsync`** - Gets called right before the application quits. This can be overridden to implement custom shutdown logic.
 - **`OnUnhandledExceptionAsync`** - Gets called if an exception was thrown that was not handled by user-code.
