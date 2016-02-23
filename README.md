@@ -37,7 +37,7 @@ suffice, no extra plugins or tools are needed (except for the `System.Windows.Mv
 package). Just clone the Git repository, open the solution in Visual Studio, and build the solution.
 
 ```batch
-git pull https://github.com/lecode-official/mvvm-framework.git
+git clone https://github.com/lecode-official/mvvm-framework
 ```
 
 The solution is split up into several light-weight projects, each of them containing a small portion of the functionality.
