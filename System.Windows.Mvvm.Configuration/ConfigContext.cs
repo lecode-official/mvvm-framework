@@ -43,6 +43,7 @@ namespace System.Windows.Mvvm.Configuration
         /// <summary>
         /// Gets or sets the store that is used by the configuration context to load and store data.
         /// </summary>
+        [JsonIgnore]
         public IStore Store { get; set; }
 
         #endregion
@@ -64,7 +65,7 @@ namespace System.Windows.Mvvm.Configuration
                 return;
 
             // Deserializes the data
-            await Task.Run(() => JsonConvert.PopulateObject(data, this));
+            await Task.Run(() => JsonConvert.PopulateObject(data, this, new JsonSerializerSettings { ContractResolver = new WritablePropertiesOnlyResolver(), TypeNameHandling = TypeNameHandling.Auto, TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple }));
         }
 
         /// <summary>
@@ -100,10 +101,7 @@ namespace System.Windows.Mvvm.Configuration
             /// <param name="type">The type that is to be serialized.</param>
             /// <param name="memberSerialization">The member serialization.</param>
             /// <returns>Returns the list of created properties.</returns>
-            protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
-            {
-                return base.CreateProperties(type, memberSerialization).Where(p => p.Writable).ToList();
-            }
+            protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization) => base.CreateProperties(type, memberSerialization).Where(p => p.Writable).ToList();
 
             #endregion
         }
