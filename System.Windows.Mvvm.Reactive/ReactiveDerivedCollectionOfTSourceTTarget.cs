@@ -29,7 +29,7 @@ namespace System.Windows.Mvvm.Reactive
         /// </summary>
         /// <param name="update">The update method that updates the target items from the source items. This is needed, because otherwise the objects would be created anew, which is less efficient and destroys object identity.</param>
         public ReactiveDerivedCollection(Action<TSource, TTarget> update)
-            : this(x => new TTarget(), update, new List<TSource>())
+            : this(null, update, new List<TSource>())
         { }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace System.Windows.Mvvm.Reactive
         /// <param name="update">The update method that updates the target items from the source items. This is needed, because otherwise the objects would be created anew, which is less efficient and destroys object identity.</param>
         /// <param name="initialContents">The initial items of the collection.</param>
         public ReactiveDerivedCollection(Action<TSource, TTarget> update, IEnumerable<TSource> initialContents)
-            : this(x => new TTarget(), update, initialContents)
+            : this(null, update, initialContents)
         { }
 
         /// <summary>
@@ -59,8 +59,13 @@ namespace System.Windows.Mvvm.Reactive
         public ReactiveDerivedCollection(Func<TSource, TTarget> select, Action<TSource, TTarget> update, IEnumerable<TSource> initialContents)
         {
             // Stores the select function and the update method
-            this.Select = select;
             this.Update = update;
+            this.Select = select != null ? select : source => 
+            {
+                TTarget target = new TTarget();
+                this.Update(source, target);
+                return target;
+            };
 
             // Initializes the reactive list
             this.reactiveList = new ReactiveList<TSource>(initialContents);
@@ -182,7 +187,11 @@ namespace System.Windows.Mvvm.Reactive
             {
                 // Subscribes for the observable
                 if (value != null)
-                    value.ObserveOnDispatcher().Where(x => this.reactiveList.Contains(x)).Subscribe(x => this.Update(x, this.derivedList[this.reactiveList.IndexOf(x)]));
+                    value.ObserveOnDispatcher().Where(x => this.reactiveList.Contains(x)).Subscribe(x =>
+                    {
+                        this.Update(x, this.derivedList[this.reactiveList.IndexOf(x)]);
+                        this.collectionView.Refresh();
+                    });
 
                 // Sets the new value
                 this.RaiseAndSetIfChanged(ref this.itemChanged, value);
@@ -219,6 +228,7 @@ namespace System.Windows.Mvvm.Reactive
                         {
                             this.Update(x, this.derivedList[this.reactiveList.IndexOf(x)]);
                         }
+                        this.collectionView.Refresh();
                     });
 
                 // Sets the new value
@@ -249,6 +259,7 @@ namespace System.Windows.Mvvm.Reactive
                     {
                         this.derivedList.RemoveAt(this.reactiveList.IndexOf(x));
                         this.reactiveList.Remove(x);
+                        this.collectionView.Refresh();
                     });
 
                 // Sets the new value

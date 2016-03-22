@@ -135,7 +135,11 @@ namespace System.Windows.Mvvm.Reactive
             {
                 // Subscribes for the observable
                 if (value != null)
-                    value.ObserveOnDispatcher().Where(x => this.reactiveList.Contains(x)).Subscribe(x => this.reactiveList[this.reactiveList.IndexOf(x)] = x);
+                    value.ObserveOnDispatcher().Where(x => this.reactiveList.Contains(x)).Subscribe(x =>
+                    {
+                        this.reactiveList[this.reactiveList.IndexOf(x)] = x;
+                        this.collectionView.Refresh();
+                    });
 
                 // Sets the new value
                 this.RaiseAndSetIfChanged(ref this.itemChanged, value);
@@ -167,6 +171,7 @@ namespace System.Windows.Mvvm.Reactive
                             this.reactiveList.Add(x);
                         else
                             this.reactiveList[this.reactiveList.IndexOf(x)] = x;
+                        this.collectionView.Refresh();
                     });
 
                 // Sets the new value
@@ -193,7 +198,11 @@ namespace System.Windows.Mvvm.Reactive
             {
                 // Subscribes for the observable
                 if (value != null)
-                    value.ObserveOnDispatcher().Where(x => this.reactiveList.Contains(x)).Subscribe(x => this.reactiveList.Remove(x));
+                    value.ObserveOnDispatcher().Where(x => this.reactiveList.Contains(x)).Subscribe(x =>
+                    {
+                        this.reactiveList.Remove(x);
+                        this.collectionView.Refresh();
+                    });
 
                 // Sets the new value
                 this.RaiseAndSetIfChanged(ref this.itemRemoved, value);
