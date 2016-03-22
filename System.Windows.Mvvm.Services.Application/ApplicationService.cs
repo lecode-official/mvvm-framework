@@ -43,22 +43,7 @@ namespace System.Windows.Mvvm.Services.Application
                 return Dispatcher.CurrentDispatcher;
             }
         }
-
-        /// <summary>
-        /// Gets a value that determines whether the application is in debug mode.
-        /// </summary>
-        public bool IsInDebugMode
-        {
-            get
-            {
-#if DEBUG
-                return true;
-#else
-                return false;
-#endif
-            }
-        }
-
+        
         /// <summary>
         /// Gets the XAML resources that have been defined application-wide.
         /// </summary>
@@ -66,7 +51,7 @@ namespace System.Windows.Mvvm.Services.Application
         {
             get
             {
-                return System.Windows.Application.Current.Resources;
+                return Windows.Application.Current.Resources;
             }
         }
 
@@ -79,7 +64,7 @@ namespace System.Windows.Mvvm.Services.Application
         /// </summary>
         public virtual void Shutdown()
         {
-            System.Windows.Application.Current.Shutdown();
+            Windows.Application.Current.Shutdown();
         }
 
         /// <summary>
@@ -89,7 +74,7 @@ namespace System.Windows.Mvvm.Services.Application
         public virtual void Shutdown(int exitCode)
         {
             // Shuts down the application with the provided exit code
-            System.Windows.Application.Current.Shutdown(exitCode);
+            Windows.Application.Current.Shutdown(exitCode);
         }
 
         /// <summary>
@@ -98,8 +83,8 @@ namespace System.Windows.Mvvm.Services.Application
         public virtual void Restart()
         {
             // Restarts the application and shuts down the current one
-            System.Windows.Forms.Application.Restart();
-            System.Windows.Application.Current.Shutdown();
+            Forms.Application.Restart();
+            Windows.Application.Current.Shutdown();
         }
 
         #endregion
@@ -113,12 +98,12 @@ namespace System.Windows.Mvvm.Services.Application
         {
             add
             {
-                System.Windows.Application.Current.Activated += value;
+                Windows.Application.Current.Activated += value;
             }
 
             remove
             {
-                System.Windows.Application.Current.Activated -= value;
+                Windows.Application.Current.Activated -= value;
             }
         }
 
@@ -129,12 +114,12 @@ namespace System.Windows.Mvvm.Services.Application
         {
             add
             {
-                System.Windows.Application.Current.Deactivated += value;
+                Windows.Application.Current.Deactivated += value;
             }
 
             remove
             {
-                System.Windows.Application.Current.Deactivated -= value;
+                Windows.Application.Current.Deactivated -= value;
             }
         }
 
@@ -145,12 +130,12 @@ namespace System.Windows.Mvvm.Services.Application
         {
             add
             {
-                System.Windows.Application.Current.Exit += value;
+                Windows.Application.Current.Exit += value;
             }
 
             remove
             {
-                System.Windows.Application.Current.Exit -= value;
+                Windows.Application.Current.Exit -= value;
             }
         }
 
@@ -161,12 +146,12 @@ namespace System.Windows.Mvvm.Services.Application
         {
             add
             {
-                System.Windows.Application.Current.SessionEnding += value;
+                Windows.Application.Current.SessionEnding += value;
             }
 
             remove
             {
-                System.Windows.Application.Current.SessionEnding -= value;
+                Windows.Application.Current.SessionEnding -= value;
             }
         }
 

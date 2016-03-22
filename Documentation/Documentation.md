@@ -16,10 +16,11 @@ Once you have made yourself familiar with the basics and you want to dig deeper,
 5. Services
   1. Application
   2. Navigation
-  3. Configuration
   4. Operating System
   5. Dialog
-6. UI Extensions
+6. Support for ReactiveUI
+7. Configuration
+8. UI Extensions
   1. Controls
   2. Markup
   3. Value Converters

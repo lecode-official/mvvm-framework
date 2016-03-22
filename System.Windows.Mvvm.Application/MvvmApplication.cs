@@ -24,15 +24,7 @@ namespace System.Windows.Mvvm.Application
         #endregion
 
         #region Protected Methods
-
-        /// <summary>
-        /// Gets called when there already is another instance of the same application running. This callback method is called before <see cref="OnStartedAsync"/> is invoked.
-        /// </summary>
-        protected virtual Task OnStartedAsAdditionalInstanceAsync()
-        {
-            return Task.FromResult(0);
-        }
-
+        
         /// <summary>
         /// Gets called after the application startup. This can be overridden by the user to implement custom startup logic and displaying views.
         /// </summary>
@@ -82,11 +74,7 @@ namespace System.Windows.Mvvm.Application
             // If this is the first instance of the application, the mutex is set and stored, so that it can be disposed of when this instance closes
             if (isFirstApplicationInstance)
                 this.singleInstanceMutex = mutex;
-
-            // Checks if this is not the first instance of the application, if so then OnStartedAsAdditionalInstanceAsync before OnStartedAsync is called
-            if (!isFirstApplicationInstance)
-                await this.OnStartedAsAdditionalInstanceAsync();
-
+            
             // Calls the on started method where the user is able to call his own code to set up the application
             await this.OnStartedAsync(new ApplicationStartedEventArgs(e.Args, isFirstApplicationInstance));
         }
