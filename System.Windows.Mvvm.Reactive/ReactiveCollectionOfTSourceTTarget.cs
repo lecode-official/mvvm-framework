@@ -45,7 +45,7 @@ namespace System.Windows.Mvvm.Reactive
         /// <param name="update">The update method that updates the target items from the source items. This is needed, because otherwise the objects would be created anew, which is less efficient and destroys object identity.</param>
         /// <param name="initialContents">The initial items of the collection.</param>
         public ReactiveCollection(Action<TSource, TTarget> update, IEnumerable<TSource> initialContents)
-            : this(x => new TTarget(), update, initialContents)
+            : this(null, update, initialContents)
         { }
 
         /// <summary>
@@ -58,8 +58,13 @@ namespace System.Windows.Mvvm.Reactive
             : base(initialContents)
         {
             // Stores the select function and the update method
-            this.Select = select;
             this.Update = update;
+            this.Select = select != null ? select : source =>
+            {
+                TTarget target = new TTarget();
+                this.Update(source, target);
+                return target;
+            };
 
             // Initializes the derived collection
             this.derivedList = new ReactiveList<TTarget>();
@@ -183,6 +188,9 @@ namespace System.Windows.Mvvm.Reactive
 
             // Adds the new item to the internal list as well
             this.derivedList.Add(this.Select(item));
+
+            // Updates the collection view
+            this.collectionView.Refresh();
         }
         
         /// <summary>
@@ -195,6 +203,9 @@ namespace System.Windows.Mvvm.Reactive
 
             // Clears the internal list as well
             this.derivedList.Clear();
+
+            // Updates the collection view
+            this.collectionView.Refresh();
         }
 
         /// <summary>
@@ -209,6 +220,9 @@ namespace System.Windows.Mvvm.Reactive
 
             // Inserts the item into the internal list as well
             this.derivedList.Insert(index, this.Select(item));
+
+            // Updates the collection view
+            this.collectionView.Refresh();
         }
         
         /// <summary>
@@ -223,6 +237,9 @@ namespace System.Windows.Mvvm.Reactive
 
             // Moves the item in the internal collection as well
             this.derivedList.Move(oldIndex, newIndex);
+
+            // Updates the collection view
+            this.collectionView.Refresh();
         }
 
         /// <summary>
@@ -237,6 +254,9 @@ namespace System.Windows.Mvvm.Reactive
             if (index < 0)
                 return false;
             this.derivedList.RemoveAt(index);
+
+            // Updates the collection view
+            this.collectionView.Refresh();
 
             // Calls the base implementation
             return base.Remove(item);
@@ -253,6 +273,9 @@ namespace System.Windows.Mvvm.Reactive
 
             // Removes the item from the internal list as well
             this.derivedList.RemoveAt(index);
+
+            // Updates the collection view
+            this.collectionView.Refresh();
         }
 
         /// <summary>
