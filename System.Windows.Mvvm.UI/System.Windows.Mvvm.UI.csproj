@@ -43,12 +43,12 @@
     <Compile Include="Controls\Extensions\ComboBox.cs" />
     <Compile Include="Controls\Extensions\Control.cs" />
     <Compile Include="Controls\DataTypeTemplateSelector.cs" />
-    <Compile Include="Controls\Extensions\ListView.cs" />
     <Compile Include="Controls\Extensions\ScrollViewer.cs" />
     <Compile Include="Controls\Extensions\TextBox.cs" />
     <Compile Include="Controls\EnumDisplayNameConverter.cs" />
     <Compile Include="Controls\EnumToBooleanConverter.cs" />
     <Compile Include="Controls\EnumToVisibilityConverter.cs" />
+    <Compile Include="Controls\Extensions\UIElement.cs" />
     <Compile Include="Controls\InvertedBooleanConverter.cs" />
     <Compile Include="Controls\InvertedBooleanToVisibilityConverter.cs" />
     <Compile Include="Markup\CommandBindingExtension.cs" />
