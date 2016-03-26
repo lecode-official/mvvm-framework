@@ -51,6 +51,8 @@
     <Compile Include="Controls\Extensions\UIElement.cs" />
     <Compile Include="Controls\InvertedBooleanConverter.cs" />
     <Compile Include="Controls\InvertedBooleanToVisibilityConverter.cs" />
+    <Compile Include="Controls\TypeToBooleanConverter.cs" />
+    <Compile Include="Controls\TypeToVisibilityConverter.cs" />
     <Compile Include="Markup\CommandBindingExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Localization\Markup\CommandBindingExtension.Designer.cs">
