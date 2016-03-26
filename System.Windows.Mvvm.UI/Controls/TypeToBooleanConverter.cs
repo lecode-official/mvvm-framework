@@ -29,10 +29,10 @@ namespace System.Windows.Controls
             if (value == null)
                 return DependencyProperty.UnsetValue;
 
-            // Gets the value as type and check if it is null, if so then tells the converter, that the value is unset
+            // Gets the value as type and check if it is null, if so then tells the converter, that the type of the object is used
             Type typeValue = value as Type;
             if (typeValue == null)
-                return DependencyProperty.UnsetValue;
+                typeValue = value.GetType();
 
             // Gets the parameter and check if it is null, if so then tells the converter, that the value is unset
             Type parameterValue = parameter as Type;
