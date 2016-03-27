@@ -42,7 +42,7 @@ namespace System.Windows.Controls
             object parameterEnumValue = Enum.Parse(value.GetType(), enumValueName);
 
             // If the parameter equals the value that is to be converted, then returns visible, otherwise hidden is returned
-            return parameterEnumValue.Equals(value) ? Visibility.Visible : Visibility.Hidden;
+            return parameterEnumValue.Equals(value) ? Visibility.Visible : Visibility.Collapsed;
         }
 
         /// <summary>
