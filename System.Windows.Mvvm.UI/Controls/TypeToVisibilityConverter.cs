@@ -40,7 +40,7 @@ namespace System.Windows.Controls
                 return DependencyProperty.UnsetValue;
 
             // If the parameter equals the value that is to be converted, then returns visible, otherwise hidden is returned
-            return typeValue == parameterValue ? Visibility.Visible : Visibility.Hidden;
+            return typeValue == parameterValue ? Visibility.Visible : Visibility.Collapsed;
         }
 
         /// <summary>
