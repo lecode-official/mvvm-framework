@@ -46,7 +46,7 @@ namespace System.Windows.Controls
 
             // Retrieves the localized display name and returns it if it exists, if it does not exist, then just the resource name is returned
             string name = resourceManager.GetString(displayAttribute.Name);
-            return string.IsNullOrEmpty(name) ? displayAttribute.Name : name;
+            return name == null ? displayAttribute.Name : name;
         }
 
         /// <summary>
