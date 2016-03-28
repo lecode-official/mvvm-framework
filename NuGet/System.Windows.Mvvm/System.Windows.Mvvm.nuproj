@@ -33,13 +33,13 @@
   <Import Project="$(NuProjPath)\NuProj.props" Condition="Exists('$(NuProjPath)\NuProj.props')" />
   <PropertyGroup Label="Configuration">
     <Id>System.Windows.Mvvm</Id>
-    <Version>0.2.6</Version>
+    <Version>0.2.7</Version>
     <Title>MVVM Framework</Title>
     <Authors>David Neumann, Lukas Rögner</Authors>
     <Owners>David Neumann, Lukas Rögner</Owners>
     <Summary>The MVVM Framework is a compact and simple, yet powerful implementation of the MVVM pattern.</Summary>
     <Description>The MVVM Framework is a compact and simple, yet powerful implementation of the MVVM pattern. It provides a strong model for managing the application lifecycle and the navigation. The MVVM framework decouples operation system functionality from the application logic by providing a powerful service system, which abstracts away any platform specific code from the application logic. Everything in the framework was build with the task awaitable pattern in mind, from application lifecycle management to navigation. The framework plays nice with all kinds of frameworks, for example the dependency injection mechanism build into the framework does not care what </Description>
-    <ReleaseNotes>Fixed a problem with some of the value converters that convert Visibility values: some of them converted to Visibility.Hidden instead of Visibility.Collapsed. The problem caused the controls to be invisible but still take place in the layouting process.</ReleaseNotes>
+    <ReleaseNotes>Fixed a problem in the enum display name value converter. If the resource existed, but was empty, then not an empty string, but the name of the enum value was returned. Also added a custom boolean to visibility value converter, which, unlike the standard boolean to visibility converter, does not return DependencyProperty.UnsetValue, when the input value is null, but it returns Visibility.Collapsed. This is very helpful, when the binding is asynchronous, because in an asynchronous binding, the value can be undetermined (i.e. null) for a short amount of time, which results in the control to be displayed for a short period of time, even if the binding value eventually evaluates to false.</ReleaseNotes>
     <ProjectUrl>https://github.com/lecode-official/mvvm-framework</ProjectUrl>
     <LicenseUrl>https://raw.githubusercontent.com/lecode-official/mvvm-framework/master/LICENSE</LicenseUrl>
     <Copyright>Copyright 2016 © David Neumann &amp; Lukas Rögner</Copyright>
