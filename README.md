@@ -3,7 +3,7 @@
 ![MVVM Framework Logo](https://github.com/lecode-official/mvvm-framework/blob/master/Documentation/Images/Banner.png "MVVM Framework Logo")
 
 The MVVM Framework is a compact and simple, yet powerful implementation of the MVVM pattern. It provides a strong model for managing the application lifecycle
-and the navigation. It was build on three important core priciples:
+and the navigation. It was build on three important core principles:
 
 1. Decoupling operating system functionality from the application logic
 2. Asynchronous from top to bottom using the task awaitable pattern
