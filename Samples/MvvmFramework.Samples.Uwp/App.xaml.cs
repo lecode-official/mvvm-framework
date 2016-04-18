@@ -37,6 +37,9 @@ namespace MvvmFramework.Samples.Uwp
         {
             // Calls the base implementation
             await base.OnActivatedAsync(eventArguments);
+
+            // Makes sure that the window is activated
+            Window.Current.Activate();
         }
 
         /// <summary>
