@@ -107,6 +107,7 @@
     <None Include="Project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MvvmApplication.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Windows.Mvvm.Application.rd.xml" />
   </ItemGroup>

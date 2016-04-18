@@ -29,31 +29,22 @@ namespace System.Windows.Mvvm.Application
         /// Gets called after the application startup. This can be overridden by the user to implement custom startup logic and displaying views.
         /// </summary>
         /// <param name="eventArguments">The arguments that contain more information about the application startup and the navigation service, which can be used to navigate to the intial window and view.</param>
-        protected virtual Task OnStartedAsync(ApplicationStartedEventArgs eventArguments)
-        {
-            return Task.FromResult(0);
-        }
+        protected virtual Task OnStartedAsync(ApplicationStartedEventArgs eventArguments) => Task.FromResult(0);
 
         /// <summary>
         /// Gets called right before the application quits. This can be overridden by the user to implement custom shutdown logic.
         /// </summary>
-        protected virtual Task OnExitAsync()
-        {
-            return Task.FromResult(0);
-        }
+        protected virtual Task OnExitAsync() => Task.FromResult(0);
 
         /// <summary>
         /// Gets called if an exception was thrown that was not handled by user-code.
         /// </summary>
         /// <param name="eventArguments">The event arguments that contain further information about the exception that was not properly handled by user-code.</param>
-        protected virtual Task OnUnhandledExceptionAsync(UnhandledExceptionEventArgs eventArguments)
-        {
-            return Task.FromResult(0);
-        }
+        protected virtual Task OnUnhandledExceptionAsync(UnhandledExceptionEventArgs eventArguments) => Task.FromResult(0);
 
         #endregion
 
-        #region Event Handlers
+        #region Application Implementation
 
         /// <summary>
         /// Is called once the application has started.
