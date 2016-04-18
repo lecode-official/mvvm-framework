@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 namespace System.Windows.Mvvm.Services.Navigation
 {
     /// <summary>
-    /// Represents a manager, that manages the navigation of a window.
+    /// Represents a manager, that manages the navigation of a views within a window.
     /// </summary>
     public class NavigationService
     {
