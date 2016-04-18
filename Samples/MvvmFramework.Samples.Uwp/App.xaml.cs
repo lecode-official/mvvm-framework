@@ -1,12 +1,10 @@
 ﻿
 #region Using Directives
 
-using System;
-using Windows.ApplicationModel;
+using System.Threading.Tasks;
 using Windows.ApplicationModel.Activation;
+using Windows.Mvvm.Application;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Navigation;
 
 #endregion
 
@@ -15,7 +13,7 @@ namespace MvvmFramework.Samples.Uwp
     /// <summary>
     /// Represents the entry-point to the MVVM sample application.
     /// </summary>
-    sealed partial class App : Application
+    sealed partial class App : MvvmApplication
     {
         #region Constructors
 
@@ -25,84 +23,48 @@ namespace MvvmFramework.Samples.Uwp
         public App()
         {
             this.InitializeComponent();
-            this.Suspending += this.OnSuspending;
         }
 
         #endregion
 
-        #region Private Methods
+        #region MvvmApplication Implementation
 
         /// <summary>
-        /// Wird aufgerufen, wenn die Navigation auf eine bestimmte Seite fehlschlägt
+        /// Gets called when the app was activated by the user.
         /// </summary>
-        /// <param name="sender">Der Rahmen, bei dem die Navigation fehlgeschlagen ist</param>
-        /// <param name="e">Details über den Navigationsfehler</param>
-        private void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
+        /// <param name="eventArguments">The event argument, that contain more information on the activation of the application.</param>
+        protected override async Task OnActivatedAsync(IActivatedEventArgs eventArguments)
         {
-            throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
+            // Calls the base implementation
+            await base.OnActivatedAsync(eventArguments);
         }
 
         /// <summary>
-        /// Wird aufgerufen, wenn die Ausführung der Anwendung angehalten wird.  Der Anwendungszustand wird gespeichert,
-        /// ohne zu wissen, ob die Anwendung beendet oder fortgesetzt wird und die Speicherinhalte dabei
-        /// unbeschädigt bleiben.
+        /// Gets called when the application is being resumed.
         /// </summary>
-        /// <param name="sender">Die Quelle der Anhalteanforderung.</param>
-        /// <param name="e">Details zur Anhalteanforderung.</param>
-        private void OnSuspending(object sender, SuspendingEventArgs e)
+        protected override async Task OnResumingAsync()
         {
-            var deferral = e.SuspendingOperation.GetDeferral();
-            deferral.Complete();
+            // Calls the base implementation
+            await base.OnResumingAsync();
         }
 
-        #endregion
-
-        #region Application Implementation
+        /// <summary>
+        /// Gets called when the app is being suspended. Can be used to save the current application state.
+        /// </summary>
+        protected override async Task OnSuspendingAsync()
+        {
+            // Calls the base implementation
+            await base.OnSuspendingAsync();
+        }
 
         /// <summary>
-        /// Wird aufgerufen, wenn die Anwendung durch den Endbenutzer normal gestartet wird. Weitere Einstiegspunkte
-        /// werden z. B. verwendet, wenn die Anwendung gestartet wird, um eine bestimmte Datei zu öffnen.
+        /// Gets called if an exception was thrown that was not handled by user-code.
         /// </summary>
-        /// <param name="e">Details über Startanforderung und -prozess.</param>
-        protected override void OnLaunched(LaunchActivatedEventArgs e)
+        /// <param name="eventArguments">The event arguments that contain further information about the exception that was not properly handled by user-code.</param>
+        protected override async Task OnUnhandledExceptionAsync(UnhandledExceptionEventArgs eventArguments)
         {
-#if DEBUG
-            if (System.Diagnostics.Debugger.IsAttached)
-                this.DebugSettings.EnableFrameRateCounter = true;
-#endif
-            Frame rootFrame = Window.Current.Content as Frame;
-
-            // App-Initialisierung nicht wiederholen, wenn das Fenster bereits Inhalte enthält.
-            // Nur sicherstellen, dass das Fenster aktiv ist.
-            if (rootFrame == null)
-            {
-                // Frame erstellen, der als Navigationskontext fungiert und zum Parameter der ersten Seite navigieren
-                rootFrame = new Frame();
-
-                rootFrame.NavigationFailed += OnNavigationFailed;
-
-                if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
-                {
-                    //TODO: Zustand von zuvor angehaltener Anwendung laden
-                }
-
-                // Den Frame im aktuellen Fenster platzieren
-                Window.Current.Content = rootFrame;
-            }
-
-            if (e.PrelaunchActivated == false)
-            {
-                if (rootFrame.Content == null)
-                {
-                    // Wenn der Navigationsstapel nicht wiederhergestellt wird, zur ersten Seite navigieren
-                    // und die neue Seite konfigurieren, indem die erforderlichen Informationen als Navigationsparameter
-                    // übergeben werden
-                    rootFrame.Navigate(typeof(MainPage), e.Arguments);
-                }
-                
-                // Sicherstellen, dass das aktuelle Fenster aktiv ist
-                Window.Current.Activate();
-            }
+            // Calls the base implementation
+            await base.OnUnhandledExceptionAsync(eventArguments);
         }
 
         #endregion
