@@ -1,0 +1,11 @@
+
+<!-- This file contains Runtime Directives used by .NET Native -->
+<Directives xmlns="http://schemas.microsoft.com/netfx/2013/01/metadata">
+  
+  <!-- Contains the .NET Native configuration for the application -->
+  <Application>
+    
+    <!-- An Assembly element with the name "*Application*" applies to all assemblies in the application package, the asterisks are not wildcards -->
+    <Assembly Name="*Application*" Dynamic="Required All"/>
+  </Application>
+</Directives>
