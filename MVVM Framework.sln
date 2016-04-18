@@ -69,6 +69,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvvmFramework.Samples.Uwp",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Windows.Mvvm.Application", "UWP\Windows.Mvvm.Application\Windows.Mvvm.Application.csproj", "{80C0BC54-7FAD-421B-B2B7-78DA1728A69E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Windows.Mvvm.Services.Navigation", "UWP\Windows.Mvvm.Services.Navigation\Windows.Mvvm.Services.Navigation.csproj", "{0A9D0956-848F-4453-B7EF-3F74BD49FD50}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -277,6 +279,22 @@ Global
 		{80C0BC54-7FAD-421B-B2B7-78DA1728A69E}.Release|x64.Build.0 = Release|x64
 		{80C0BC54-7FAD-421B-B2B7-78DA1728A69E}.Release|x86.ActiveCfg = Release|x86
 		{80C0BC54-7FAD-421B-B2B7-78DA1728A69E}.Release|x86.Build.0 = Release|x86
+		{0A9D0956-848F-4453-B7EF-3F74BD49FD50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A9D0956-848F-4453-B7EF-3F74BD49FD50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A9D0956-848F-4453-B7EF-3F74BD49FD50}.Debug|ARM.ActiveCfg = Debug|ARM
+		{0A9D0956-848F-4453-B7EF-3F74BD49FD50}.Debug|ARM.Build.0 = Debug|ARM
+		{0A9D0956-848F-4453-B7EF-3F74BD49FD50}.Debug|x64.ActiveCfg = Debug|x64
+		{0A9D0956-848F-4453-B7EF-3F74BD49FD50}.Debug|x64.Build.0 = Debug|x64
+		{0A9D0956-848F-4453-B7EF-3F74BD49FD50}.Debug|x86.ActiveCfg = Debug|x86
+		{0A9D0956-848F-4453-B7EF-3F74BD49FD50}.Debug|x86.Build.0 = Debug|x86
+		{0A9D0956-848F-4453-B7EF-3F74BD49FD50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A9D0956-848F-4453-B7EF-3F74BD49FD50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A9D0956-848F-4453-B7EF-3F74BD49FD50}.Release|ARM.ActiveCfg = Release|ARM
+		{0A9D0956-848F-4453-B7EF-3F74BD49FD50}.Release|ARM.Build.0 = Release|ARM
+		{0A9D0956-848F-4453-B7EF-3F74BD49FD50}.Release|x64.ActiveCfg = Release|x64
+		{0A9D0956-848F-4453-B7EF-3F74BD49FD50}.Release|x64.Build.0 = Release|x64
+		{0A9D0956-848F-4453-B7EF-3F74BD49FD50}.Release|x86.ActiveCfg = Release|x86
+		{0A9D0956-848F-4453-B7EF-3F74BD49FD50}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -296,5 +314,6 @@ Global
 		{CF0D2326-4C2F-4F02-999C-49E5CBB43726} = {85C48241-1D5D-4C1B-A4A0-E8E05B506510}
 		{C3FAFADD-695A-4D06-AF6D-77B3DF088945} = {5BD95894-83FE-497F-B046-9F16D2339A02}
 		{80C0BC54-7FAD-421B-B2B7-78DA1728A69E} = {06F6FD26-410C-41D5-AA6C-47ACF0BA6A6B}
+		{0A9D0956-848F-4453-B7EF-3F74BD49FD50} = {06F6FD26-410C-41D5-AA6C-47ACF0BA6A6B}
 	EndGlobalSection
 EndGlobal
