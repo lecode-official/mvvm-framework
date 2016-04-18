@@ -10,17 +10,7 @@ namespace Windows.Mvvm.Services.Navigation
         /// The navigation happened because the user navigates to a new view (may be cancelled).
         /// </summary>
         Navigation,
-
-        /// <summary>
-        /// The navigation happened because a new window was opened (may be cancelled).
-        /// </summary>
-        WindowOpened,
-
-        /// <summary>
-        /// The navigation happened because the window is being closed (may be cancelled).
-        /// </summary>
-        WindowClosing,
-
+        
         /// <summary>
         /// The navigation happened because the window got closed (may not be cancelled).
         /// </summary>
