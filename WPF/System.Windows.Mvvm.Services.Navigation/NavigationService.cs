@@ -41,7 +41,7 @@ namespace System.Windows.Mvvm.Services.Navigation
         /// <summary>
         /// Contains the IOC container which is used to instantiate the views and their corresponding view models.
         /// </summary>
-        private IReadOnlyIocContainer iocContainer;
+        private readonly IReadOnlyIocContainer iocContainer;
 
         /// <summary>
         /// Contains all cached types of the assembly. The types are used when activating a view model convention-based.
@@ -56,7 +56,7 @@ namespace System.Windows.Mvvm.Services.Navigation
         /// <summary>
         /// Contains the stack of views for the backwards navigation.
         /// </summary>
-        private Stack<KeyValuePair<Page, IViewModel>> navigationStack = new Stack<KeyValuePair<Page, IViewModel>>();
+        private readonly Stack<KeyValuePair<Page, IViewModel>> navigationStack = new Stack<KeyValuePair<Page, IViewModel>>();
 
         #endregion
 
@@ -88,7 +88,7 @@ namespace System.Windows.Mvvm.Services.Navigation
                 else
                     this.navigationFrame = null;
 
-                // Disables the navigation UI of the frame, since the navigation manager is now responsible for navigating between views
+                // Disables the navigation UI of the frame, since the navigation service is now responsible for navigating between views
                 if (this.navigationFrame != null)
                     this.navigationFrame.NavigationUIVisibility = NavigationUIVisibility.Hidden;
             }
@@ -178,14 +178,14 @@ namespace System.Windows.Mvvm.Services.Navigation
         #region Internal Methods
 
         /// <summary>
-        /// Closes the window that is managed by this navigation manager.
+        /// Closes the window that is managed by this navigation service.
         /// </summary>
         /// <param name="isCancellable">Determines whether the closing of the application can be cancelled by the view model.</param>
         /// <returns>Returns a value that determines whether the window was closed or its closing was cancelled. If <see cref="forceClose"/> is set to <c>true</c>, <c>NavigationResult.Navigated</c> is always returned.</returns>
         internal Task<NavigationResult> CloseWindowAsync(bool isCancellable) => this.CloseWindowAsync(isCancellable, !isCancellable ? NavigationReason.WindowClosed : NavigationReason.WindowClosing);
 
         /// <summary>
-        /// Closes the window that is managed by this navigation manager.
+        /// Closes the window that is managed by this navigation service.
         /// </summary>
         /// <param name="isCancellable">Determines whether the closing of the application can be cancelled by the view model.</param>
         /// <param name="navigationReason">The navigation reason that is sent to the view model.</param>
@@ -193,7 +193,7 @@ namespace System.Windows.Mvvm.Services.Navigation
         internal Task<NavigationResult> CloseWindowAsync(bool isCancellable, NavigationReason navigationReason) => this.CloseWindowAsync(isCancellable, navigationReason, true);
 
         /// <summary>
-        /// Closes the window that is managed by this navigation manager.
+        /// Closes the window that is managed by this navigation service.
         /// </summary>
         /// <param name="isCancellable">Determines whether the closing of the application can be cancelled by the view model.</param>
         /// <param name="navigationReason">The navigation reason that is sent to the view model.</param>

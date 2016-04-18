@@ -40,12 +40,12 @@ namespace System.Windows.Mvvm.Services.Navigation
         /// <summary>
         /// Contains the IOC container which is used to instantiate the windows and their corresponding view models.
         /// </summary>
-        private IReadOnlyIocContainer iocContainer;
+        private readonly IReadOnlyIocContainer iocContainer;
 
         /// <summary>
         /// Contains the navigation services of all open windows.
         /// </summary>
-        private ICollection<NavigationService> navigationServices = new List<NavigationService>();
+        private readonly ICollection<NavigationService> navigationServices = new List<NavigationService>();
 
         /// <summary>
         /// Contains all cached types of the assembly. The types are used when activating a view model convention-based.
@@ -591,7 +591,7 @@ namespace System.Windows.Mvvm.Services.Navigation
         /// </summary>
         /// <param name="viewModel">The view model for which the navigation service is to be retrieved.</param>
         /// <returns>Returns the navigation service for the view model if it exists.</returns>
-        public NavigationService GetNavigationService(IViewModel viewModel) => this.navigationServices.SingleOrDefault(navigationManager => navigationManager.WindowViewModel == viewModel || navigationManager.CurrentViewModel == viewModel);
+        public NavigationService GetNavigationService(IViewModel viewModel) => this.navigationServices.FirstOrDefault(navigationService => navigationService.WindowViewModel == viewModel || navigationService.CurrentViewModel == viewModel);
 
         /// <summary>
         /// Retrieves the navigation services for the specified type of window.
@@ -626,7 +626,7 @@ namespace System.Windows.Mvvm.Services.Navigation
 
         #endregion
 
-        #region Nested Classes
+        #region Nested Types
 
         /// <summary>
         /// Represents the result of the creation of a window.
@@ -651,7 +651,7 @@ namespace System.Windows.Mvvm.Services.Navigation
             public NavigationService NavigationService { get; set; }
 
             /// <summary>
-            /// Gets or sets the result of the "navigation", which happened when the window was created.
+            /// Gets or sets the result of the navigation, which happened when the window was created.
             /// </summary>
             public NavigationResult NavigationResult { get; set; }
             
