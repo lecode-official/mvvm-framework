@@ -152,35 +152,27 @@
     <None Include="Packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\System.Windows.Mvvm.Application\System.Windows.Mvvm.Application.csproj">
+    <ProjectReference Include="..\..\WPF\System.Windows.Mvvm.Application\System.Windows.Mvvm.Application.csproj">
       <Project>{87a21405-b4ee-47a1-ab9d-7542abddf92e}</Project>
       <Name>System.Windows.Mvvm.Application</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\System.Windows.Mvvm.Configuration\System.Windows.Mvvm.Configuration.csproj">
-      <Project>{4bf2ce70-e68e-4413-b229-180ef613f33a}</Project>
-      <Name>System.Windows.Mvvm.Configuration</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\System.Windows.Mvvm.Reactive\System.Windows.Mvvm.Reactive.csproj">
+    <ProjectReference Include="..\..\WPF\System.Windows.Mvvm.Reactive\System.Windows.Mvvm.Reactive.csproj">
       <Project>{f69d1cfb-e729-4087-8496-eee1a0d2329f}</Project>
       <Name>System.Windows.Mvvm.Reactive</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\System.Windows.Mvvm.Services.Application\System.Windows.Mvvm.Services.Application.csproj">
+    <ProjectReference Include="..\..\WPF\System.Windows.Mvvm.Services.Application\System.Windows.Mvvm.Services.Application.csproj">
       <Project>{2f9dad0b-504c-4a20-8112-80d6595cee88}</Project>
       <Name>System.Windows.Mvvm.Services.Application</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\System.Windows.Mvvm.Services.Dialog\System.Windows.Mvvm.Services.Dialog.csproj">
+    <ProjectReference Include="..\..\WPF\System.Windows.Mvvm.Services.Dialog\System.Windows.Mvvm.Services.Dialog.csproj">
       <Project>{d83d3704-21ca-410c-a50e-1f332eb79c4f}</Project>
       <Name>System.Windows.Mvvm.Services.Dialog</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\System.Windows.Mvvm.Services.Navigation\System.Windows.Mvvm.Services.Navigation.csproj">
+    <ProjectReference Include="..\..\WPF\System.Windows.Mvvm.Services.Navigation\System.Windows.Mvvm.Services.Navigation.csproj">
       <Project>{bb9fb8fe-cc08-44f0-b4ea-b04b9fc8013f}</Project>
       <Name>System.Windows.Mvvm.Services.Navigation</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\System.Windows.Mvvm.Services.OperatingSystem\System.Windows.Mvvm.Services.OperatingSystem.csproj">
-      <Project>{156941f4-1b21-4831-8d2c-4012bf15f913}</Project>
-      <Name>System.Windows.Mvvm.Services.OperatingSystem</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\System.Windows.Mvvm.UI\System.Windows.Mvvm.UI.csproj">
+    <ProjectReference Include="..\..\WPF\System.Windows.Mvvm.UI\System.Windows.Mvvm.UI.csproj">
       <Project>{cf0d2326-4c2f-4f02-999c-49e5cbb43726}</Project>
       <Name>System.Windows.Mvvm.UI</Name>
     </ProjectReference>

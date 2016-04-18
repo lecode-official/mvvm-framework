@@ -15,14 +15,14 @@
     <Content Include="tools\init.ps1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\System.Windows.Mvvm.Application\System.Windows.Mvvm.Application.csproj" />
-    <ProjectReference Include="..\..\System.Windows.Mvvm.Configuration\System.Windows.Mvvm.Configuration.csproj" />
-    <ProjectReference Include="..\..\System.Windows.Mvvm.Reactive\System.Windows.Mvvm.Reactive.csproj" />
-    <ProjectReference Include="..\..\System.Windows.Mvvm.Services.Application\System.Windows.Mvvm.Services.Application.csproj" />
-    <ProjectReference Include="..\..\System.Windows.Mvvm.Services.Dialog\System.Windows.Mvvm.Services.Dialog.csproj" />
-    <ProjectReference Include="..\..\System.Windows.Mvvm.Services.Navigation\System.Windows.Mvvm.Services.Navigation.csproj" />
-    <ProjectReference Include="..\..\System.Windows.Mvvm.Services.OperatingSystem\System.Windows.Mvvm.Services.OperatingSystem.csproj" />
-    <ProjectReference Include="..\..\System.Windows.Mvvm.UI\System.Windows.Mvvm.UI.csproj" />
+    <ProjectReference Include="..\..\WPF\System.Windows.Mvvm.Application\System.Windows.Mvvm.Application.csproj" />
+    <ProjectReference Include="..\..\WPF\System.Windows.Mvvm.Configuration\System.Windows.Mvvm.Configuration.csproj" />
+    <ProjectReference Include="..\..\WPF\System.Windows.Mvvm.Reactive\System.Windows.Mvvm.Reactive.csproj" />
+    <ProjectReference Include="..\..\WPF\System.Windows.Mvvm.Services.Application\System.Windows.Mvvm.Services.Application.csproj" />
+    <ProjectReference Include="..\..\WPF\System.Windows.Mvvm.Services.Dialog\System.Windows.Mvvm.Services.Dialog.csproj" />
+    <ProjectReference Include="..\..\WPF\System.Windows.Mvvm.Services.Navigation\System.Windows.Mvvm.Services.Navigation.csproj" />
+    <ProjectReference Include="..\..\WPF\System.Windows.Mvvm.Services.OperatingSystem\System.Windows.Mvvm.Services.OperatingSystem.csproj" />
+    <ProjectReference Include="..\..\WPF\System.Windows.Mvvm.UI\System.Windows.Mvvm.UI.csproj" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>2ae7d561-d045-4e97-9948-bb294bb3eab2</ProjectGuid>
