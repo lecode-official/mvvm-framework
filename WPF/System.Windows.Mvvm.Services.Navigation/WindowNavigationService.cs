@@ -169,8 +169,7 @@ namespace System.Windows.Mvvm.Services.Navigation
 
                 // Removes the navigation manager from the list of window navigation managers
                 this.navigationServices.Remove(navigationService);
-                if (this.WindowClosed != null)
-                    this.WindowClosed(this, new WindowEventArgs(navigationService));
+                this.WindowClosed?.Invoke(this, new WindowEventArgs(navigationService));
             };
 
             // Returns the result
@@ -228,8 +227,7 @@ namespace System.Windows.Mvvm.Services.Navigation
 
             // Adds the new navigation service to the list of navigation services
             this.navigationServices.Add(result.NavigationService);
-            if (this.WindowCreated != null)
-                this.WindowCreated(this, new WindowEventArgs(result.NavigationService));
+            this.WindowCreated?.Invoke(this, new WindowEventArgs(result.NavigationService));
 
             // Sets the window as the new main window, if the user requested us to do so
             if (Application.Current != null)
@@ -293,8 +291,7 @@ namespace System.Windows.Mvvm.Services.Navigation
 
             // Creates and adds the new navigation manager to the list of navigation managers
             this.navigationServices.Add(result.NavigationService);
-            if (this.WindowCreated != null)
-                this.WindowCreated(this, new WindowEventArgs(result.NavigationService));
+            this.WindowCreated?.Invoke(this, new WindowEventArgs(result.NavigationService));
 
             // Sets the window as the new main window, if the user requested us to do so
             if (Application.Current != null)
@@ -380,8 +377,7 @@ namespace System.Windows.Mvvm.Services.Navigation
 
             // Adds the new navigation service to the list of navigation services
             this.navigationServices.Add(result.NavigationService);
-            if (this.WindowCreated != null)
-                this.WindowCreated(this, new WindowEventArgs(result.NavigationService));
+            this.WindowCreated?.Invoke(this, new WindowEventArgs(result.NavigationService));
 
             // Opens the new window
             result.Window.ShowDialog();
@@ -429,9 +425,8 @@ namespace System.Windows.Mvvm.Services.Navigation
 
             // Creates and adds the new navigation manager to the list of navigation managers
             this.navigationServices.Add(result.NavigationService);
-            if (this.WindowCreated != null)
-                this.WindowCreated(this, new WindowEventArgs(result.NavigationService));
-            
+            this.WindowCreated?.Invoke(this, new WindowEventArgs(result.NavigationService));
+
             // Opens the new window
             result.Window.ShowDialog();
             
@@ -585,8 +580,7 @@ namespace System.Windows.Mvvm.Services.Navigation
 
             // Removes the navigation manager from the list of window navigation managers
             this.navigationServices.Remove(navigationService);
-            if (this.WindowClosed != null)
-                this.WindowClosed(this, new WindowEventArgs(navigationService));
+            this.WindowClosed?.Invoke(this, new WindowEventArgs(navigationService));
 
             // Since the window was closed, navigated is returned
             return NavigationResult.Navigated;
