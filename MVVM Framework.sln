@@ -77,6 +77,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Windows.Mvvm.UI", "UWP\Wind
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Windows.Mvvm.Services.Application", "UWP\Windows.Mvvm.Services.Application\Windows.Mvvm.Services.Application.csproj", "{771BB045-3F3E-4242-A648-A29D385C0CA2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Windows.Mvvm.Services.Dialog", "UWP\Windows.Mvvm.Services.Dialog\Windows.Mvvm.Services.Dialog.csproj", "{73410EA0-740F-4985-A36E-BA8932A17E7A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -349,6 +351,22 @@ Global
 		{771BB045-3F3E-4242-A648-A29D385C0CA2}.Release|x64.Build.0 = Release|x64
 		{771BB045-3F3E-4242-A648-A29D385C0CA2}.Release|x86.ActiveCfg = Release|x86
 		{771BB045-3F3E-4242-A648-A29D385C0CA2}.Release|x86.Build.0 = Release|x86
+		{73410EA0-740F-4985-A36E-BA8932A17E7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73410EA0-740F-4985-A36E-BA8932A17E7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73410EA0-740F-4985-A36E-BA8932A17E7A}.Debug|ARM.ActiveCfg = Debug|ARM
+		{73410EA0-740F-4985-A36E-BA8932A17E7A}.Debug|ARM.Build.0 = Debug|ARM
+		{73410EA0-740F-4985-A36E-BA8932A17E7A}.Debug|x64.ActiveCfg = Debug|x64
+		{73410EA0-740F-4985-A36E-BA8932A17E7A}.Debug|x64.Build.0 = Debug|x64
+		{73410EA0-740F-4985-A36E-BA8932A17E7A}.Debug|x86.ActiveCfg = Debug|x86
+		{73410EA0-740F-4985-A36E-BA8932A17E7A}.Debug|x86.Build.0 = Debug|x86
+		{73410EA0-740F-4985-A36E-BA8932A17E7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73410EA0-740F-4985-A36E-BA8932A17E7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73410EA0-740F-4985-A36E-BA8932A17E7A}.Release|ARM.ActiveCfg = Release|ARM
+		{73410EA0-740F-4985-A36E-BA8932A17E7A}.Release|ARM.Build.0 = Release|ARM
+		{73410EA0-740F-4985-A36E-BA8932A17E7A}.Release|x64.ActiveCfg = Release|x64
+		{73410EA0-740F-4985-A36E-BA8932A17E7A}.Release|x64.Build.0 = Release|x64
+		{73410EA0-740F-4985-A36E-BA8932A17E7A}.Release|x86.ActiveCfg = Release|x86
+		{73410EA0-740F-4985-A36E-BA8932A17E7A}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -372,5 +390,6 @@ Global
 		{D0312848-48A4-49FD-AB25-EF803EEE4286} = {06F6FD26-410C-41D5-AA6C-47ACF0BA6A6B}
 		{4E67ADEE-D34C-4EAA-B8E6-61C1EA5F8389} = {06F6FD26-410C-41D5-AA6C-47ACF0BA6A6B}
 		{771BB045-3F3E-4242-A648-A29D385C0CA2} = {06F6FD26-410C-41D5-AA6C-47ACF0BA6A6B}
+		{73410EA0-740F-4985-A36E-BA8932A17E7A} = {06F6FD26-410C-41D5-AA6C-47ACF0BA6A6B}
 	EndGlobalSection
 EndGlobal
