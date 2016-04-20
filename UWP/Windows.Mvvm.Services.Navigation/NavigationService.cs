@@ -326,8 +326,7 @@ namespace Windows.Mvvm.Services.Navigation
                 this.CurrentViewModel.Dispose();
             }
 
-            // Navigates to the view that was on top of the navigation stack (the data context is set to null before navigation and is reset afterwards, because this causes all the bindings that do not call the property changed event to
-            // properly update; this is, for example helpful if database models are used in views for performance reasons, because they do not implement INotifyPropertyChanged)
+            // Navigates to the view that was on top of the navigation stack (the data context is set to null before navigation and is reset afterwards, because this causes all the bindings that do not call the property changed event to properly update; this is, for example helpful if database models are used in views for performance reasons, because they do not implement INotifyPropertyChanged)
             Page view = this.navigationStack.Pop().Key;
             this.CurrentView = view;
             this.CurrentViewModel = viewModel;
