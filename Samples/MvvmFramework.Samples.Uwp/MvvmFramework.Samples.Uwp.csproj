@@ -98,6 +98,7 @@
     </Compile>
     <Compile Include="Models\TodoListItem.cs" />
     <Compile Include="Repositories\TodoListItemsRepository.cs" />
+    <Compile Include="ViewModels\CreateTodoListItemViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\TodoListItemViewModel.cs" />
     <Compile Include="Views\CreateTodoListItemView.xaml.cs">
