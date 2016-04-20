@@ -41,7 +41,11 @@ namespace Windows.Mvvm.Services.Dialog
                     {
                         Id = Guid.NewGuid().ToString(),
                         Label = this.DefaultCommand.Label,
-                        Invoked = async command => await this.DefaultCommand?.Command()
+                        Invoked = async c =>
+                        {
+                            if (this.DefaultCommand.Command != null)
+                                await this.DefaultCommand.Command();
+                        }
                     });
 
                     // Adds the cancel command
@@ -49,7 +53,11 @@ namespace Windows.Mvvm.Services.Dialog
                     {
                         Id = Guid.NewGuid().ToString(),
                         Label = this.CancelCommand.Label,
-                        Invoked = async c => await this.CancelCommand?.Command()
+                        Invoked = async c =>
+                        {
+                            if (this.CancelCommand.Command != null)
+                                await this.CancelCommand.Command();
+                        }
                     });
 
                     // Adds the rest of the commands
@@ -57,7 +65,11 @@ namespace Windows.Mvvm.Services.Dialog
                     {
                         Id = Guid.NewGuid().ToString(),
                         Label = command.Label,
-                        Invoked = async c => await command?.Command()
+                        Invoked = async c =>
+                        {
+                            if (command.Command != null)
+                                await command.Command();
+                        }
                     }));
                 }
 
@@ -83,7 +95,7 @@ namespace Windows.Mvvm.Services.Dialog
         /// <summary>
         /// Gets or sets the rest of the commands, which are represented as their own buttons in the message box dialog.
         /// </summary>
-        public ICollection<MessageBoxDialogCommand> Commands { get; } = new Collection<MessageBoxDialogCommand>();
+        public ICollection<MessageBoxDialogCommand> Commands { get; set; } = new Collection<MessageBoxDialogCommand>();
 
         #endregion
     }
