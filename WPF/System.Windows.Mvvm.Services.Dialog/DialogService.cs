@@ -54,13 +54,13 @@ namespace System.Windows.Mvvm.Services.Dialog
             return await this.applicationService.CurrentDispatcher.InvokeAsync(() =>
             {
                 // Get the message box buttons that are to be displayed
-                System.Windows.MessageBoxButton buttons = (System.Windows.MessageBoxButton)messageBoxButton;
+                Windows.MessageBoxButton buttons = (Windows.MessageBoxButton)messageBoxButton;
 
                 // Get the message box icon that is to be displayed
-                System.Windows.MessageBoxImage icon = (System.Windows.MessageBoxImage)messageBoxIcon;
+                MessageBoxImage icon = (MessageBoxImage)messageBoxIcon;
 
                 // Prompt the message
-                System.Windows.MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show(message, title, buttons, icon);
+                MessageBoxResult messageBoxResult = MessageBox.Show(message, title, buttons, icon);
 
                 // Returns the result of the message box invocation
                 return (DialogResult)messageBoxResult;
@@ -146,13 +146,13 @@ namespace System.Windows.Mvvm.Services.Dialog
             return await this.applicationService.CurrentDispatcher.InvokeAsync(() =>
             {
                 // Creates the folder browser dialog, shows it to the user and returns the dialog result and the selected path
-                using (System.Windows.Forms.FolderBrowserDialog folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog())
+                using (Forms.FolderBrowserDialog folderBrowserDialog = new Forms.FolderBrowserDialog())
                 {
                     // Sets the description of the folder browser dialog
                     folderBrowserDialog.Description = description;
 
                     // Displays the folder browser dialog to the user and returns the dialog result
-                    if (folderBrowserDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK && !string.IsNullOrWhiteSpace(folderBrowserDialog.SelectedPath))
+                    if (folderBrowserDialog.ShowDialog() == Forms.DialogResult.OK && !string.IsNullOrWhiteSpace(folderBrowserDialog.SelectedPath))
                         return new DialogResult<string>(DialogResult.Okay, folderBrowserDialog.SelectedPath);
                     else
                         return new DialogResult<string>(DialogResult.Cancel, string.Empty);
