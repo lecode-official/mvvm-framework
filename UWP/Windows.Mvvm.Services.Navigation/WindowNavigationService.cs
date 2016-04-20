@@ -50,29 +50,36 @@ namespace Windows.Mvvm.Services.Navigation
         /// Contains the navigation services of all open windows.
         /// </summary>
         private ICollection<NavigationService> navigationServices = new List<NavigationService>();
-        
+
         #endregion
-        
+
         #region Private Methods
 
         /// <summary>
         /// Creates a new window.
         /// </summary>
         /// <param name="anchorViewId">The ID of the anchor window of the new window.</param>
-        /// <param name="anchorViewSizePrefenrece">The preferred size for the anchor window.</param>
-        /// <param name="newApplicationViewSizePrefenrece">The preferred size for the new window.</param>
+        /// <param name="anchorWindowSizePreference">The preferred size for the anchor window.</param>
+        /// <param name="newWindowSizePreference">The preferred size for the new window.</param>
         /// <returns>Returns a window creation result, which contains the a flag that determines whether the creation was successful and the navigation service, for the newly created window.</returns>
-        private async Task<WindowCreationResult> CreateWindowAsync(Nullable<int> anchorViewId, ViewSizePreference anchorViewSizePrefenrece, ViewSizePreference newApplicationViewSizePrefenrece)
+        private async Task<WindowCreationResult> CreateWindowAsync(Nullable<int> anchorViewId, ViewSizePreference anchorWindowSizePreference, ViewSizePreference newWindowSizePreference)
         {
             // Creates the result of the window creation a new navigation service for the window
             WindowCreationResult windowCreationResult = new WindowCreationResult();
-            
+
+            // Checks if this is the first creation of a new window (which is when there are no navigation services, yet), if so then the default window, which is created at application startup, is taken, otherwise a new window is created
+            CoreApplicationView newWindow;
+            if (this.navigationServices.Any())
+                newWindow = CoreApplication.CreateNewView();
+            else
+                newWindow = CoreApplication.GetCurrentView();
+
             // Actually creates the new window and initializes it on its dispatcher
-            await CoreApplication.CreateNewView().Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            await newWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 // Creates the navigation frame and the navigation service, which are needed to navigate within the newly created window
                 Window.Current.Content = new Frame();
-                windowCreationResult.NavigationService = new NavigationService(this.iocContainer, Window.Current.Content as Frame);
+                windowCreationResult.NavigationService = new NavigationService(this.iocContainer, Window.Current, ApplicationView.GetForCurrentView(), Window.Current.Content as Frame);
 
                 // Signs up for the closed event of the window, when the closed event is raised, then the life-cycle methods of the view model is called and the the window is disposed of
                 Window.Current.Closed += async (sender, e) => await this.CloseWindowAsync(windowCreationResult.NavigationService);
@@ -81,11 +88,14 @@ namespace Windows.Mvvm.Services.Navigation
                 Window.Current.Activate();
             });
 
-            // Shows the window and determines whether the creation was successful
-            if (anchorViewId.HasValue)
-                windowCreationResult.WasSuccessful = await ApplicationViewSwitcher.TryShowAsStandaloneAsync(windowCreationResult.NavigationService.Window.Id, newApplicationViewSizePrefenrece, anchorViewId.Value, anchorViewSizePrefenrece);
-            else
-                windowCreationResult.WasSuccessful = await ApplicationViewSwitcher.TryShowAsStandaloneAsync(windowCreationResult.NavigationService.Window.Id, newApplicationViewSizePrefenrece);
+            // Shows the window and determines whether the creation was successful (but the window only needs to shown, if this is not the first navigation, because the default window, that is created at application startup, is already open)
+            if (this.navigationServices.Any())
+            {
+                if (anchorViewId.HasValue)
+                    windowCreationResult.WasSuccessful = await ApplicationViewSwitcher.TryShowAsStandaloneAsync(windowCreationResult.NavigationService.ApplicationView.Id, newWindowSizePreference, anchorViewId.Value, anchorWindowSizePreference);
+                else
+                    windowCreationResult.WasSuccessful = await ApplicationViewSwitcher.TryShowAsStandaloneAsync(windowCreationResult.NavigationService.ApplicationView.Id, newWindowSizePreference);
+            }
 
             // Returns the result
             return windowCreationResult;
@@ -94,22 +104,94 @@ namespace Windows.Mvvm.Services.Navigation
         #endregion
 
         #region Public Methods
-        
-        public Task<WindowNavigationResult> NavigateAsync<TView>(object viewParameters, NavigationService anchorWindowNavigationService, ViewSizePreference newApplicationViewSizePrefenrece) => this.NavigateAsync<TView>(viewParameters, anchorWindowNavigationService, newApplicationViewSizePrefenrece, ViewSizePreference.Default);
 
-        public Task<WindowNavigationResult> NavigateAsync<TView>(object viewParameters, ViewSizePreference newApplicationViewSizePrefenrece) => this.NavigateAsync<TView>(viewParameters, null, newApplicationViewSizePrefenrece, ViewSizePreference.Default);
+        /// <summary>
+        /// Creates a new window and navigates to the specified view.
+        /// </summary>
+        /// <typeparam name="TView">The type of the view to which the user should be navigated in the new window.</typeparam>
+        /// <param name="parameters">The parameters, which are injected in to the view model of the view.</param>
+        /// <param name="newWindowSizePreference">The size preference for the new window, which determines how the new window is arranged in respect to the anchor window.</param>
+        /// <param name="anchorWindowNavigationService">The navigation service of the window, which is the anchor for the new window. This can be used to specify how the two windows are being arranged by Windows.</param>
+        /// <returns>Returns the result of the navigation.</returns>
+        public Task<WindowNavigationResult> NavigateAsync<TView>(object parameters, ViewSizePreference newWindowSizePreference, NavigationService anchorWindowNavigationService) where TView : Page => this.NavigateAsync<TView>(parameters, newWindowSizePreference, anchorWindowNavigationService, ViewSizePreference.Default);
 
-        public Task<WindowNavigationResult> NavigateAsync<TView>(NavigationService anchorWindowNavigationService, ViewSizePreference newApplicationViewSizePrefenrece) => this.NavigateAsync<TView>(null, anchorWindowNavigationService, newApplicationViewSizePrefenrece, ViewSizePreference.Default);
+        /// <summary>
+        /// Creates a new window and navigates to the specified view.
+        /// </summary>
+        /// <typeparam name="TView">The type of the view to which the user should be navigated in the new window.</typeparam>
+        /// <param name="parameters">The parameters, which are injected in to the view model of the view.</param>
+        /// <param name="newWindowSizePreference">The size preference for the new window, which determines how the new window is arranged in respect to the window from which the new window is being opened.</param>
+        /// <returns>Returns the result of the navigation.</returns>
+        public Task<WindowNavigationResult> NavigateAsync<TView>(object parameters, ViewSizePreference newWindowSizePreference) where TView : Page => this.NavigateAsync<TView>(parameters, newWindowSizePreference, null, ViewSizePreference.Default);
 
-        public Task<WindowNavigationResult> NavigateAsync<TView>(ViewSizePreference newApplicationViewSizePrefenrece) => this.NavigateAsync<TView>(null, null, newApplicationViewSizePrefenrece, ViewSizePreference.Default);
+        /// <summary>
+        /// Creates a new window and navigates to the specified view.
+        /// </summary>
+        /// <typeparam name="TView">The type of the view to which the user should be navigated in the new window.</typeparam>
+        /// <param name="newWindowSizePreference">The size preference for the new window, which determines how the new window is arranged in respect to the anchor window.</param>
+        /// <param name="anchorWindowNavigationService">The navigation service of the window, which is the anchor for the new window. This can be used to specify how the two windows are being arranged by Windows.</param>
+        /// <returns>Returns the result of the navigation.</returns>
+        public Task<WindowNavigationResult> NavigateAsync<TView>(ViewSizePreference newWindowSizePreference, NavigationService anchorWindowNavigationService) where TView : Page => this.NavigateAsync<TView>(null, newWindowSizePreference, anchorWindowNavigationService, ViewSizePreference.Default);
 
-        public Task<WindowNavigationResult> NavigateAsync<TView>(object viewParameters) => this.NavigateAsync<TView>(viewParameters, null, ViewSizePreference.Default, ViewSizePreference.Default);
+        /// <summary>
+        /// Creates a new window and navigates to the specified view.
+        /// </summary>
+        /// <typeparam name="TView">The type of the view to which the user should be navigated in the new window.</typeparam>
+        /// <param name="newWindowSizePreference">The size preference for the new window, which determines how the new window is arranged in respect to the window from which the new window is being opened.</param>
+        /// <returns>Returns the result of the navigation.</returns>
+        public Task<WindowNavigationResult> NavigateAsync<TView>(ViewSizePreference newWindowSizePreference) where TView : Page => this.NavigateAsync<TView>(null, newWindowSizePreference, null, ViewSizePreference.Default);
 
-        public Task<WindowNavigationResult> NavigateAsync<TView>() => this.NavigateAsync<TView>(null, null, ViewSizePreference.Default, ViewSizePreference.Default);
+        /// <summary>
+        /// Creates a new window and navigates to the specified view.
+        /// </summary>
+        /// <typeparam name="TView">The type of the view to which the user should be navigated in the new window.</typeparam>
+        /// <param name="parameters">The parameters, which are injected in to the view model of the view.</param>
+        /// <returns>Returns the result of the navigation.</returns>
+        public Task<WindowNavigationResult> NavigateAsync<TView>(object parameters) where TView : Page => this.NavigateAsync<TView>(parameters, ViewSizePreference.Default, null, ViewSizePreference.Default);
 
-        public async Task<WindowNavigationResult> NavigateAsync<TView>(object viewParameters, NavigationService anchorWindowNavigationService, ViewSizePreference newApplicationViewSizePrefenrece, ViewSizePreference anchorViewSizePrefenrece)
+        /// <summary>
+        /// Creates a new window and navigates to the specified view.
+        /// </summary>
+        /// <typeparam name="TView">The type of the view to which the user should be navigated in the new window.</typeparam>
+        /// <returns>Returns the result of the navigation.</returns>
+        public Task<WindowNavigationResult> NavigateAsync<TView>() where TView : Page => this.NavigateAsync<TView>(null, ViewSizePreference.Default, null, ViewSizePreference.Default);
+
+        /// <summary>
+        /// Creates a new window and navigates to the specified view.
+        /// </summary>
+        /// <typeparam name="TView">The type of the view to which the user should be navigated in the new window.</typeparam>
+        /// <param name="parameters">The parameters, which are injected in to the view model of the view.</param>
+        /// <param name="newWindowSizePreference">The size preference for the new window, which determines how the new window is arranged in respect to the anchor window.</param>
+        /// <param name="anchorWindowNavigationService">The navigation service of the window, which is the anchor for the new window. This can be used to specify how the two windows are being arranged by Windows.</param>
+        /// <param name="anchorWindowSizePreference">The size preference for the anchor window, which determines how the anchor window is arranged in respect to the new window.</param>
+        /// <returns>Returns the result of the navigation.</returns>
+        public async Task<WindowNavigationResult> NavigateAsync<TView>(object parameters, ViewSizePreference newWindowSizePreference, NavigationService anchorWindowNavigationService, ViewSizePreference anchorWindowSizePreference) where TView : Page
         {
-            throw new NotImplementedException();
+            // Creates the new window
+            WindowCreationResult result = await this.CreateWindowAsync(anchorWindowNavigationService?.ApplicationView.Id, anchorWindowSizePreference, newWindowSizePreference);
+
+            // Checks if the window could be created, if not then the navigation can not be performed
+            if (!result.WasSuccessful)
+                return new WindowNavigationResult { Result = NavigationResult.Canceled };
+
+            // Navigates to the specified view
+            if (await result.NavigationService.NavigateAsync<TView>(parameters) == NavigationResult.Canceled)
+            {
+                // Since the view could not be navigated to, the new window is closed, and the navigation is aborted
+                await result.NavigationService.CloseWindowAsync();
+                return new WindowNavigationResult { Result = NavigationResult.Canceled };
+            }
+
+            // Adds the new navigation service to the list of navigation services and invokes the window created event
+            this.navigationServices.Add(result.NavigationService);
+            this.WindowCreated?.Invoke(this, new WindowEventArgs(result.NavigationService));
+
+            // Since the navigation was successful, the navigation service is returned
+            return new WindowNavigationResult
+            {
+                Result = NavigationResult.Navigated,
+                NavigationService = result.NavigationService
+            };
         }
 
         /// <summary>
