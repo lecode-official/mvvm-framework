@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MvvmFramework.Samples.Uwp</RootNamespace>
     <AssemblyName>MvvmFramework.Samples.Uwp</AssemblyName>
-    <DefaultLanguage>de-DE</DefaultLanguage>
+    <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion>10.0.10586.0</TargetPlatformVersion>
     <TargetPlatformMinVersion>10.0.10586.0</TargetPlatformMinVersion>
@@ -147,6 +147,10 @@
     <ProjectReference Include="..\..\UWP\Windows.Mvvm.Reactive\Windows.Mvvm.Reactive.csproj">
       <Project>{D0312848-48A4-49FD-AB25-EF803EEE4286}</Project>
       <Name>Windows.Mvvm.Reactive</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\UWP\Windows.Mvvm.Services.Application\Windows.Mvvm.Services.Application.csproj">
+      <Project>{771bb045-3f3e-4242-a648-a29d385c0ca2}</Project>
+      <Name>Windows.Mvvm.Services.Application</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\UWP\Windows.Mvvm.Services.Navigation\Windows.Mvvm.Services.Navigation.csproj">
       <Project>{0a9d0956-848f-4453-b7ef-3f74bd49fd50}</Project>

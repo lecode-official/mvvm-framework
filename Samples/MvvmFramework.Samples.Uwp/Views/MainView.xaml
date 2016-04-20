@@ -12,6 +12,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <ListBox ItemsSource="{Binding Path=TodoListItems}" SelectedItem="{Binding Path=SelectedTodoListItem, Mode=TwoWay}" Grid.Row="0">
@@ -38,6 +39,10 @@
             <Button Command="{Binding Path=CreateTodoListItemCommand}" Padding="5" Margin="10">Create new item</Button>
             <Button Command="{Binding Path=MarkTodoListItemAsFinishedCommand}" Padding="5" Margin="10">Mark as finished</Button>
             <Button Command="{Binding Path=RemoveTodoListItemCommand}" Padding="5" Margin="10">Remove</Button>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right">
+            <Button Command="{Binding Path=ShutdownApplicationCommand}" Padding="5" Margin="10">Quit</Button>
         </StackPanel>
     </Grid>
 </Page>

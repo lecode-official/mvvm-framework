@@ -19,6 +19,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <TextBlock FontSize="18" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0">Create new todo list item</TextBlock>
@@ -32,6 +33,10 @@
         <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4" HorizontalAlignment="Right">
             <Button Command="{Binding Path=CancelCommand}" Padding="5" Margin="10">Cancel</Button>
             <Button Command="{Binding Path=SaveCommand}" Padding="5" Margin="10">Save</Button>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="5" HorizontalAlignment="Right">
+            <Button Command="{Binding Path=ShutdownApplicationCommand}" Padding="5" Margin="10">Quit</Button>
         </StackPanel>
     </Grid>
 </Page>
