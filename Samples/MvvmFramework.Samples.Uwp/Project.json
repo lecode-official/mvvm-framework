@@ -1,6 +1,8 @@
 ﻿{
   "dependencies": {
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.1.0",
+    "reactiveui": "6.5.0",
+    "Splat": "1.6.2",
     "System.InversionOfControl.Abstractions.SimpleIoc": "0.1.2"
   },
   "frameworks": {

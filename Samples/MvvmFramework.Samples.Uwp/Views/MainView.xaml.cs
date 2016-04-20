@@ -5,7 +5,7 @@ using Windows.UI.Xaml.Controls;
 
 #endregion
 
-namespace MvvmFramework.Samples.Uwp
+namespace MvvmFramework.Samples.Uwp.Views
 {
     /// <summary>
     /// Represents the main view of the application.
