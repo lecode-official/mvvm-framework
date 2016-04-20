@@ -1,7 +1,7 @@
 ﻿{
   "dependencies": {
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.1.0",
-    "System.InversionOfControl.Abstractions": "0.1.0"
+    "System.InversionOfControl.Abstractions": "0.1.2"
   },
   "frameworks": {
     "uap10.0": {}
