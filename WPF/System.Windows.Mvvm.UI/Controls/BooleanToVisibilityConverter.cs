@@ -9,10 +9,9 @@ using System.Windows.Data;
 namespace System.Windows.Controls
 {
     /// <summary>
-    /// Convertes boolean values into visibility values and vice versa. Unlike the standard boolean to visibility converter it does not return
-    /// <c>DependencyProperty.UnsetValue</c>, when the input value is <c>null</c>, but it returns <c>Visibility.Collapsed</c>. This is very helpful, when the
-    /// binding is asynchronous, because in an asynchronous binding, the value can be undetermined (i.e. <c>null</c>) for a short amount of time, which results
-    /// in the control to be displayed for a short period of time, even if the binding value eventually evaluates to <c>false</c>.
+    /// Convertes boolean values into visibility values and vice versa. Unlike the standard boolean to visibility converter it does not return <c>DependencyProperty.UnsetValue</c>, when the input value is <c>null</c>, but it returns <c>Visibility.Collapsed</c>. This is
+    /// very helpful, when the binding is asynchronous, because in an asynchronous binding, the value can be undetermined (i.e. <c>null</c>) for a short amount of time, which results in the control to be displayed for a short period of time, even if the binding value
+    /// eventually evaluates to <c>false</c>.
     /// </summary>
     public class BooleanToVisibilityConverter : IValueConverter
     {
