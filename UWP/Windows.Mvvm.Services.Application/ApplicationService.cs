@@ -3,7 +3,6 @@
 
 using System;
 using System.Globalization;
-using System.Windows.Threading;
 using Windows.UI.Xaml;
 
 #endregion
@@ -33,18 +32,7 @@ namespace Windows.Mvvm.Services.Application
                 CultureInfo.CurrentUICulture = value;
             }
         }
-
-        /// <summary>
-        /// Gets the dispatcher that is associated with the current thread.
-        /// </summary>
-        public virtual Dispatcher CurrentDispatcher
-        {
-            get
-            {
-                return Dispatcher.CurrentDispatcher;
-            }
-        }
-
+        
         /// <summary>
         /// Gets the XAML resources that have been defined application-wide.
         /// </summary>
