@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Navigation;
 
 #endregion
 
@@ -272,9 +273,11 @@ namespace Windows.Mvvm.Services.Navigation
 
             // Instantiates the new view
             TaskCompletionSource<Page> taskCompletionSource = new TaskCompletionSource<Page>();
-            this.navigationFrame.Navigated += (sender, e) => taskCompletionSource.SetResult(e.Content as Page);
+            NavigatedEventHandler navigatedEventHandler = (sender, e) => taskCompletionSource.SetResult(e.Content as Page);
+            this.navigationFrame.Navigated += navigatedEventHandler;
             this.navigationFrame.Navigate(typeof(TView));
             this.CurrentView = await taskCompletionSource.Task;
+            this.navigationFrame.Navigated -= navigatedEventHandler;
 
             // Sets the view model as data context of the view and sets the new current view model
             this.CurrentView.DataContext = viewModel;
@@ -332,9 +335,11 @@ namespace Windows.Mvvm.Services.Navigation
             this.CurrentViewModel = viewModel;
             this.CurrentView.DataContext = null;
             TaskCompletionSource<bool> taskCompletionSource = new TaskCompletionSource<bool>();
-            this.navigationFrame.Navigated += (sender, e) => taskCompletionSource.SetResult(true);
+            NavigatedEventHandler navigatedEventHandler = (sender, e) => taskCompletionSource.SetResult(true);
+            this.navigationFrame.Navigated += navigatedEventHandler;
             this.navigationFrame.GoBack();
             await taskCompletionSource.Task;
+            this.navigationFrame.Navigated -= navigatedEventHandler;
             if (this.CurrentViewModel != null)
                 this.CurrentViewModel.IsInView = true;
             this.CurrentView.DataContext = this.CurrentViewModel;
