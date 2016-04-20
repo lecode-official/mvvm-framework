@@ -2,11 +2,12 @@
 #region Using Directives
 
 using System;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 
 #endregion
 
-namespace Windows.UI.Xaml.Controls
+namespace Windows.Mvvm.UI.Controls
 {
     /// <summary>
     /// Convertes boolean values into their negated boolean value (true => false, false => true).

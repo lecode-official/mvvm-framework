@@ -6,11 +6,12 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using System.Resources;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 
 #endregion
 
-namespace Windows.UI.Xaml.Controls
+namespace Windows.Mvvm.UI.Controls
 {
     /// <summary>
     /// Represents a value converter that is used to get the localized name of an enumeration value.
