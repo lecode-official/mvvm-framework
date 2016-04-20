@@ -96,6 +96,10 @@ namespace Windows.Mvvm.Services.Navigation
                 else
                     windowCreationResult.WasSuccessful = await ApplicationViewSwitcher.TryShowAsStandaloneAsync(windowCreationResult.NavigationService.ApplicationView.Id, newWindowSizePreference);
             }
+            else
+            {
+                windowCreationResult.WasSuccessful = true;
+            }
 
             // Returns the result
             return windowCreationResult;
@@ -178,7 +182,7 @@ namespace Windows.Mvvm.Services.Navigation
             if (await result.NavigationService.NavigateAsync<TView>(parameters) == NavigationResult.Canceled)
             {
                 // Since the view could not be navigated to, the new window is closed, and the navigation is aborted
-                await result.NavigationService.CloseWindowAsync();
+                await result.NavigationService.CloseWindowAsync(false, NavigationReason.WindowClosed);
                 return new WindowNavigationResult { Result = NavigationResult.Canceled };
             }
 
@@ -200,7 +204,7 @@ namespace Windows.Mvvm.Services.Navigation
         /// <param name="viewModel">The view model of the window or the view model of the view that is hosted in the window that is to be closed.</param>
         /// <exception cref="ArgumentNullException">If the specified view model is <c>null</c>, an <see cref="ArgumentNullException"/> exception is thrown</exception>
         /// <exception cref="InvalidOperationException">If the view model does not belong to a window, an <see cref="InvalidOperationException"/> exception is thrown.</exception>
-        public async Task CloseWindowAsync(IViewModel viewModel)
+        public async Task<NavigationResult> CloseWindowAsync(IViewModel viewModel)
         {
             // Validates the paramters
             if (viewModel == null)
@@ -212,7 +216,7 @@ namespace Windows.Mvvm.Services.Navigation
                 throw new InvalidOperationException("The navigation service for the view model could not be found.");
 
             // Closes the window
-            await this.CloseWindowAsync(navigationService);
+            return await this.CloseWindowAsync(navigationService);
         }
         
         /// <summary>
@@ -220,18 +224,22 @@ namespace Windows.Mvvm.Services.Navigation
         /// </summary>
         /// <param name="navigationService">The navigation manager whose window is to be closed.</param>
         /// <exception cref="ArgumentNullException">If the specified navigation manager is <c>null</c>, then an <see cref="ArgumentNullException"/> exception is thrown.</exception>
-        public async Task CloseWindowAsync(NavigationService navigationService)
+        public async Task<NavigationResult> CloseWindowAsync(NavigationService navigationService)
         {
             // Validates the parameters
             if (navigationService == null)
                 throw new ArgumentNullException(nameof(navigationService));
 
             // Closes the window
-            await navigationService.CloseWindowAsync();
+            if (await navigationService.CloseWindowAsync(true, NavigationReason.WindowClosing) == NavigationResult.Canceled)
+                return NavigationResult.Canceled;
 
             // Removes the navigation manager from the list of window navigation managers
             this.navigationServices.Remove(navigationService);
             this.WindowClosed?.Invoke(this, new WindowEventArgs(navigationService));
+
+            // Since the window was closed, navigated is returned
+            return NavigationResult.Navigated;
         }
 
         /// <summary>
@@ -247,7 +255,7 @@ namespace Windows.Mvvm.Services.Navigation
         public async Task DestroyAsync()
         {
             // Destroys all windows by closing them and destroying their view models
-            await Task.WhenAll(this.navigationServices.Select(navigationService => navigationService.CloseWindowAsync()));
+            await Task.WhenAll(this.navigationServices.Select(navigationService => navigationService.CloseWindowAsync(false, NavigationReason.WindowClosed)));
             this.navigationServices.Clear();
         }
 

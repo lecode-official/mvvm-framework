@@ -96,8 +96,8 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainPage.xaml.cs">
-      <DependentUpon>MainPage.xaml</DependentUpon>
+    <Compile Include="MainView.xaml.cs">
+      <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -122,7 +122,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="MainPage.xaml">
+    <Page Include="MainView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -131,6 +131,10 @@
     <ProjectReference Include="..\..\UWP\Windows.Mvvm.Application\Windows.Mvvm.Application.csproj">
       <Project>{80c0bc54-7fad-421b-b2b7-78da1728a69e}</Project>
       <Name>Windows.Mvvm.Application</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\UWP\Windows.Mvvm.Services.Navigation\Windows.Mvvm.Services.Navigation.csproj">
+      <Project>{0a9d0956-848f-4453-b7ef-3f74bd49fd50}</Project>
+      <Name>Windows.Mvvm.Services.Navigation</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
