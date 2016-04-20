@@ -10,14 +10,14 @@ namespace MvvmFramework.Samples.Uwp
     /// <summary>
     /// Represents the main view of the application.
     /// </summary>
-    public sealed partial class MainPage : Page
+    public sealed partial class MainView : Page
     {
         #region Constructors
 
         /// <summary>
-        /// Initializes a new <see cref="MainPage"/> instance.
+        /// Initializes a new <see cref="MainView"/> instance.
         /// </summary>
-        public MainPage()
+        public MainView()
         {
             this.InitializeComponent();
         }

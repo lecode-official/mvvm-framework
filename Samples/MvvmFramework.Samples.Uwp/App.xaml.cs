@@ -1,10 +1,12 @@
 ﻿
 #region Using Directives
 
+using System.InversionOfControl.Abstractions;
+using System.InversionOfControl.Abstractions.SimpleIoc;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Activation;
 using Windows.Mvvm.Application;
-using Windows.UI.Xaml;
+using Windows.Mvvm.Services.Navigation;
 
 #endregion
 
@@ -27,6 +29,15 @@ namespace MvvmFramework.Samples.Uwp
 
         #endregion
 
+        #region Private Fields
+
+        /// <summary>
+        /// Contains the IOC container which is used by the navigation service to activate the views and view models.
+        /// </summary>
+        private IIocContainer iocContainer;
+
+        #endregion
+
         #region MvvmApplication Implementation
 
         /// <summary>
@@ -35,39 +46,20 @@ namespace MvvmFramework.Samples.Uwp
         /// <param name="eventArguments">The event argument, that contain more information on the activation of the application.</param>
         protected override async Task OnActivatedAsync(IActivatedEventArgs eventArguments)
         {
-            // Calls the base implementation
-            await base.OnActivatedAsync(eventArguments);
+            // Makes sure that the initialization takes only place, when the application was previously not running
+            if (eventArguments.PreviousExecutionState != ApplicationExecutionState.Running && eventArguments.PreviousExecutionState != ApplicationExecutionState.Suspended)
+            {
+                // Initializes the IOC container; in this sample the Simple IOC is used
+                this.iocContainer = new SimpleIocContainer();
 
-            // Makes sure that the window is activated
-            Window.Current.Activate();
-        }
+                // Binds all repositories and services that are needed for the application to the IoC container
+                this.iocContainer.RegisterType<IReadOnlyIocContainer>(() => this.iocContainer);
+                this.iocContainer.RegisterType<WindowNavigationService>(Scope.Singleton);
 
-        /// <summary>
-        /// Gets called when the application is being resumed.
-        /// </summary>
-        protected override async Task OnResumingAsync()
-        {
-            // Calls the base implementation
-            await base.OnResumingAsync();
-        }
-
-        /// <summary>
-        /// Gets called when the app is being suspended. Can be used to save the current application state.
-        /// </summary>
-        protected override async Task OnSuspendingAsync()
-        {
-            // Calls the base implementation
-            await base.OnSuspendingAsync();
-        }
-
-        /// <summary>
-        /// Gets called if an exception was thrown that was not handled by user-code.
-        /// </summary>
-        /// <param name="eventArguments">The event arguments that contain further information about the exception that was not properly handled by user-code.</param>
-        protected override async Task OnUnhandledExceptionAsync(UnhandledExceptionEventArgs eventArguments)
-        {
-            // Calls the base implementation
-            await base.OnUnhandledExceptionAsync(eventArguments);
+                // Navigates the user to the main view
+                WindowNavigationService windowNavigationService = this.iocContainer.GetInstance<WindowNavigationService>();
+                await windowNavigationService.NavigateAsync<MainView>();
+            }
         }
 
         #endregion
