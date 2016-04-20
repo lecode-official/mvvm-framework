@@ -2,11 +2,12 @@
 #region Using Directives
 
 using System;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 
 #endregion
 
-namespace Windows.UI.Xaml.Controls
+namespace Windows.Mvvm.UI.Controls
 {
     /// <summary>
     /// Convertes boolean values into visibility values and vice versa. Unlike the standard boolean to visibility converter it inverts the boolean values, which means, that false converts to visible and true converts to collapsed.

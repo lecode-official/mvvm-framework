@@ -2,11 +2,12 @@
 #region Using Directives
 
 using System;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 
 #endregion
 
-namespace Windows.UI.Xaml.Controls
+namespace Windows.Mvvm.UI.Controls
 {
     /// <summary>
     /// Converts an enum to a boolean value, if the parameter has the same value as the enum value.
