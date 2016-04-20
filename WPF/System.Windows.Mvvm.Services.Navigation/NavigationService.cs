@@ -181,7 +181,7 @@ namespace System.Windows.Mvvm.Services.Navigation
         /// Closes the window that is managed by this navigation service.
         /// </summary>
         /// <param name="isCancellable">Determines whether the closing of the application can be cancelled by the view model.</param>
-        /// <returns>Returns a value that determines whether the window was closed or its closing was cancelled. If <see cref="forceClose"/> is set to <c>true</c>, <c>NavigationResult.Navigated</c> is always returned.</returns>
+        /// <returns>Returns a value that determines whether the window was closed or its closing was cancelled. If <see cref="p:isCancellable"/> is set to <c>true</c>, <c>NavigationResult.Navigated</c> is always returned.</returns>
         internal Task<NavigationResult> CloseWindowAsync(bool isCancellable) => this.CloseWindowAsync(isCancellable, !isCancellable ? NavigationReason.WindowClosed : NavigationReason.WindowClosing);
 
         /// <summary>
@@ -198,7 +198,7 @@ namespace System.Windows.Mvvm.Services.Navigation
         /// <param name="isCancellable">Determines whether the closing of the application can be cancelled by the view model.</param>
         /// <param name="navigationReason">The navigation reason that is sent to the view model.</param>
         /// <param name="closeWindow">Indicates whether the window should be closed or the view models should just be disposed of.</param>
-        /// <returns>Returns a value that determines whether the window was closed or its closing was cancelled. If <see cref="isCancellable"/> is set to <c>false</c>, <c>NavigationResult.Navigated</c> is always returned.</returns>
+        /// <returns>Returns a value that determines whether the window was closed or its closing was cancelled. If <see cref="p:isCancellable"/> is set to <c>false</c>, <c>NavigationResult.Navigated</c> is always returned.</returns>
         internal async Task<NavigationResult> CloseWindowAsync(bool isCancellable, NavigationReason navigationReason, bool closeWindow)
         {
             // Creates new event arguments for the navigation events
