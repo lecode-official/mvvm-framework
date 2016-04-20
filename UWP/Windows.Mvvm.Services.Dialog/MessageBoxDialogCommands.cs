@@ -41,7 +41,7 @@ namespace Windows.Mvvm.Services.Dialog
                     {
                         Id = Guid.NewGuid().ToString(),
                         Label = this.DefaultCommand.Label,
-                        Invoked = async command => await this.DefaultCommand.Command()
+                        Invoked = async command => await this.DefaultCommand?.Command()
                     });
 
                     // Adds the cancel command
@@ -49,7 +49,7 @@ namespace Windows.Mvvm.Services.Dialog
                     {
                         Id = Guid.NewGuid().ToString(),
                         Label = this.CancelCommand.Label,
-                        Invoked = async c => await this.CancelCommand.Command()
+                        Invoked = async c => await this.CancelCommand?.Command()
                     });
 
                     // Adds the rest of the commands
@@ -57,7 +57,7 @@ namespace Windows.Mvvm.Services.Dialog
                     {
                         Id = Guid.NewGuid().ToString(),
                         Label = command.Label,
-                        Invoked = async c => await command.Command()
+                        Invoked = async c => await command?.Command()
                     }));
                 }
 
