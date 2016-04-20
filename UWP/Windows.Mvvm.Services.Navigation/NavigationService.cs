@@ -76,7 +76,7 @@ namespace Windows.Mvvm.Services.Navigation
         /// <summary>
         /// Contains the stack of views for the backwards navigation.
         /// </summary>
-        private readonly Stack<KeyValuePair<Page, IViewModel>> navigationStack = new Stack<KeyValuePair<Page, IViewModel>>();
+        private readonly Stack<IViewModel> navigationStack = new Stack<IViewModel>();
 
         #endregion
 
@@ -176,13 +176,13 @@ namespace Windows.Mvvm.Services.Navigation
             while (this.navigationStack.Any())
             {
                 // Gets the view and the view model
-                KeyValuePair<Page, IViewModel> viewViewModelPair = this.navigationStack.Pop();
+                IViewModel viewModel = this.navigationStack.Pop();
 
                 // Deactivates and disposes of the view model
-                if (viewViewModelPair.Value != null)
+                if (viewModel != null)
                 {
-                    await viewViewModelPair.Value.OnDeactivateAsync();
-                    viewViewModelPair.Value.Dispose();
+                    await viewModel.OnDeactivateAsync();
+                    viewModel.Dispose();
                 }
             }
         }
@@ -269,7 +269,7 @@ namespace Windows.Mvvm.Services.Navigation
             if (this.CurrentViewModel != null)
                 this.CurrentViewModel.IsInView = false;
             if (this.CurrentView != null)
-                this.navigationStack.Push(new KeyValuePair<Page, IViewModel>(this.CurrentView, this.CurrentViewModel));
+                this.navigationStack.Push(this.CurrentViewModel);
 
             // Instantiates the new view
             TaskCompletionSource<Page> taskCompletionSource = new TaskCompletionSource<Page>();
@@ -313,7 +313,7 @@ namespace Windows.Mvvm.Services.Navigation
             }
 
             // Raises the on navigate to event of the view model of the view that is on top of the navigation stack, if the view model does not allow to be navigated away from, then the navigation is aborted
-            IViewModel viewModel = this.navigationStack.Peek().Value;
+            IViewModel viewModel = this.navigationStack.Peek();
             if (viewModel != null)
             {
                 eventArguments = new NavigationEventArgs(NavigationReason.Navigation);
@@ -330,15 +330,12 @@ namespace Windows.Mvvm.Services.Navigation
             }
 
             // Navigates to the view that was on top of the navigation stack (the data context is set to null before navigation and is reset afterwards, because this causes all the bindings that do not call the property changed event to properly update; this is, for example helpful if database models are used in views for performance reasons, because they do not implement INotifyPropertyChanged)
-            Page view = this.navigationStack.Pop().Key;
-            this.CurrentView = view;
             this.CurrentViewModel = viewModel;
-            this.CurrentView.DataContext = null;
-            TaskCompletionSource<bool> taskCompletionSource = new TaskCompletionSource<bool>();
-            NavigatedEventHandler navigatedEventHandler = (sender, e) => taskCompletionSource.SetResult(true);
+            TaskCompletionSource<Page> taskCompletionSource = new TaskCompletionSource<Page>();
+            NavigatedEventHandler navigatedEventHandler = (sender, e) => taskCompletionSource.SetResult(e.Content as Page);
             this.navigationFrame.Navigated += navigatedEventHandler;
             this.navigationFrame.GoBack();
-            await taskCompletionSource.Task;
+            this.CurrentView = await taskCompletionSource.Task;
             this.navigationFrame.Navigated -= navigatedEventHandler;
             if (this.CurrentViewModel != null)
                 this.CurrentViewModel.IsInView = true;
