@@ -16,7 +16,7 @@
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <PackageCertificateKeyFile>TemporaryKey.pfx</PackageCertificateKeyFile>
+    <PackageCertificateKeyFile>Resources\Certificates\TemporaryKey.pfx</PackageCertificateKeyFile>
     <PackageCertificateThumbprint>B53FF6963FF3AADADCCB45C1E18A9F56E067CAC7</PackageCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
@@ -96,7 +96,14 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainView.xaml.cs">
+    <Compile Include="Models\TodoListItem.cs" />
+    <Compile Include="Repositories\TodoListItemsRepository.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\TodoListItemViewModel.cs" />
+    <Compile Include="Views\CreateTodoListItemView.xaml.cs">
+      <DependentUpon>CreateTodoListItemView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -105,24 +112,28 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <None Include="TemporaryKey.pfx" />
+    <None Include="Resources\Certificates\TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Properties\Default.rd.xml" />
-    <Content Include="Assets\LockScreenLogo.scale-200.png" />
-    <Content Include="Assets\SplashScreen.scale-200.png" />
-    <Content Include="Assets\Square150x150Logo.scale-200.png" />
-    <Content Include="Assets\Square44x44Logo.scale-200.png" />
-    <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
-    <Content Include="Assets\StoreLogo.png" />
-    <Content Include="Assets\Wide310x150Logo.scale-200.png" />
+    <Content Include="Resources\Assets\LockScreenLogo.scale-200.png" />
+    <Content Include="Resources\Assets\SplashScreen.scale-200.png" />
+    <Content Include="Resources\Assets\Square150x150Logo.scale-200.png" />
+    <Content Include="Resources\Assets\Square44x44Logo.scale-200.png" />
+    <Content Include="Resources\Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
+    <Content Include="Resources\Assets\StoreLogo.png" />
+    <Content Include="Resources\Assets\Wide310x150Logo.scale-200.png" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="MainView.xaml">
+    <Page Include="Views\CreateTodoListItemView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -132,11 +143,20 @@
       <Project>{80c0bc54-7fad-421b-b2b7-78da1728a69e}</Project>
       <Name>Windows.Mvvm.Application</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\UWP\Windows.Mvvm.Reactive\Windows.Mvvm.Reactive.csproj">
+      <Project>{D0312848-48A4-49FD-AB25-EF803EEE4286}</Project>
+      <Name>Windows.Mvvm.Reactive</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\UWP\Windows.Mvvm.Services.Navigation\Windows.Mvvm.Services.Navigation.csproj">
       <Project>{0a9d0956-848f-4453-b7ef-3f74bd49fd50}</Project>
       <Name>Windows.Mvvm.Services.Navigation</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\UWP\Windows.Mvvm.UI\Windows.Mvvm.UI.csproj">
+      <Project>{4e67adee-d34c-4eaa-b8e6-61c1ea5f8389}</Project>
+      <Name>Windows.Mvvm.UI</Name>
+    </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

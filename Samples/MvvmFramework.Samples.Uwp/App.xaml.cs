@@ -1,6 +1,8 @@
 ﻿
 #region Using Directives
 
+using MvvmFramework.Samples.Uwp.Repositories;
+using MvvmFramework.Samples.Uwp.Views;
 using System.InversionOfControl.Abstractions;
 using System.InversionOfControl.Abstractions.SimpleIoc;
 using System.Threading.Tasks;
@@ -54,6 +56,7 @@ namespace MvvmFramework.Samples.Uwp
 
                 // Binds all repositories and services that are needed for the application to the IoC container
                 this.iocContainer.RegisterType<IReadOnlyIocContainer>(() => this.iocContainer);
+                this.iocContainer.RegisterType<TodoListItemsRepository>(Scope.Singleton);
                 this.iocContainer.RegisterType<WindowNavigationService>(Scope.Singleton);
 
                 // Navigates the user to the main view

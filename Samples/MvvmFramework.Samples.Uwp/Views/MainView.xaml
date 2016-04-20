@@ -1,0 +1,43 @@
+﻿
+<!-- Represents the main view of the application. -->
+<Page x:Class="MvvmFramework.Samples.Uwp.Views.MainView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:local="using:MvvmFramework.Samples.Uwp"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <ListBox ItemsSource="{Binding Path=TodoListItems}" SelectedItem="{Binding Path=SelectedTodoListItem, Mode=TwoWay}" Grid.Row="0">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock FontSize="26" FontWeight="Bold" Text="{Binding Path=Title}" Visibility="{Binding Path=IsFinished, Converter={StaticResource InvertedBooleanToVisibilityConverter}}" />
+                        <Grid Visibility="{Binding Path=IsFinished, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <TextBlock FontSize="26" FontWeight="Bold" Text="{Binding Path=Title}" />
+                            <Line Stretch="Fill" Stroke="Black" StrokeThickness="2 " X1="1" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                        </Grid>
+
+                        <TextBlock FontSize="18" Text="{Binding Path=Description}" Visibility="{Binding Path=IsFinished, Converter={StaticResource InvertedBooleanToVisibilityConverter}}" />
+                        <Grid Visibility="{Binding Path=IsFinished, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <TextBlock FontSize="18" FontWeight="Bold" Text="{Binding Path=Description}" />
+                            <Line Stretch="Fill" Stroke="Black" StrokeThickness="2" X1="1" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                        </Grid>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right">
+            <Button Command="{Binding Path=CreateTodoListItemCommand}" Padding="5" Margin="10">Create new item</Button>
+            <Button Command="{Binding Path=MarkTodoListItemAsFinishedCommand}" Padding="5" Margin="10">Mark as finished</Button>
+            <Button Command="{Binding Path=RemoveTodoListItemCommand}" Padding="5" Margin="10">Remove</Button>
+        </StackPanel>
+    </Grid>
+</Page>
