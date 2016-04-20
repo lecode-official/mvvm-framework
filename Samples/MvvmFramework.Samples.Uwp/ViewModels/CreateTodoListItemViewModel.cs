@@ -4,8 +4,10 @@
 using MvvmFramework.Samples.Uwp.Repositories;
 using ReactiveUI;
 using System;
+using System.Reactive;
 using System.Threading.Tasks;
 using Windows.Mvvm.Reactive;
+using Windows.Mvvm.Services.Application;
 using Windows.Mvvm.Services.Navigation;
 
 #endregion
@@ -23,10 +25,12 @@ namespace MvvmFramework.Samples.Uwp.ViewModels
         /// Initializes a new <see cref="CreateTodoListItemViewModel"/> instance.
         /// </summary>
         /// <param name="navigationService">The navigation service, which is used to navigate between views.</param>
+        /// <param name="applicationService">The application service, which can be used to manage the application lifecycle.</param>
         /// <param name="todoListItemsRepository">The todo list items repository, which can be used to manage the items on the todo list.</param>
-        public CreateTodoListItemViewModel(NavigationService navigationService, TodoListItemsRepository todoListItemsRepository)
+        public CreateTodoListItemViewModel(NavigationService navigationService, ApplicationService applicationService, TodoListItemsRepository todoListItemsRepository)
         {
             this.navigationService = navigationService;
+            this.applicationService = applicationService;
             this.todoListItemsRepository = todoListItemsRepository;
         }
 
@@ -38,7 +42,12 @@ namespace MvvmFramework.Samples.Uwp.ViewModels
         /// Contains the navigation service, which is used to navigate between views.
         /// </summary>
         private readonly NavigationService navigationService;
-        
+
+        /// <summary>
+        /// Contains the application service, which can be used to manage the application lifecycle.
+        /// </summary>
+        private readonly ApplicationService applicationService;
+
         /// <summary>
         /// Contains the todo list items repository, which can be used to manage the items on the todo list.
         /// </summary>
@@ -100,6 +109,11 @@ namespace MvvmFramework.Samples.Uwp.ViewModels
         /// </summary>
         public ReactiveCommand<NavigationResult> SaveCommand { get; private set; }
 
+        /// <summary>
+        /// Gets the command, which shuts down the application.
+        /// </summary>
+        public ReactiveCommand<Unit> ShutdownApplicationCommand { get; private set; }
+
         #endregion
 
         #region ReactiveViewModel Implementation
@@ -120,6 +134,13 @@ namespace MvvmFramework.Samples.Uwp.ViewModels
 
                 // Navigates the user back to the main view
                 return await this.navigationService.NavigateBackAsync();
+            });
+
+            // Initializes the command, which shuts down the application
+            this.ShutdownApplicationCommand = ReactiveCommand.CreateAsyncTask(x =>
+            {
+                this.applicationService.Shutdown();
+                return Task.FromResult(Unit.Default);
             });
 
             // Since no asynchronous operation was performed, an empty task is returned

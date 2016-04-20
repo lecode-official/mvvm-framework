@@ -8,6 +8,7 @@ using System.InversionOfControl.Abstractions.SimpleIoc;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Activation;
 using Windows.Mvvm.Application;
+using Windows.Mvvm.Services.Application;
 using Windows.Mvvm.Services.Navigation;
 
 #endregion
@@ -58,6 +59,7 @@ namespace MvvmFramework.Samples.Uwp
                 this.iocContainer.RegisterType<IReadOnlyIocContainer>(() => this.iocContainer);
                 this.iocContainer.RegisterType<TodoListItemsRepository>(Scope.Singleton);
                 this.iocContainer.RegisterType<WindowNavigationService>(Scope.Singleton);
+                this.iocContainer.RegisterType<ApplicationService>(Scope.Singleton);
 
                 // Navigates the user to the main view
                 WindowNavigationService windowNavigationService = this.iocContainer.GetInstance<WindowNavigationService>();
