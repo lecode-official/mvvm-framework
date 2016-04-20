@@ -8,6 +8,7 @@ using System.Reactive;
 using System.Threading.Tasks;
 using Windows.Mvvm.Reactive;
 using Windows.Mvvm.Services.Application;
+using Windows.Mvvm.Services.Dialog;
 using Windows.Mvvm.Services.Navigation;
 
 #endregion
@@ -26,11 +27,13 @@ namespace MvvmFramework.Samples.Uwp.ViewModels
         /// </summary>
         /// <param name="navigationService">The navigation service, which is used to navigate between views.</param>
         /// <param name="applicationService">The application service, which can be used to manage the application lifecycle.</param>
+        /// <param name="dialogService">The dialog service, which provides access to the various dialogs offered by Windows.</param>
         /// <param name="todoListItemsRepository">The todo list items repository, which can be used to manage the items on the todo list.</param>
-        public CreateTodoListItemViewModel(NavigationService navigationService, ApplicationService applicationService, TodoListItemsRepository todoListItemsRepository)
+        public CreateTodoListItemViewModel(NavigationService navigationService, ApplicationService applicationService, DialogService dialogService, TodoListItemsRepository todoListItemsRepository)
         {
             this.navigationService = navigationService;
             this.applicationService = applicationService;
+            this.dialogService = dialogService;
             this.todoListItemsRepository = todoListItemsRepository;
         }
 
@@ -47,6 +50,11 @@ namespace MvvmFramework.Samples.Uwp.ViewModels
         /// Contains the application service, which can be used to manage the application lifecycle.
         /// </summary>
         private readonly ApplicationService applicationService;
+
+        /// <summary>
+        /// Contains the dialog service, which provides access to the various dialogs offered by Windows.
+        /// </summary>
+        private readonly DialogService dialogService;
 
         /// <summary>
         /// Contains the todo list items repository, which can be used to manage the items on the todo list.
@@ -102,7 +110,7 @@ namespace MvvmFramework.Samples.Uwp.ViewModels
         /// <summary>
         /// Gets the command, which cancels the creation dialog and returns to the previous view.
         /// </summary>
-        public ReactiveCommand<NavigationResult> CancelCommand { get; private set; }
+        public ReactiveCommand<Unit> CancelCommand { get; private set; }
 
         /// <summary>
         /// Gets the command, which saves the new todo list item and navigates the user back to the main view.
@@ -124,7 +132,18 @@ namespace MvvmFramework.Samples.Uwp.ViewModels
         public override Task OnActivateAsync()
         {
             // Initializes the command, which cancels the creation and returns to the previous view
-            this.CancelCommand = ReactiveCommand.CreateAsyncTask(async x => await this.navigationService.NavigateBackAsync());
+            this.CancelCommand = ReactiveCommand.CreateAsyncTask(async x =>
+            {
+                await this.dialogService.ShowMessageBoxDialogAsync("Do you really want to cancel the creation of the todo list item.", "Confirm cancellation", new MessageBoxDialogCommands
+                {
+                    DefaultCommand = new MessageBoxDialogCommand
+                    {
+                        Label = "Okay",
+                        Command = () => this.navigationService.NavigateBackAsync()
+                    },
+                    CancelCommand = new MessageBoxDialogCommand { Label = "Cancel" }
+                });
+            });
 
             // Initializes the command, which creates the new todo list item and navigates the user to the main view
             this.SaveCommand = ReactiveCommand.CreateAsyncTask(async x =>

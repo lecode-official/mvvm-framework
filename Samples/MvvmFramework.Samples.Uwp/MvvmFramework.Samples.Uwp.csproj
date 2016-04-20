@@ -152,6 +152,10 @@
       <Project>{771bb045-3f3e-4242-a648-a29d385c0ca2}</Project>
       <Name>Windows.Mvvm.Services.Application</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\UWP\Windows.Mvvm.Services.Dialog\Windows.Mvvm.Services.Dialog.csproj">
+      <Project>{73410ea0-740f-4985-a36e-ba8932a17e7a}</Project>
+      <Name>Windows.Mvvm.Services.Dialog</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\UWP\Windows.Mvvm.Services.Navigation\Windows.Mvvm.Services.Navigation.csproj">
       <Project>{0a9d0956-848f-4453-b7ef-3f74bd49fd50}</Project>
       <Name>Windows.Mvvm.Services.Navigation</Name>
