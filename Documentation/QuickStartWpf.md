@@ -7,7 +7,9 @@ sample application, you can find it [here](https://github.com/lecode-official/mv
 
 ## Creating a New Project
 
-Right now the MVVM Framework does not support any framework other than WPF. This might change in the future. To get started using the framework you should open Visual
+This quick guide is for kick-starting you on developing applications using WPF. Both flavors of the MVVM Framework share a pretty similar API surface but are not the
+same. Both of them look and feel very similar, but each of them acknowledges the differences between the platforms by providing APIs that are tailor-made for for each
+platform. A version of the quick start guide for the Windows universal app platform (UWP) is coming soon. To get started using the framework you should open Visual
 Studio and create a new C# WPF project.
 
 ![Project creation dialog](https://github.com/lecode-official/mvvm-framework/blob/master/Documentation/Images/ProjectCreationDialog.jpg "Creating a new C# WPF project")

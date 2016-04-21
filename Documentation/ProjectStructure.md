@@ -68,6 +68,7 @@ to an event of a control.
 
 ## MvvmFramework.Samples.Wpf
 
-This project contains a sample application, which showcases the usage of the MVVM Framework. It implements the canonical Todo list application. If you want more information on the inner workings
-of the sample application, please consult the [quick start guide](https://github.com/lecode-official/mvvm-framework/blob/master/Documentation/QuickStart.md), which goes through code step by step
-and explains some of the most important features of the MVVM Framework.
+This project contains sample applications, which showcase the usage of the MVVM Framework on bot WPF and the UWP platform. They implement the canonical todo list application. If you want more
+information on the inner workings of the sample applications, please consult the [Quick Start Guide (WPF)](https://github.com/lecode-official/mvvm-framework/blob/master/Documentation/QuickStart.md).
+A quick start guide for the the Window universal app platform (UWP) is coming soon. The quick start guides go through the code step by step and explain some of the most important features of the
+MVVM Framework.

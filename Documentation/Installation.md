@@ -17,6 +17,7 @@ kind of inversion of control container you are using.
 # First Steps
 
 If this is the first time that you are using the MVVM Framework you should head over to the
-[quick start guide](https://github.com/lecode-official/mvvm-framework/blob/master/Documentation/QuickStart.md) to learn the basics. If you want to dig deeper,
-please check out the [documentation](https://github.com/lecode-official/mvvm-framework/blob/master/Documentation/Documentation.md), which will provide you with a
-lot of detail on each component of the framework.
+[Quick Start Guide (WPF)](https://github.com/lecode-official/mvvm-framework/blob/master/Documentation/QuickStartWpf.md) to learn the basics. A quick start guide for
+the UWP platform is coming soon. If you want to dig deeper, please check out the
+[documentation](https://github.com/lecode-official/mvvm-framework/blob/master/Documentation/Documentation.md), which will provide you with a lot of detail on each
+component of the framework.
