@@ -112,6 +112,7 @@
     <Compile Include="DialogResultOfT.cs" />
     <Compile Include="DialogService.cs" />
     <Compile Include="FileTypeRestriction.cs" />
+    <Compile Include="MessageBoxButton.cs" />
     <Compile Include="MessageBoxDialogCommand.cs" />
     <Compile Include="MessageBoxDialogCommands.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

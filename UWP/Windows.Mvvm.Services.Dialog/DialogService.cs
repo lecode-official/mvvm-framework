@@ -51,6 +51,88 @@ namespace Windows.Mvvm.Services.Dialog
             });
         }
 
+        /// <summary>
+        /// Shows a message box dialog.
+        /// </summary>
+        /// <param name="message">The message that is displayed in the message box dialog.</param>
+        /// <param name="title">The title that is displayed in the message box dialog.</param>
+        /// <param name="messageBoxButton">The message box buttons that are to be displayed in the message box dialog.</param>
+        /// <returns>Returns the buttont that was pressed by the user.</returns>
+        public virtual async Task<DialogResult> ShowMessageBoxDialogAsync(string message, string title, MessageBoxButton messageBoxButton)
+        {
+            // Creates a new task completion source, which will be resolved when the message box dialog has been closed
+            TaskCompletionSource<DialogResult> taskCompletionSource = new TaskCompletionSource<DialogResult>();
+
+            // Creates the message box dialog commands for the specified message box buttons
+            MessageBoxDialogCommands messageBoxDialogCommands = new MessageBoxDialogCommands();
+            if (messageBoxButton == MessageBoxButton.Okay || messageBoxButton == MessageBoxButton.OkayCancel)
+            {
+                messageBoxDialogCommands.DefaultCommand = new MessageBoxDialogCommand
+                {
+                    Label = "Okay",
+                    Command = () =>
+                    {
+                        taskCompletionSource.TrySetResult(DialogResult.Okay);
+                        return Task.FromResult(0);
+                    }
+                };
+            }
+            if (messageBoxButton == MessageBoxButton.YesNo || messageBoxButton == MessageBoxButton.YesNoCancel)
+            {
+                messageBoxDialogCommands.DefaultCommand = new MessageBoxDialogCommand
+                {
+                    Label = "Yes",
+                    Command = () =>
+                    {
+                        taskCompletionSource.TrySetResult(DialogResult.Yes);
+                        return Task.FromResult(0);
+                    }
+                };
+            }
+            if (messageBoxButton == MessageBoxButton.OkayCancel || messageBoxButton == MessageBoxButton.YesNoCancel)
+            {
+                messageBoxDialogCommands.CancelCommand = new MessageBoxDialogCommand
+                {
+                    Label = "Cancel",
+                    Command = () =>
+                    {
+                        taskCompletionSource.TrySetResult(DialogResult.Cancel);
+                        return Task.FromResult(0);
+                    }
+                };
+            }
+            if (messageBoxButton == MessageBoxButton.YesNo)
+            {
+                messageBoxDialogCommands.CancelCommand = new MessageBoxDialogCommand
+                {
+                    Label = "No",
+                    Command = () =>
+                    {
+                        taskCompletionSource.TrySetResult(DialogResult.No);
+                        return Task.FromResult(0);
+                    }
+                };
+            }
+            if (messageBoxButton == MessageBoxButton.YesNoCancel)
+            {
+                messageBoxDialogCommands.Commands.Add(new MessageBoxDialogCommand
+                {
+                    Label = "No",
+                    Command = () =>
+                    {
+                        taskCompletionSource.TrySetResult(DialogResult.No);
+                        return Task.FromResult(0);
+                    }
+                });
+            }
+
+            // Shows the message box dialog
+            await this.ShowMessageBoxDialogAsync(message, title, messageBoxDialogCommands);
+
+            // Gets the result of the message box dialog and returns it
+            return await taskCompletionSource.Task;
+        }
+
         #endregion
     }
 }
