@@ -52,10 +52,19 @@ namespace System.Windows.Mvvm.Configuration.Stores
         /// Stores the configuration data.
         /// </summary>
         /// <param name="content">The serializes configuration data.</param>
-        public Task StoreAsync(string content)
+        public async Task StoreAsync(string content)
         {
-            return Task.Run(() => File.WriteAllText(this.FileName, content));
+            // Writes the configuration data to the file
+            await Task.Run(() => File.WriteAllText(this.FileName, content));
+
+            // Raises the configuration changed event
+            this.ConfigurationChanged?.Invoke(this, new EventArgs());
         }
+
+        /// <summary>
+        /// An event, which is raised, when the configuration has possibly changed.
+        /// </summary>
+        public event EventHandler ConfigurationChanged;
 
         #endregion
     }
