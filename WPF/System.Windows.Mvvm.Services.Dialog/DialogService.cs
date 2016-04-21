@@ -73,7 +73,7 @@ namespace System.Windows.Mvvm.Services.Dialog
         /// <param name="title">The title of the file open dialog.</param>
         /// <param name="filter">The file type restrictions, that should be put on the file open dialog.</param>
         /// <returns>Returns the dialog result and the resulting file name.</returns>
-        public virtual async Task<DialogResult<string>> ShowOpenFileDialogAsync(string title, ICollection<FileTypeRestriction> filter)
+        public virtual async Task<DialogResult<string>> ShowOpenFileDialogAsync(string title, IEnumerable<FileTypeRestriction> filter)
         {
             // Validates the parameters
             if (filter == null)
@@ -107,7 +107,7 @@ namespace System.Windows.Mvvm.Services.Dialog
         /// <param name="filter">The file type restrictions, that should be put on the file save dialog.</param>
         /// <param name="defaultExtension">The file extension, that is used by default for the new file (without dot and star, e.g. "txt" instead of "*.txt").</param>
         /// <returns>Returns the dialog result and the resulting file name.</returns>
-        public virtual async Task<DialogResult<string>> ShowSaveFileDialogAsync(string title, ICollection<FileTypeRestriction> filter, string defaultExtension)
+        public virtual async Task<DialogResult<string>> ShowSaveFileDialogAsync(string title, IEnumerable<FileTypeRestriction> filter, string defaultExtension)
         {
             // Validates the parameters
             if (filter == null)

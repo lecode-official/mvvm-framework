@@ -22,38 +22,23 @@ namespace System.Windows.Mvvm.Services.Dialog
         /// <param name="fileTypes">The file extensions (without dot and star, e.g. "txt" instead of "*.txt") of the file types on which the file open and file save dialogs should be restricted.</param>
         public FileTypeRestriction(string fileTypesDescription, params string[] fileTypes)
         {
-            this.fileTypesDescription = fileTypesDescription;
-            this.fileTypes = fileTypes.ToList();
+            this.FileTypesDescription = fileTypesDescription;
+            this.FileTypes = fileTypes.ToList();
         }
-
-        #endregion
-
-        #region Private Fields
-
-        /// <summary>
-        /// Contains the description for the file type restrictions.
-        /// </summary>
-        private string fileTypesDescription;
-
-        /// <summary>
-        /// Contains the file types, that the file open and file save dialog should be restricted on
-        /// </summary>
-        private List<string> fileTypes = new List<string>();
 
         #endregion
 
         #region Public Properties
 
         /// <summary>
-        /// Gets the string representation for the file type restriction.
+        /// Gets the description for the file type restrictions.
         /// </summary>
-        public string Restriction
-        {
-            get
-            {
-                return string.Concat(this.fileTypesDescription, "|", string.Join(";", this.fileTypes.Select(fileType => string.Concat("*.", fileType))));
-            }
-        }
+        public string FileTypesDescription { get; private set; }
+
+        /// <summary>
+        /// Gets the file types, that the file open and file save dialog should be restricted on
+        /// </summary>
+        public IEnumerable<string> FileTypes { get; private set; }
 
         #endregion
 
@@ -100,6 +85,21 @@ namespace System.Windows.Mvvm.Services.Dialog
             get
             {
                 return new FileTypeRestriction(Resources.Localization.FileTypeRestriction.VideoFilesRestrictionDescription, "mp4");
+            }
+        }
+
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        /// Gets the string representation for the file type restriction.
+        /// </summary>
+        public string Restriction
+        {
+            get
+            {
+                return string.Concat(this.FileTypesDescription, "|", string.Join(";", this.FileTypes.Select(fileType => string.Concat("*.", fileType))));
             }
         }
 
