@@ -14,6 +14,10 @@ specific code from the application logic. Everything in the framework was build 
 navigation. The framework plays nice with all kinds of frameworks, for example the dependency injection mechanism build into the framework does not care what
 kind of inversion of control container you are using.
 
+Right now the MVVM Framework is available in two flavors: one for WPF and one for the universal Windows app platform UWP. Both share a pretty similar API surface
+but are not the same. Both flavors look and feel very similar, but each of them acknowledges the differences between the platforms by providing APIs that are
+tailor-made for for each platform.
+
 ## Acknowledgments
 
 My special thanks goes out to [Lukas Rögner](https://github.com/lukasroegner) who wrote a lot of the code and did a great deal of refactoring. Without him the
@@ -25,10 +29,16 @@ the reactive pattern.
 
 ## Using the Project
 
-The project is available on NuGet: https://www.nuget.org/packages/System.Windows.Mvvm.
+The project is available on NuGet. You can find the WPF version here: https://www.nuget.org/packages/System.Windows.Mvvm.
 
 ```batch
 PM> Install-Package System.Windows.Mvvm
+```
+
+The UWP version is available here: https://www.nuget.org/packages/Windows.Mvvm.
+
+```batch
+PM> Install-Package Windows.Mvvm 
 ```
 
 If you want to you can download and manually build the solution. The project was built using Visual Studio 2015. Basically any version of Visual Studio 2015 will

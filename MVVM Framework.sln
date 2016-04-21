@@ -16,7 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 		Documentation\Documentation.md = Documentation\Documentation.md
 		Documentation\Installation.md = Documentation\Installation.md
 		Documentation\ProjectStructure.md = Documentation\ProjectStructure.md
-		Documentation\QuickStart.md = Documentation\QuickStart.md
+		Documentation\QuickStartWpf.md = Documentation\QuickStartWpf.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Images", "Images", "{263D3AEF-5532-487E-9B2F-592848FCAE13}"
