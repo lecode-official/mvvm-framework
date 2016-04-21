@@ -34,11 +34,11 @@
   <PropertyGroup Label="Configuration">
     <Id>System.Windows.Mvvm</Id>
     <Version>0.2.9</Version>
-    <Title>MVVM Framework</Title>
+    <Title>MVVM Framework (WPF)</Title>
     <Authors>David Neumann, Lukas Rögner</Authors>
     <Owners>David Neumann, Lukas Rögner</Owners>
-    <Summary>The MVVM Framework is a compact and simple, yet powerful implementation of the MVVM pattern.</Summary>
-    <Description>The MVVM Framework is a compact and simple, yet powerful implementation of the MVVM pattern. It provides a strong model for managing the application lifecycle and the navigation. The MVVM framework decouples operation system functionality from the application logic by providing a powerful service system, which abstracts away any platform specific code from the application logic. Everything in the framework was build with the task awaitable pattern in mind, from application lifecycle management to navigation. The framework plays nice with all kinds of frameworks, for example the dependency injection mechanism build into the framework does not care what </Description>
+    <Summary>The MVVM Framework is a compact and simple, yet powerful implementation of the MVVM pattern for WPF.</Summary>
+    <Description>The MVVM Framework is a compact and simple, yet powerful implementation of the MVVM pattern for WPF. It provides a strong model for managing the application lifecycle and the navigation. The MVVM framework decouples operation system functionality from the application logic by providing a powerful service system, which abstracts away any platform specific code from the application logic. Everything in the framework was build with the task awaitable pattern in mind, from application lifecycle management to navigation. The framework plays nice with all kinds of frameworks, for example the dependency injection mechanism build into the framework does not care what </Description>
     <ReleaseNotes>Fixed some code smells and consolidated some minor things between the WPF and the UWP version</ReleaseNotes>
     <ProjectUrl>https://github.com/lecode-official/mvvm-framework</ProjectUrl>
     <LicenseUrl>https://raw.githubusercontent.com/lecode-official/mvvm-framework/master/LICENSE</LicenseUrl>
