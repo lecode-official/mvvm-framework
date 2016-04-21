@@ -48,18 +48,6 @@ namespace Windows.Mvvm.Services.Dialog
                         }
                     });
 
-                    // Adds the cancel command
-                    this.uiCommands.Add(new UICommand
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        Label = this.CancelCommand.Label,
-                        Invoked = async c =>
-                        {
-                            if (this.CancelCommand.Command != null)
-                                await this.CancelCommand.Command();
-                        }
-                    });
-
                     // Adds the rest of the commands
                     this.uiCommands.AddRange(this.Commands.Select(command => new UICommand
                     {
@@ -71,6 +59,18 @@ namespace Windows.Mvvm.Services.Dialog
                                 await command.Command();
                         }
                     }));
+
+                    // Adds the cancel command
+                    this.uiCommands.Add(new UICommand
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        Label = this.CancelCommand.Label,
+                        Invoked = async c =>
+                        {
+                            if (this.CancelCommand.Command != null)
+                                await this.CancelCommand.Command();
+                        }
+                    });
                 }
 
                 // Returns the created UI commands
