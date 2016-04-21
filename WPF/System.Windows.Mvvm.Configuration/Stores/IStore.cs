@@ -27,5 +27,14 @@ namespace System.Windows.Mvvm.Configuration.Stores
         Task StoreAsync(string content);
 
         #endregion
+
+        #region Events
+
+        /// <summary>
+        /// An event, which is raised, when the configuration has possibly changed.
+        /// </summary>
+        event EventHandler ConfigurationChanged;
+
+        #endregion
     }
 }

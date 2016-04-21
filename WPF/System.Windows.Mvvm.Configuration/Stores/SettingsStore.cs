@@ -70,10 +70,18 @@ namespace System.Windows.Mvvm.Configuration.Stores
             // Saves the settings
             this.Settings[this.PropertyName] = content;
             this.Settings.Save();
+            
+            // Raises the configuration changed event
+            this.ConfigurationChanged?.Invoke(this, new EventArgs());
 
             // Returns an empty task as no asynchronous operation has been performed
             return Task.FromResult(0);
         }
+
+        /// <summary>
+        /// An event, which is raised, when the configuration has possibly changed.
+        /// </summary>
+        public event EventHandler ConfigurationChanged;
 
         #endregion
     }
