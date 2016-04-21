@@ -20,7 +20,7 @@ namespace System.Windows.Mvvm.Configuration.Stores
         /// </summary>
         /// <param name="fileName">The settings that are used to store the configuration data.</param>
         public SettingsStore(ApplicationSettingsBase settings)
-            : this(settings, "Default")
+            : this(settings, "Configuration")
         { }
 
         /// <summary>
