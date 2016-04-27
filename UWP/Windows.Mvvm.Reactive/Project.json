@@ -1,6 +1,8 @@
 ﻿{
   "dependencies": {
-    "Microsoft.NETCore.UniversalWindowsPlatform": "5.1.0"
+    "Microsoft.NETCore.UniversalWindowsPlatform": "5.1.0",
+    "Rx-Main": "2.2.5",
+    "Rx-Xaml": "2.2.5"
   },
   "frameworks": {
     "uap10.0": {}
