@@ -91,7 +91,7 @@ namespace Windows.Mvvm.Reactive
         /// <summary>
         /// Contains a subject, which determines whether the command is currently being executed.
         /// </summary>
-        private Subject<bool> isExecuting = new Subject<bool>();
+        private BehaviorSubject<bool> isExecuting = new BehaviorSubject<bool>(false);
 
         /// <summary>
         /// Gets an observable, which determines whether the command is currently being executed.
