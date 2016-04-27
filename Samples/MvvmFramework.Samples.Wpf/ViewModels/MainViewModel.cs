@@ -94,8 +94,8 @@ namespace System.Windows.Mvvm.Sample.ViewModels
             // Initializes the command, which removes the currently selected todo list item
             this.RemoveTodoListItemCommand = new ReactiveCommand(() =>
             {
-                this.TodoListItems.Remove(this.SelectedTodoListItem.Value);
                 this.todoListItemsRepository.RemoveTodoListItem(this.SelectedTodoListItem.Value.Id.Value);
+                this.TodoListItems.Remove(this.SelectedTodoListItem.Value);
                 this.SelectedTodoListItem.Value = null;
                 return Task.FromResult(0);
             }, this.SelectedTodoListItem.Changed.Select(x => this.SelectedTodoListItem != null));

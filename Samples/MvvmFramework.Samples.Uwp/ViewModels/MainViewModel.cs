@@ -4,9 +4,7 @@
 using MvvmFramework.Samples.Uwp.Models;
 using MvvmFramework.Samples.Uwp.Repositories;
 using MvvmFramework.Samples.Uwp.Views;
-using ReactiveUI;
 using System.Linq;
-using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Windows.Mvvm.Reactive;
@@ -20,7 +18,7 @@ namespace MvvmFramework.Samples.Uwp.ViewModels
     /// <summary>
     /// Represents the view model for the main view of the application.
     /// </summary>
-    public class MainViewModel : ReactiveViewModel
+    public class MainViewModel : ViewModel
     {
         #region Constructors
 
@@ -63,48 +61,32 @@ namespace MvvmFramework.Samples.Uwp.ViewModels
         /// <summary>
         /// Gets the items of the todo list.
         /// </summary>
-        public ReactiveList<TodoListItemViewModel> TodoListItems { get; private set; } = new ReactiveList<TodoListItemViewModel> { ChangeTrackingEnabled = true };
-
-        /// <summary>
-        /// Contains the currently selected todo list item.
-        /// </summary>
-        private TodoListItemViewModel selectedTodoListItem;
+        public ReactiveUI.ReactiveList<TodoListItemViewModel> TodoListItems { get; private set; } = new ReactiveUI.ReactiveList<TodoListItemViewModel> { ChangeTrackingEnabled = true };
 
         /// <summary>
         /// Gets or sets the currently selected todo list item.
         /// </summary>
-        public TodoListItemViewModel SelectedTodoListItem
-        {
-            get
-            {
-                return this.selectedTodoListItem;
-            }
-
-            set
-            {
-                this.RaiseAndSetIfChanged(ref this.selectedTodoListItem, value);
-            }
-        }
+        public ReactiveProperty<TodoListItemViewModel> SelectedTodoListItem { get; } = new ReactiveProperty<TodoListItemViewModel>();
 
         /// <summary>
         /// Gets the command, which marks the currently selected todo list item as finished.
         /// </summary>
-        public ReactiveCommand<Unit> MarkTodoListItemAsFinishedCommand { get; private set; }
+        public ReactiveCommand MarkTodoListItemAsFinishedCommand { get; private set; }
 
         /// <summary>
         /// Gets the command, which removes the currently selected item from the todo list.
         /// </summary>
-        public ReactiveCommand<Unit> RemoveTodoListItemCommand { get; private set; }
+        public ReactiveCommand RemoveTodoListItemCommand { get; private set; }
 
         /// <summary>
         /// Gets the command, which navigates the user to the create todo list item view.
         /// </summary>
-        public ReactiveCommand<NavigationResult> CreateTodoListItemCommand { get; private set; }
+        public ReactiveCommand CreateTodoListItemCommand { get; private set; }
 
         /// <summary>
         /// Gets the command, which shuts down the application.
         /// </summary>
-        public ReactiveCommand<Unit> ShutdownApplicationCommand { get; private set; }
+        public ReactiveCommand ShutdownApplicationCommand { get; private set; }
 
         #endregion
 
@@ -116,31 +98,31 @@ namespace MvvmFramework.Samples.Uwp.ViewModels
         public override Task OnActivateAsync()
         {
             // Initializes the command, which marks the currently selected todo list item as finished
-            this.MarkTodoListItemAsFinishedCommand = ReactiveCommand.CreateAsyncTask(this.WhenAnyValue(x => x.SelectedTodoListItem).Select(x => this.SelectedTodoListItem != null), x =>
+            this.MarkTodoListItemAsFinishedCommand = new ReactiveCommand(() =>
             {
-                this.SelectedTodoListItem.IsFinished = true;
-                this.todoListItemsRepository.MarkTodoListItemAsFinished(this.SelectedTodoListItem.Id);
-                return Task.FromResult(Unit.Default);
-            });
+                this.SelectedTodoListItem.Value.IsFinished.Value = true;
+                this.todoListItemsRepository.MarkTodoListItemAsFinished(this.SelectedTodoListItem.Value.Id.Value);
+                return Task.FromResult(0);
+            }, this.SelectedTodoListItem.Changed.Select(x => this.SelectedTodoListItem != null));
 
             // Initializes the command, which removes the currently selected todo list item
-            this.RemoveTodoListItemCommand = ReactiveCommand.CreateAsyncTask(this.WhenAnyValue(x => x.SelectedTodoListItem).Select(x => this.SelectedTodoListItem != null), x =>
+            this.RemoveTodoListItemCommand = new ReactiveCommand(() =>
             {
-                this.TodoListItems.Remove(this.SelectedTodoListItem);
-                this.todoListItemsRepository.RemoveTodoListItem(this.SelectedTodoListItem.Id);
-                this.SelectedTodoListItem = null;
-                return Task.FromResult(Unit.Default);
-            });
+                this.todoListItemsRepository.RemoveTodoListItem(this.SelectedTodoListItem.Value.Id.Value);
+                this.TodoListItems.Remove(this.SelectedTodoListItem.Value);
+                this.SelectedTodoListItem.Value = null;
+                return Task.FromResult(0);
+            }, this.SelectedTodoListItem.Changed.Select(x => this.SelectedTodoListItem != null));
 
             // Initializes the command, which shuts down the application
-            this.ShutdownApplicationCommand = ReactiveCommand.CreateAsyncTask(x =>
+            this.ShutdownApplicationCommand = new ReactiveCommand(() =>
             {
                 this.applicationService.Shutdown();
-                return Task.FromResult(Unit.Default);
+                return Task.FromResult(0);
             });
 
             // Initializes the command, which navigates the user to the create todo list item view
-            this.CreateTodoListItemCommand = ReactiveCommand.CreateAsyncTask(async x => await this.navigationService.NavigateAsync<CreateTodoListItemView>());
+            this.CreateTodoListItemCommand = new ReactiveCommand(async () => await this.navigationService.NavigateAsync<CreateTodoListItemView>());
 
             // Since no asynchronous operation was performed, an empty task is returned
             return Task.FromResult(0);
@@ -157,15 +139,7 @@ namespace MvvmFramework.Samples.Uwp.ViewModels
 
             // Loads all the todo list items from the repository and stores them in a list, so that the view has access to them
             foreach (TodoListItem todoListItem in this.todoListItemsRepository.GetTodoListItems().ToList())
-            {
-                this.TodoListItems.Add(new TodoListItemViewModel
-                {
-                    Id = todoListItem.Id,
-                    Title = todoListItem.Title,
-                    Description = todoListItem.Description,
-                    IsFinished = todoListItem.IsFinished
-                });
-            }
+                this.TodoListItems.Add(new TodoListItemViewModel(todoListItem));
 
             // Since no asynchronous operation was performed, an empty task is returned
             return Task.FromResult(0);
