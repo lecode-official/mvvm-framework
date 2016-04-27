@@ -14,7 +14,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <ListBox ItemsSource="{Binding Path=TodoListItems}" SelectedItem="{Binding Path=SelectedTodoListItem.Value}" IsSynchronizedWithCurrentItem="True" Grid.Row="0">
+        <ListBox ItemsSource="{Binding Path=TodoListItems.View}" SelectedItem="{Binding Path=SelectedTodoListItem.Value}" IsSynchronizedWithCurrentItem="True" Grid.Row="0">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Vertical">
