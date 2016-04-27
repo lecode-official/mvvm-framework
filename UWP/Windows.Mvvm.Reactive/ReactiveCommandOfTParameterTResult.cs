@@ -37,7 +37,8 @@ namespace Windows.Mvvm.Reactive
             this.CanExecute = Observable.CombineLatest(new List<IObservable<bool>>
             {
                 canExecute ?? Observable.Return(true),
-                blockOnExecution ? this.IsExecuting.Select(x => !x) : Observable.Return(true)
+                blockOnExecution ? this.IsExecuting.Select(x => !x) : Observable.Return(true),
+                Observable.Return(true)
             }, latestResults => latestResults.All(result => result));
 
             // Subscribes to the can execute observable, it stores the latest value, which is used for the can execute method, also it raises the can execute changed event
@@ -86,7 +87,7 @@ namespace Windows.Mvvm.Reactive
         /// <summary>
         /// Contains the latest value of the can execute observable. This is used as the return value of the can execute method.
         /// </summary>
-        private bool latestCanExecuteValue = true;
+        private bool latestCanExecuteValue;
 
         /// <summary>
         /// Contains a subject, which determines whether the command is currently being executed.
