@@ -88,7 +88,7 @@ namespace System.Windows.Mvvm.Services.Navigation.Resources.Localization {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die The type of the window view model must be a sub-class of ViewModelBase. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The type of the window view model must be an implementation of IViewModel. ähnelt.
         /// </summary>
         internal static string WrongViewModelTypeExceptionMessage {
             get {
