@@ -89,7 +89,7 @@ namespace System.Windows.Mvvm.Sample.ViewModels
                 this.SelectedTodoListItem.Value.IsFinished.Value = true;
                 this.todoListItemsRepository.MarkTodoListItemAsFinished(this.SelectedTodoListItem.Value.Id.Value);
                 return Task.FromResult(0);
-            }, this.SelectedTodoListItem.Changed.Select(x => this.SelectedTodoListItem != null));
+            }, this.SelectedTodoListItem.Changed.Select(x => x != null));
 
             // Initializes the command, which removes the currently selected todo list item
             this.RemoveTodoListItemCommand = new ReactiveCommand(() =>
@@ -98,7 +98,7 @@ namespace System.Windows.Mvvm.Sample.ViewModels
                 this.TodoListItems.Remove(this.SelectedTodoListItem.Value);
                 this.SelectedTodoListItem.Value = null;
                 return Task.FromResult(0);
-            }, this.SelectedTodoListItem.Changed.Select(x => this.SelectedTodoListItem != null));
+            }, this.SelectedTodoListItem.Changed.Select(x => x != null));
 
             // Initializes the command, which navigates the user to the create todo list item view
             this.CreateTodoListItemCommand = new ReactiveCommand(async () =>  await this.navigationService.NavigateAsync<CreateTodoListItemView>());
