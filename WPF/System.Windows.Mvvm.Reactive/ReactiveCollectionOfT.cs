@@ -14,21 +14,21 @@ namespace System.Windows.Mvvm.Reactive
     /// Represents an implementation a reactive list with sorting and filtering options and exposure of an implementation of the <see cref="ICollectionView"/> interface.
     /// </summary>
     /// <typeparam name="T">The type of the items.</typeparam>
-    public class ReactiveCollection<T> : ReactiveList<T> where T : class
+    public class ReactiveCollectionEx<T> : ReactiveList<T> where T : class
     {
         #region Constructors
 
         /// <summary>
-        /// Initializes a new <see cref="ReactiveCollection{T}"/> instance.
+        /// Initializes a new <see cref="ReactiveCollectionEx{T}"/> instance.
         /// </summary>
-        public ReactiveCollection()
+        public ReactiveCollectionEx()
             : this(new List<T>()) { }
 
         /// <summary>
-        /// Initializes a new <see cref="ReactiveCollection{T}"/> instance.
+        /// Initializes a new <see cref="ReactiveCollectionEx{T}"/> instance.
         /// </summary>
         /// <param name="initialContents">The initial items of the collection.</param>
-        public ReactiveCollection(IEnumerable<T> initialContents)
+        public ReactiveCollectionEx(IEnumerable<T> initialContents)
             : base(initialContents)
         {
             // Initializes the internal collection view, which is exposed as items source
