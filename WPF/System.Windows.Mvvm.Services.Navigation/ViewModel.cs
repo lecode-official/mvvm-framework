@@ -10,7 +10,7 @@ namespace System.Windows.Mvvm.Services.Navigation
     /// <summary>
     /// Represents the standard implementation of the <see cref="IViewModel"/> interface.
     /// </summary>
-    public class ViewModel
+    public class ViewModel : IViewModel
     {
         #region Public Properties
 
