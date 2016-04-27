@@ -31,11 +31,11 @@ namespace System.Windows.Mvvm.Reactive
         {
             // Stores the execute delegate, when no delegate was specified, then an empty delegate is used
             this.execute = execute ?? (parameter => Task.FromResult(default(TResult)));
-            
+
             // Creates the observable for can execute
             this.CanExecute = Observable.CombineLatest(new List<IObservable<bool>>
             {
-                canExecute ?? Observable.Return(true),
+                canExecute != null ? Observable.Merge(canExecute, Observable.Return(false)) : Observable.Return(true),
                 blockOnExecution ? this.IsExecuting.Select(x => !x) : Observable.Return(true),
                 Observable.Return(true)
             }, latestResults => latestResults.All(result => result));

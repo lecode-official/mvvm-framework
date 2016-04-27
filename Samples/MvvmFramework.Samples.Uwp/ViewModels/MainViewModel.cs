@@ -103,7 +103,7 @@ namespace MvvmFramework.Samples.Uwp.ViewModels
                 this.SelectedTodoListItem.Value.IsFinished.Value = true;
                 this.todoListItemsRepository.MarkTodoListItemAsFinished(this.SelectedTodoListItem.Value.Id.Value);
                 return Task.FromResult(0);
-            }, this.SelectedTodoListItem.Changed.Select(x => x != null));
+            }, this.SelectedTodoListItem.Select(x => x != null));
 
             // Initializes the command, which removes the currently selected todo list item
             this.RemoveTodoListItemCommand = new ReactiveCommand(() =>
@@ -112,7 +112,7 @@ namespace MvvmFramework.Samples.Uwp.ViewModels
                 this.TodoListItems.Remove(this.SelectedTodoListItem.Value);
                 this.SelectedTodoListItem.Value = null;
                 return Task.FromResult(0);
-            }, this.SelectedTodoListItem.Changed.Select(x => x != null));
+            }, this.SelectedTodoListItem.Select(x => x != null));
 
             // Initializes the command, which shuts down the application
             this.ShutdownApplicationCommand = new ReactiveCommand(() =>
