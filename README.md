@@ -23,10 +23,6 @@ tailor-made for for each platform.
 My special thanks goes out to [Lukas Rögner](https://github.com/lukasroegner) who wrote a lot of the code and did a great deal of refactoring. Without him the
 project would not have happened.
 
-From its conception, the framework was designed to work beautifully with the reactive pattern. This is why the framework has strong ties to
-[ReactiveUI](https://github.com/reactiveui/ReactiveUI) and provides an optional bridge to it, which makes it super easy to implement an MVVM application using
-the reactive pattern.
-
 ## Using the Project
 
 The project is available on NuGet. You can find the WPF version here: https://www.nuget.org/packages/System.Windows.Mvvm.

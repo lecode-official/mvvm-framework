@@ -27,10 +27,9 @@ when it comes to unit testing).
 
 ## System.Windows.Mvvm.Reactive
 
-As mentioned before in other parts of the documentation, the MVVM Framework has strong ties to [ReactiveUI](https://github.com/reactiveui/ReactiveUI), because it was originally conceived as an
-extension to it. Now, as the framework matures, the bridge to [ReactiveUI](https://github.com/reactiveui/ReactiveUI) has evolved to an component, which is recommend, but optional to use. This
-project contains all reactive components, which make it easier to work together with the MVVM Framework as well as some extensions, which makes writing reactive applications even more simple. Most
-notably, the project contains the `ReactiveViewModel` class, which is a view model implementation based on [ReactiveUI](https://github.com/reactiveui/ReactiveUI).
+This project contains all reactive components, which make it easier to work together with the MVVM Framework as well as some extensions, which makes writing reactive applications even more simple.
+Most notably, the project contains the `ReactiveCommand` class, which is a reactive implementation of the command, and the `ReactiveProperty`, which wraps the `INotifyPropertyChanged` logic for
+view model properties and makes them reactive.
 
 ## System.Windows.Mvvm.Services.Application
 
