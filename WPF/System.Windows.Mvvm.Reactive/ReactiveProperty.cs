@@ -13,7 +13,7 @@ namespace System.Windows.Mvvm.Reactive
     /// Represents a property, which can be observed.
     /// </summary>
     /// <typeparam name="T">The type of the property.</typeparam>
-    public class ReactiveProperty<T> : INotifyPropertyChanged
+    public class ReactiveProperty<T> : INotifyPropertyChanged, IObservable<T>
     {
         #region Constructors
 
@@ -49,6 +49,15 @@ namespace System.Windows.Mvvm.Reactive
 
         #endregion
 
+        #region Private Fields
+
+        /// <summary>
+        /// Contains a subject, into which the current value of the reactive property is always pushed.
+        /// </summary>
+        private BehaviorSubject<T> reactivePropertyValueSubject;
+
+        #endregion
+
         #region Public Properties
 
         /// <summary>
@@ -72,9 +81,10 @@ namespace System.Windows.Mvvm.Reactive
                 if (this.OnlyRaiseIfChanged && object.Equals(this.value, value))
                     return;
 
-                // Raises the changing and changed subjects
+                // Raises the changing and changed subjects, updates the reactive property value observable, and sets the new value
                 this.changing?.OnNext(this.value);
                 this.value = value;
+                this.reactivePropertyValueSubject?.OnNext(this.value);
                 this.changed.OnNext(this.value);
             }
         }
@@ -142,7 +152,26 @@ namespace System.Windows.Mvvm.Reactive
                 this.propertyChanged -= value;
             }
         }
-        
+
+        #endregion
+
+        #region IObservable Implementation
+
+        /// <summary>
+        /// Subscribes to the reactive property observable, which always gives the observer the current value of the reactive property.
+        /// </summary>
+        /// <param name="observer">The observer of the reactive property value.</param>
+        /// <returns>Returns a disposable, which can be used by the observer to stop receiving messages from the observable.</returns>
+        public IDisposable Subscribe(IObserver<T> observer)
+        {
+            // Lazily initializes the behavior subject for the reactive property value (this reduces the overhead while no one is observing the reactive property value)
+            if (this.reactivePropertyValueSubject == null)
+                this.reactivePropertyValueSubject = new BehaviorSubject<T>(this.value);
+
+            // Subscribes the user to the reactive property value
+            return this.reactivePropertyValueSubject.Subscribe(observer);
+        }
+
         #endregion
     }
 }
