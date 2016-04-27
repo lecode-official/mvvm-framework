@@ -14,15 +14,15 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <ListBox ItemsSource="{Binding Path=TodoListItems}" SelectedItem="{Binding Path=SelectedTodoListItem}" IsSynchronizedWithCurrentItem="True" Grid.Row="0">
+        <ListBox ItemsSource="{Binding Path=TodoListItems}" SelectedItem="{Binding Path=SelectedTodoListItem.Value}" IsSynchronizedWithCurrentItem="True" Grid.Row="0">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Vertical">
-                        <TextBlock FontSize="26" FontWeight="Bold" Text="{Binding Path=Title}" Visibility="{Binding Path=IsFinished, Converter={StaticResource InvertedBooleanToVisibilityConverter}}" />
-                        <TextBlock FontSize="26" FontWeight="Bold" Text="{Binding Path=Title}" TextDecorations="Strikethrough" Visibility="{Binding Path=IsFinished, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                        <TextBlock FontSize="26" FontWeight="Bold" Text="{Binding Path=Title.Value}" Visibility="{Binding Path=IsFinished.Value, Converter={StaticResource InvertedBooleanToVisibilityConverter}}" />
+                        <TextBlock FontSize="26" FontWeight="Bold" Text="{Binding Path=Title.Value}" TextDecorations="Strikethrough" Visibility="{Binding Path=IsFinished.Value, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
-                        <TextBlock FontSize="18" Text="{Binding Path=Description}" Visibility="{Binding Path=IsFinished, Converter={StaticResource InvertedBooleanToVisibilityConverter}}" />
-                        <TextBlock FontSize="18" Text="{Binding Path=Description}" TextDecorations="Strikethrough" Visibility="{Binding Path=IsFinished, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                        <TextBlock FontSize="18" Text="{Binding Path=Description.Value}" Visibility="{Binding Path=IsFinished.Value, Converter={StaticResource InvertedBooleanToVisibilityConverter}}" />
+                        <TextBlock FontSize="18" Text="{Binding Path=Description.Value}" TextDecorations="Strikethrough" Visibility="{Binding Path=IsFinished.Value, Converter={StaticResource BooleanToVisibilityConverter}}" />
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>

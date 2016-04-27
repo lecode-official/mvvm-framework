@@ -1,11 +1,10 @@
 ﻿
 #region Using Directives
 
-using ReactiveUI;
-using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows.Mvvm.Reactive;
 using System.Windows.Mvvm.Services.Application;
+using System.Windows.Mvvm.Services.Navigation;
 
 #endregion
 
@@ -14,7 +13,7 @@ namespace System.Windows.Mvvm.Sample.ViewModels
     /// <summary>
     /// Represents the view model for the main window.
     /// </summary>
-    public class MainWindowViewModel : ReactiveViewModel
+    public class MainWindowViewModel : ViewModel
     {
         #region Constructors
 
@@ -43,7 +42,7 @@ namespace System.Windows.Mvvm.Sample.ViewModels
         /// <summary>
         /// Gets the command, which shuts down the application.
         /// </summary>
-        public ReactiveCommand<Unit> ShutdownApplicationCommand { get; private set; }
+        public ReactiveCommand ShutdownApplicationCommand { get; private set; }
 
         #endregion
 
@@ -55,10 +54,10 @@ namespace System.Windows.Mvvm.Sample.ViewModels
         public override Task OnActivateAsync()
         {
             // Initializes the command, which shuts down the application
-            this.ShutdownApplicationCommand = ReactiveCommand.CreateAsyncTask(x =>
+            this.ShutdownApplicationCommand = new ReactiveCommand(() =>
             {
                 this.applicationService.Shutdown();
-                return Task.FromResult(Unit.Default);
+                return Task.FromResult(0);
             });
 
             // Since no asynchronous operation was performed, an empty task is returned
