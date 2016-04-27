@@ -31,10 +31,8 @@ namespace System.Windows.Mvvm.Reactive
         {
             // Stores the execute delegate, when no delegate was specified, then an empty delegate is used
             this.execute = execute ?? (parameter => Task.FromResult(default(TResult)));
-
-            // Stores the can execute observable, if no can execute observable was specified, then the is executing observable is used, when block on execution is true, then the can execute observable also is false, when the command is being executed
-            Subject<bool> canExecuteSubject = new Subject<bool>();
-
+            
+            // Creates the observable for can execute
             this.CanExecute = Observable.CombineLatest(new List<IObservable<bool>>
             {
                 canExecute ?? Observable.Return(true),
