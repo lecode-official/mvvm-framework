@@ -31,10 +31,6 @@
     <DocumentationFile>bin\Release\System.Windows.Mvvm.Reactive.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="PresentationFramework" />
     <Reference Include="ReactiveUI, Version=6.5.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\reactiveui-core.6.5.0\lib\Net45\ReactiveUI.dll</HintPath>
@@ -77,12 +73,8 @@
     <Compile Include="ReactiveCollectionOfTSourceTTarget.cs" />
     <Compile Include="ReactiveCollectionOfT.cs" />
     <Compile Include="ReactiveConfigContext.cs" />
-    <Compile Include="ReactiveDbContext.cs" />
-    <Compile Include="ReactiveDbSet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReactiveDbSetOfT.cs" />
     <Compile Include="ReactiveViewModel.cs" />
-    <Compile Include="ChangeDetectionPolicy.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Packages.config" />
