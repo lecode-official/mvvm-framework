@@ -166,7 +166,7 @@ namespace Windows.Mvvm.Reactive
                 this.beforeItemAdded?.OnNext(item);
                 this.collection.Add(item);
                 this.itemAdded?.OnNext(item);
-                this.collectionChangedSubject.OnNext(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item));
+                this.collectionChangedSubject.OnNext(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item, this.collection.IndexOf(item)));
             }
         }
 
@@ -274,7 +274,7 @@ namespace Windows.Mvvm.Reactive
             this.beforeItemAdded?.OnNext(item);
             this.collection.Add(item);
             this.itemAdded?.OnNext(item);
-            this.collectionChangedSubject.OnNext(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item));
+            this.collectionChangedSubject.OnNext(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item, this.collection.IndexOf(item)));
         }
 
         /// <summary>
@@ -492,7 +492,7 @@ namespace Windows.Mvvm.Reactive
             this.beforeItemAdded?.OnNext(item);
             this.collection.Add(item);
             this.itemAdded?.OnNext(item);
-            this.collectionChangedSubject.OnNext(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item));
+            this.collectionChangedSubject.OnNext(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item, this.collection.IndexOf(item)));
 
             return this.collection.IndexOf(item);
         }
