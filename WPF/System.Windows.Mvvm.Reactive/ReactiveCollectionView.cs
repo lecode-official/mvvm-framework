@@ -16,7 +16,7 @@ namespace System.Windows.Mvvm.Reactive
     /// <summary>
     /// Represents a collection view for the <see cref="ReactiveCollection{T}"/>.
     /// </summary>
-    /// <typeparam name="T">The type of items in the reactive collection.</typeparam>
+    /// <typeparam name="T">The type of items in the collection.</typeparam>
     public class ReactiveCollectionView<T> : ICollectionView
     {
         #region Constructors
@@ -24,11 +24,11 @@ namespace System.Windows.Mvvm.Reactive
         /// <summary>
         /// Initializes a new <see cref="ReactiveCollectionView{T}"/> instance.
         /// </summary>
-        /// <param name="reactiveCollection"></param>
-        public ReactiveCollectionView(ReactiveCollection<T> reactiveCollection)
+        /// <param name="collection"></param>
+        public ReactiveCollectionView(IList collection)
         {
-            this.reactiveCollection = reactiveCollection;
-            this.collectionView = CollectionViewSource.GetDefaultView(this.reactiveCollection as INotifyCollectionChanged) as ListCollectionView;
+            this.collection = collection;
+            this.collectionView = CollectionViewSource.GetDefaultView(this.collection as INotifyCollectionChanged) as ListCollectionView;
         }
 
         #endregion
@@ -36,9 +36,9 @@ namespace System.Windows.Mvvm.Reactive
         #region Private Fields
 
         /// <summary>
-        /// Contains the reactive collection on which the view is based.
+        /// Contains the collection on which the view is based.
         /// </summary>
-        private ReactiveCollection<T> reactiveCollection;
+        private IList collection;
 
         /// <summary>
         /// Contains the internal collection view on which all operations are performed.

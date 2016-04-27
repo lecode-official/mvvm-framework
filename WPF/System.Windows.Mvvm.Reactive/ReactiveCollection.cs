@@ -61,24 +61,6 @@ namespace System.Windows.Mvvm.Reactive
         #region Public Properties
         
         /// <summary>
-        /// Contains the view for the collection.
-        /// </summary>
-        private ReactiveCollectionView<T> view;
-
-        /// <summary>
-        /// Gets the view for the collection.
-        /// </summary>
-        public ReactiveCollectionView<T> View
-        {
-            get
-            {
-                if (this.view == null)
-                    this.view = new ReactiveCollectionView<T>(this);
-                return this.view;
-            }
-        }
-        
-        /// <summary>
         /// Contains a subject, which fires before a new item is added to the collection.
         /// </summary>
         private Subject<T> beforeItemAdded;
