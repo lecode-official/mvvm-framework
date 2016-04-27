@@ -73,20 +73,9 @@
     <Compile Include="ReactiveCollectionOfTSourceTTarget.cs" />
     <Compile Include="ReactiveCollectionOfT.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReactiveViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\System.Windows.Mvvm.Configuration\System.Windows.Mvvm.Configuration.csproj">
-      <Project>{4bf2ce70-e68e-4413-b229-180ef613f33a}</Project>
-      <Name>System.Windows.Mvvm.Configuration</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\System.Windows.Mvvm.Services.Navigation\System.Windows.Mvvm.Services.Navigation.csproj">
-      <Project>{bb9fb8fe-cc08-44f0-b4ea-b04b9fc8013f}</Project>
-      <Name>System.Windows.Mvvm.Services.Navigation</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

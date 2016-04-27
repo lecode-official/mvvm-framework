@@ -1,18 +1,17 @@
 ﻿
 #region Using Directives
 
-using System.Windows.Mvvm.Services.Navigation;
-using ReactiveUI;
+using System;
 using System.Threading.Tasks;
 
 #endregion
 
-namespace System.Windows.Mvvm.Reactive
+namespace Windows.Mvvm.Services.Navigation
 {
     /// <summary>
-    /// Represents the base class for all view models.
+    /// Represents the standard implementation of the <see cref="IViewModel"/> interface.
     /// </summary>
-    public abstract class ReactiveViewModel : ReactiveObject, IViewModel
+    public class ViewModel
     {
         #region Public Properties
 

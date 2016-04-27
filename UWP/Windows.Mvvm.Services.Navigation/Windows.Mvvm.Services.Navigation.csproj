@@ -114,6 +114,7 @@
     <Compile Include="NavigationResult.cs" />
     <Compile Include="NavigationService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModel.cs" />
     <Compile Include="ViewModelAttribute.cs" />
     <Compile Include="WindowEventArgs.cs" />
     <Compile Include="WindowNavigationResult.cs" />

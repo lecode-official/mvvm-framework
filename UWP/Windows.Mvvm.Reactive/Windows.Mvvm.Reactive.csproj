@@ -109,14 +109,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReactiveViewModel.cs" />
     <EmbeddedResource Include="Properties\Windows.Mvvm.Reactive.rd.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Windows.Mvvm.Services.Navigation\Windows.Mvvm.Services.Navigation.csproj">
-      <Project>{0a9d0956-848f-4453-b7ef-3f74bd49fd50}</Project>
-      <Name>Windows.Mvvm.Services.Navigation</Name>
-    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
