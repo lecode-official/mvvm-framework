@@ -68,6 +68,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ReactiveCollection.cs" />
+    <Compile Include="ReactiveCollectionView.cs" />
     <Compile Include="ReactiveCommand.cs" />
     <Compile Include="ReactiveCommandOfTParameter.cs" />
     <Compile Include="ReactiveCommandOfTParameterTResult.cs" />
