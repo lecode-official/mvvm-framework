@@ -4,6 +4,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
@@ -16,7 +17,7 @@ namespace System.Windows.Mvvm.Reactive
     /// Represents a collection where the changing of items can be observed.
     /// </summary>
     /// <typeparam name="T">The type of the items of the collection.</typeparam>
-    public class ReactiveCollection<T> : INotifyCollectionChanged, ICollection<T>, ICollection, IReadOnlyCollection<T>, IList<T>, IReadOnlyList<T>, IList, IEnumerable<T>, IEnumerable
+    public class ReactiveCollection<T> : INotifyCollectionChanged, INotifyPropertyChanged, ICollection<T>, ICollection, IReadOnlyCollection<T>, IList<T>, IReadOnlyList<T>, IList, IEnumerable<T>, IEnumerable
     {
         #region Constructors
 
@@ -27,7 +28,11 @@ namespace System.Windows.Mvvm.Reactive
         public ReactiveCollection(IEnumerable<T> collection)
         {
             this.collection = collection.ToList();
-            this.collectionChangedSubject.ObserveOnDispatcher().Subscribe(x => this.collectionChanged?.Invoke(this, x));
+            this.collectionChangedSubject.ObserveOnDispatcher().Subscribe(x =>
+            {
+                this.collectionChanged?.Invoke(this, x);
+                this.propertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(this.Count)));
+            });
         }
 
         /// <summary>
@@ -223,6 +228,31 @@ namespace System.Windows.Mvvm.Reactive
             remove
             {
                 this.collectionChanged -= value;
+            }
+        }
+
+        #endregion
+
+        #region INotifyPropertyChanged Implementation
+
+        /// <summary>
+        /// An event, which is raised when a property of the reactive collection has changed.
+        /// </summary>
+        private event PropertyChangedEventHandler propertyChanged;
+
+        /// <summary>
+        /// An event, which is raised when a property of the reactive collection has changed.
+        /// </summary>
+        event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
+        {
+            add
+            {
+                this.propertyChanged += value;
+            }
+
+            remove
+            {
+                this.propertyChanged -= value;
             }
         }
 
