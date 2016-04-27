@@ -72,7 +72,6 @@
     <Compile Include="ReactiveDerivedCollectionOfT.cs" />
     <Compile Include="ReactiveCollectionOfTSourceTTarget.cs" />
     <Compile Include="ReactiveCollectionOfT.cs" />
-    <Compile Include="ReactiveConfigContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReactiveViewModel.cs" />
   </ItemGroup>
