@@ -61,7 +61,7 @@ namespace MvvmFramework.Samples.Uwp.ViewModels
         /// <summary>
         /// Gets the items of the todo list.
         /// </summary>
-        public ReactiveUI.ReactiveList<TodoListItemViewModel> TodoListItems { get; private set; } = new ReactiveUI.ReactiveList<TodoListItemViewModel> { ChangeTrackingEnabled = true };
+        public ReactiveCollection<TodoListItemViewModel> TodoListItems { get; private set; } = new ReactiveCollection<TodoListItemViewModel>();
 
         /// <summary>
         /// Gets or sets the currently selected todo list item.
@@ -138,8 +138,7 @@ namespace MvvmFramework.Samples.Uwp.ViewModels
             this.TodoListItems.Clear();
 
             // Loads all the todo list items from the repository and stores them in a list, so that the view has access to them
-            foreach (TodoListItem todoListItem in this.todoListItemsRepository.GetTodoListItems().ToList())
-                this.TodoListItems.Add(new TodoListItemViewModel(todoListItem));
+            this.TodoListItems.AddRange(this.todoListItemsRepository.GetTodoListItems().Select(todoListItem => new TodoListItemViewModel(todoListItem)).ToList());
 
             // Since no asynchronous operation was performed, an empty task is returned
             return Task.FromResult(0);
