@@ -2,9 +2,7 @@
 #region Using Directivs
 
 using MvvmFramework.Samples.Uwp.Repositories;
-using ReactiveUI;
 using System;
-using System.Reactive;
 using System.Threading.Tasks;
 using Windows.Mvvm.Reactive;
 using Windows.Mvvm.Services.Application;
@@ -18,7 +16,7 @@ namespace MvvmFramework.Samples.Uwp.ViewModels
     /// <summary>
     /// Represents a view model for the create todo list item view.
     /// </summary>
-    public class CreateTodoListItemViewModel : ReactiveViewModel
+    public class CreateTodoListItemViewModel : ViewModel
     {
         #region Constructors
 
@@ -66,61 +64,29 @@ namespace MvvmFramework.Samples.Uwp.ViewModels
         #region Public Properties
 
         /// <summary>
-        /// Contains the title of the new todo list item.
+        /// Gets the title property of the new todo list item.
         /// </summary>
-        private string title;
+        public ReactiveProperty<string> Title { get; } = new ReactiveProperty<string>();
 
         /// <summary>
-        /// Gets or sets the title of the new todo list item.
+        /// Gets the description property of the new todo list item.
         /// </summary>
-        public string Title
-        {
-            get
-            {
-                return this.title;
-            }
-
-            set
-            {
-                this.RaiseAndSetIfChanged(ref this.title, value);
-            }
-        }
-
-        /// <summary>
-        /// Contains the title of the new todo list item.
-        /// </summary>
-        private string description;
-
-        /// <summary>
-        /// Gets or sets the description of the new todo list item.
-        /// </summary>
-        public string Description
-        {
-            get
-            {
-                return this.description;
-            }
-
-            set
-            {
-                this.RaiseAndSetIfChanged(ref this.description, value);
-            }
-        }
+        public ReactiveProperty<string> Description { get; } = new ReactiveProperty<string>();
 
         /// <summary>
         /// Gets the command, which cancels the creation dialog and returns to the previous view.
         /// </summary>
-        public ReactiveCommand<Unit> CancelCommand { get; private set; }
+        public ReactiveCommand CancelCommand { get; private set; }
 
         /// <summary>
         /// Gets the command, which saves the new todo list item and navigates the user back to the main view.
         /// </summary>
-        public ReactiveCommand<NavigationResult> SaveCommand { get; private set; }
+        public ReactiveCommand SaveCommand { get; private set; }
 
         /// <summary>
         /// Gets the command, which shuts down the application.
         /// </summary>
-        public ReactiveCommand<Unit> ShutdownApplicationCommand { get; private set; }
+        public ReactiveCommand ShutdownApplicationCommand { get; private set; }
 
         #endregion
 
@@ -132,7 +98,7 @@ namespace MvvmFramework.Samples.Uwp.ViewModels
         public override Task OnActivateAsync()
         {
             // Initializes the command, which cancels the creation and returns to the previous view
-            this.CancelCommand = ReactiveCommand.CreateAsyncTask(async x =>
+            this.CancelCommand = new ReactiveCommand(async () =>
             {
                 await this.dialogService.ShowMessageBoxDialogAsync("Do you really want to cancel the creation of the todo list item.", "Confirm cancellation", new MessageBoxDialogCommands
                 {
@@ -146,20 +112,20 @@ namespace MvvmFramework.Samples.Uwp.ViewModels
             });
 
             // Initializes the command, which creates the new todo list item and navigates the user to the main view
-            this.SaveCommand = ReactiveCommand.CreateAsyncTask(async x =>
+            this.SaveCommand = new ReactiveCommand(async () =>
             {
                 // Creates the new todo list item
-                this.todoListItemsRepository.CreateTodoListItem(this.Title, this.Description);
+                this.todoListItemsRepository.CreateTodoListItem(this.Title.Value, this.Description.Value);
 
                 // Navigates the user back to the main view
-                return await this.navigationService.NavigateBackAsync();
+                await this.navigationService.NavigateBackAsync();
             });
 
             // Initializes the command, which shuts down the application
-            this.ShutdownApplicationCommand = ReactiveCommand.CreateAsyncTask(x =>
+            this.ShutdownApplicationCommand = new ReactiveCommand(() =>
             {
                 this.applicationService.Shutdown();
-                return Task.FromResult(Unit.Default);
+                return Task.FromResult(0);
             });
 
             // Since no asynchronous operation was performed, an empty task is returned

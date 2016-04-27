@@ -15,19 +15,19 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <ListBox ItemsSource="{Binding Path=TodoListItems}" SelectedItem="{Binding Path=SelectedTodoListItem, Mode=TwoWay}" Grid.Row="0">
+        <ListBox ItemsSource="{Binding Path=TodoListItems}" SelectedItem="{Binding Path=SelectedTodoListItem.Value, Mode=TwoWay}" Grid.Row="0">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Vertical">
-                        <TextBlock FontSize="26" FontWeight="Bold" Text="{Binding Path=Title}" Visibility="{Binding Path=IsFinished, Converter={StaticResource InvertedBooleanToVisibilityConverter}}" />
-                        <Grid Visibility="{Binding Path=IsFinished, Converter={StaticResource BooleanToVisibilityConverter}}">
-                            <TextBlock FontSize="26" FontWeight="Bold" Text="{Binding Path=Title}" />
+                        <TextBlock FontSize="26" FontWeight="Bold" Text="{Binding Path=Title.Value}" Visibility="{Binding Path=IsFinished.Value, Converter={StaticResource InvertedBooleanToVisibilityConverter}}" />
+                        <Grid Visibility="{Binding Path=IsFinished.Value, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <TextBlock FontSize="26" FontWeight="Bold" Text="{Binding Path=Title.Value}" />
                             <Line Stretch="Fill" Stroke="Black" StrokeThickness="2 " X1="1" VerticalAlignment="Center" HorizontalAlignment="Center" />
                         </Grid>
 
-                        <TextBlock FontSize="18" Text="{Binding Path=Description}" Visibility="{Binding Path=IsFinished, Converter={StaticResource InvertedBooleanToVisibilityConverter}}" />
-                        <Grid Visibility="{Binding Path=IsFinished, Converter={StaticResource BooleanToVisibilityConverter}}">
-                            <TextBlock FontSize="18" FontWeight="Bold" Text="{Binding Path=Description}" />
+                        <TextBlock FontSize="18" Text="{Binding Path=Description.Value}" Visibility="{Binding Path=IsFinished.Value, Converter={StaticResource InvertedBooleanToVisibilityConverter}}" />
+                        <Grid Visibility="{Binding Path=IsFinished.Value, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <TextBlock FontSize="18" FontWeight="Bold" Text="{Binding Path=Description.Value}" />
                             <Line Stretch="Fill" Stroke="Black" StrokeThickness="2" X1="1" VerticalAlignment="Center" HorizontalAlignment="Center" />
                         </Grid>
                     </StackPanel>
