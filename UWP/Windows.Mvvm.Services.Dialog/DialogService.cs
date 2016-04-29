@@ -144,9 +144,9 @@ namespace Windows.Mvvm.Services.Dialog
         /// <param name="fileTypeFilter">The file type filter, which determines which kinds of files are displayed to the user.</param>
         /// <param name="suggestedStartLocation">The suggested start location, which is initally displayed by the open file dialog.</param>
         /// <param name="viewMode">The view mode, which determines whether the open file dialog displays the files as a list or as thumbnails.</param>
-        /// <param name="isMultiFile">Determines whether the user is able to select multiple files.</param>
+        /// <param name="isMultiselect">Determines whether the user is able to select multiple files.</param>
         /// <returns>Returns the dialog result and the files that were selected by the user.</returns>
-        public virtual async Task<DialogResult<IEnumerable<StorageFile>>> ShowOpenFileDialogAsync(string commitButtonText, IEnumerable<string> fileTypeFilter, PickerLocationId suggestedStartLocation, PickerViewMode viewMode, bool isMultiFile)
+        public virtual async Task<DialogResult<IEnumerable<StorageFile>>> ShowOpenFileDialogAsync(string commitButtonText, IEnumerable<string> fileTypeFilter, PickerLocationId suggestedStartLocation, PickerViewMode viewMode, bool isMultiselect)
         {
             // Creates a new task completion source for the result of the open file dialog
             TaskCompletionSource<IEnumerable<StorageFile>> taskCompletionSource = new TaskCompletionSource<IEnumerable<StorageFile>>();
@@ -165,7 +165,7 @@ namespace Windows.Mvvm.Services.Dialog
                     fileOpenPicker.FileTypeFilter.Add(currentFileTypeFilter == "*" ? currentFileTypeFilter : $".{currentFileTypeFilter}");
 
                 // Shows the open file dialog and stores the result
-                if (isMultiFile)
+                if (isMultiselect)
                     taskCompletionSource.TrySetResult(await fileOpenPicker.PickMultipleFilesAsync());
                 else
                     taskCompletionSource.TrySetResult(new List<StorageFile> { await fileOpenPicker.PickSingleFileAsync() });
@@ -204,9 +204,9 @@ namespace Windows.Mvvm.Services.Dialog
         /// </summary>
         /// <param name="commitButtonText">The text, that is displayed on the commit button, that the user has to press to select one or multiple files.</param>
         /// <param name="fileTypeFilter">The file type filter, which determines which kinds of files are displayed to the user.</param>
-        /// <param name="isMultiFile">Determines whether the user is able to select multiple files.</param>
+        /// <param name="isMultiselect">Determines whether the user is able to select multiple files.</param>
         /// <returns>Returns the dialog result and the files that were selected by the user.</returns>
-        public virtual Task<DialogResult<IEnumerable<StorageFile>>> ShowOpenFileDialogAsync(string commitButtonText, IEnumerable<string> fileTypeFilter, bool isMultiFile) => this.ShowOpenFileDialogAsync(commitButtonText, fileTypeFilter, PickerLocationId.Unspecified, PickerViewMode.Thumbnail, isMultiFile);
+        public virtual Task<DialogResult<IEnumerable<StorageFile>>> ShowOpenFileDialogAsync(string commitButtonText, IEnumerable<string> fileTypeFilter, bool isMultiselect) => this.ShowOpenFileDialogAsync(commitButtonText, fileTypeFilter, PickerLocationId.Unspecified, PickerViewMode.Thumbnail, isMultiselect);
 
         /// <summary>
         /// Displays a file open dialog to the user.
