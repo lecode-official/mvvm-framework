@@ -72,8 +72,9 @@ namespace System.Windows.Mvvm.Services.Dialog
         /// </summary>
         /// <param name="title">The title of the file open dialog.</param>
         /// <param name="filter">The file type restrictions, that should be put on the file open dialog.</param>
-        /// <returns>Returns the dialog result and the resulting file name.</returns>
-        public virtual async Task<DialogResult<string>> ShowOpenFileDialogAsync(string title, IEnumerable<FileTypeRestriction> filter)
+        /// <param name="isMultiselect">Determines whether the user is able to select multiple files.</param>
+        /// <returns>Returns the dialog result and the resulting file names.</returns>
+        public virtual async Task<DialogResult<IEnumerable<string>>> ShowOpenFileDialogAsync(string title, IEnumerable<FileTypeRestriction> filter, bool isMultiselect)
         {
             // Validates the parameters
             if (filter == null)
@@ -86,18 +87,32 @@ namespace System.Windows.Mvvm.Services.Dialog
                 OpenFileDialog openFileDialog = new OpenFileDialog()
                 {
                     Title = title,
-                    Filter = string.Join("|", filter.Select(restriction => restriction.Restriction))
+                    Filter = string.Join("|", filter.Select(restriction => restriction.Restriction)),
+                    Multiselect = isMultiselect
                 };
                 bool? result = openFileDialog.ShowDialog();
 
                 // Returns the dialog result
                 if (result == true)
-                    return new DialogResult<string>(DialogResult.Okay, openFileDialog.FileName);
+                    return new DialogResult<IEnumerable<string>>(DialogResult.Okay, openFileDialog.FileNames);
                 else if (result == false)
-                    return new DialogResult<string>(DialogResult.Cancel, string.Empty);
+                    return new DialogResult<IEnumerable<string>>(DialogResult.Cancel, new List<string>());
                 else
-                    return new DialogResult<string>(DialogResult.None, string.Empty);
+                    return new DialogResult<IEnumerable<string>>(DialogResult.None, new List<string>());
             });
+        }
+
+        /// <summary>
+        /// Displays a file open dialog to the user.
+        /// </summary>
+        /// <param name="title">The title of the file open dialog.</param>
+        /// <param name="filter">The file type restrictions, that should be put on the file open dialog.</param>
+        /// <returns>Returns the dialog result and the resulting file name.</returns>
+        public virtual async Task<DialogResult<string>> ShowOpenFileDialogAsync(string title, IEnumerable<FileTypeRestriction> filter)
+        {
+            // Shows the open file dialog where multiselect is disabled and returns the dialog result with the selected file
+            DialogResult<IEnumerable<string>> dialogResult = await this.ShowOpenFileDialogAsync(title, filter, false);
+            return new DialogResult<string>(dialogResult.Result, dialogResult.ResultValue.FirstOrDefault());
         }
 
         /// <summary>
