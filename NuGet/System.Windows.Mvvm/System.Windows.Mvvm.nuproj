@@ -33,7 +33,7 @@
   <Import Project="$(NuProjPath)\NuProj.props" Condition="Exists('$(NuProjPath)\NuProj.props')" />
   <PropertyGroup Label="Configuration">
     <Id>System.Windows.Mvvm</Id>
-    <Version>0.2.9</Version>
+    <Version>0.3.0</Version>
     <Title>MVVM Framework (WPF)</Title>
     <Authors>David Neumann, Lukas Rögner</Authors>
     <Owners>David Neumann, Lukas Rögner</Owners>
