@@ -102,12 +102,12 @@ namespace System.Windows.Mvvm.Services.Navigation
         /// <summary>
         /// Gets or sets the view that is currently being viewed in the window. If the window does not support navigation, then the current view is always null.
         /// </summary>
-        internal Page CurrentView { get; set; }
+        internal Page CurrentView { get; private set; }
 
         /// <summary>
         /// Gets or sets the view model of the current view.
         /// </summary>
-        internal IViewModel CurrentViewModel { get; set; }
+        internal IViewModel CurrentViewModel { get; private set; }
 
         #endregion
 

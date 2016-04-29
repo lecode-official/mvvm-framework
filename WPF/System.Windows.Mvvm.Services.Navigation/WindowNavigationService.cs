@@ -175,8 +175,6 @@ namespace System.Windows.Mvvm.Services.Navigation
             // Returns the result
             return new WindowCreationResult
             {
-                Window = navigationService.Window,
-                ViewModel = navigationService.WindowViewModel,
                 NavigationResult = NavigationResult.Navigated,
                 NavigationService = navigationService
             };
@@ -211,8 +209,8 @@ namespace System.Windows.Mvvm.Services.Navigation
             if (!result.NavigationService.SupportsNavigation)
             {
                 // Since the window does not support navigation, the window view model is deactivated and disposed of
-                await result.ViewModel.OnDeactivateAsync();
-                result.ViewModel.Dispose();
+                await result.NavigationService.WindowViewModel.OnDeactivateAsync();
+                result.NavigationService.WindowViewModel.Dispose();
                 throw new InvalidOperationException(Resources.Localization.WindowNavigationService.NavigationNotSupportedExceptionMessage);
             }
 
@@ -220,8 +218,8 @@ namespace System.Windows.Mvvm.Services.Navigation
             if (await result.NavigationService.NavigateAsync<TView>(viewParameters) == NavigationResult.Canceled)
             {
                 // Since the view could not be navigated to, the new window view model is deactivated, disposed of, and the navigation is aborted
-                await result.ViewModel.OnDeactivateAsync();
-                result.ViewModel.Dispose();
+                await result.NavigationService.WindowViewModel.OnDeactivateAsync();
+                result.NavigationService.WindowViewModel.Dispose();
                 return new WindowNavigationResult { Result = NavigationResult.Canceled };
             }
 
@@ -233,19 +231,19 @@ namespace System.Windows.Mvvm.Services.Navigation
             if (Application.Current != null)
             {
                 if (isMainWindow)
-                    Application.Current.MainWindow = result.Window;
-                else if (Application.Current.MainWindow != null && result.Window != Application.Current.MainWindow)
-                    result.Window.Owner = Application.Current.MainWindow;
+                    Application.Current.MainWindow = result.NavigationService.Window;
+                else if (Application.Current.MainWindow != null && result.NavigationService.Window != Application.Current.MainWindow)
+                    result.NavigationService.Window.Owner = Application.Current.MainWindow;
             }
 
             // Opens the new window
-            result.Window.Show();
+            result.NavigationService.Window.Show();
 
             // Sets the ownership of all opened windows
             if (isMainWindow)
             {
-                foreach (Window childWindow in this.navigationServices.Select(navigationService => navigationService.Window).Where(childWindow => childWindow != result.Window).ToList())
-                    childWindow.Owner = result.Window;
+                foreach (Window childWindow in this.navigationServices.Select(navigationService => navigationService.Window).Where(childWindow => childWindow != result.NavigationService.Window).ToList())
+                    childWindow.Owner = result.NavigationService.Window;
             }
 
             // Since the navigation was successful, Navigated is returned as a result of the navigation
@@ -297,19 +295,19 @@ namespace System.Windows.Mvvm.Services.Navigation
             if (Application.Current != null)
             {
                 if (isMainWindow)
-                    Application.Current.MainWindow = result.Window;
+                    Application.Current.MainWindow = result.NavigationService.Window;
                 else if (Application.Current.MainWindow != null)
-                    result.Window.Owner = Application.Current.MainWindow;
+                    result.NavigationService.Window.Owner = Application.Current.MainWindow;
             }
 
             // Opens the new window
-            result.Window.Show();
+            result.NavigationService.Window.Show();
 
             // Sets the ownership of all opened windows
             if (isMainWindow)
             {
-                foreach (Window childWindow in this.navigationServices.Select(navigationService => navigationService.Window).Where(childWindow => childWindow != result.Window).ToList())
-                    childWindow.Owner = result.Window;
+                foreach (Window childWindow in this.navigationServices.Select(navigationService => navigationService.Window).Where(childWindow => childWindow != result.NavigationService.Window).ToList())
+                    childWindow.Owner = result.NavigationService.Window;
             }
 
             // Since the navigation was successful, Navigated is returned as a result of the navigation
@@ -361,8 +359,8 @@ namespace System.Windows.Mvvm.Services.Navigation
             if (!result.NavigationService.SupportsNavigation)
             {
                 // Since the window does not support navigation, the window view model is deactivated and disposed of
-                await result.ViewModel.OnDeactivateAsync();
-                result.ViewModel.Dispose();
+                await result.NavigationService.WindowViewModel.OnDeactivateAsync();
+                result.NavigationService.WindowViewModel.Dispose();
                 throw new InvalidOperationException(Resources.Localization.WindowNavigationService.NavigationNotSupportedExceptionMessage);
             }
 
@@ -370,8 +368,8 @@ namespace System.Windows.Mvvm.Services.Navigation
             if (await result.NavigationService.NavigateAsync<TView>(viewParameters) == NavigationResult.Canceled)
             {
                 // Since the view could not be navigated to, the new window view model is deactivated, disposed of, and the navigation is aborted
-                await result.ViewModel.OnDeactivateAsync();
-                result.ViewModel.Dispose();
+                await result.NavigationService.WindowViewModel.OnDeactivateAsync();
+                result.NavigationService.WindowViewModel.Dispose();
                 return new WindowNavigationResult { Result = NavigationResult.Canceled };
             }
 
@@ -380,7 +378,7 @@ namespace System.Windows.Mvvm.Services.Navigation
             this.WindowCreated?.Invoke(this, new WindowEventArgs(result.NavigationService));
 
             // Opens the new window
-            result.Window.ShowDialog();
+            result.NavigationService.Window.ShowDialog();
 
             // Since the navigation was successful, Navigated is returned as a result of the navigation
             return new WindowNavigationResult
@@ -428,7 +426,7 @@ namespace System.Windows.Mvvm.Services.Navigation
             this.WindowCreated?.Invoke(this, new WindowEventArgs(result.NavigationService));
 
             // Opens the new window
-            result.Window.ShowDialog();
+            result.NavigationService.Window.ShowDialog();
             
             // Since the navigation was successful, Navigated is returned as a result of the navigation
             return new WindowNavigationResult
@@ -634,17 +632,7 @@ namespace System.Windows.Mvvm.Services.Navigation
         private class WindowCreationResult
         {
             #region Public Properties
-
-            /// <summary>
-            /// Gets or sets the window that has been created.
-            /// </summary>
-            public Window Window { get; set; }
-
-            /// <summary>
-            /// Gets or sets the view model of the window that has been created.
-            /// </summary>
-            public IViewModel ViewModel { get; set; }
-
+            
             /// <summary>
             /// Gets or sets the navigation service, which was created for the window.
             /// </summary>
