@@ -170,6 +170,9 @@ namespace System.Windows.Mvvm.Services.Navigation
                 // Removes the navigation manager from the list of window navigation managers
                 this.navigationServices.Remove(navigationService);
                 this.WindowClosed?.Invoke(this, new WindowEventArgs(navigationService));
+
+                // This is a fix for the window owner bug (when a child window is closed, then the parent window get minimized, this fix works around that problem)
+                navigationService.Window.Owner?.Activate();
             };
 
             // Returns the result
