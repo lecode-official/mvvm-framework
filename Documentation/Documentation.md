@@ -20,9 +20,8 @@ is coming soon. Once you have made yourself familiar with the basics and you wan
   2. Navigation
   4. Operating System
   5. Dialog
-7. Support for ReactiveUI
-8. Configuration
-9. UI Extensions
+7. Configuration
+8. UI Extensions
   1. Controls
   2. Markup
   3. Value Converters
