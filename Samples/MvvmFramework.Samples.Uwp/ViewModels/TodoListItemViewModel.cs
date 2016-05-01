@@ -21,7 +21,7 @@ namespace MvvmFramework.Samples.Uwp.ViewModels
         /// <param name="todoListItem">The model from which the view model is to be generated.</param>
         public TodoListItemViewModel(TodoListItem todoListItem)
         {
-            this.Id.Value = todoListItem.Id;
+            this.Id = todoListItem.Id;
             this.Title.Value = todoListItem.Title;
             this.Description.Value = todoListItem.Description;
             this.IsFinished.Value = todoListItem.IsFinished;
@@ -34,7 +34,7 @@ namespace MvvmFramework.Samples.Uwp.ViewModels
         /// <summary>
         /// Gets or sets the unique identifier of the todo list item, which is a global unique ID.
         /// </summary>
-        public ReactiveProperty<string> Id { get; } = new ReactiveProperty<string>();
+        public string Id { get; private set; }
 
         /// <summary>
         /// Gets or sets the title of the todo list item.
