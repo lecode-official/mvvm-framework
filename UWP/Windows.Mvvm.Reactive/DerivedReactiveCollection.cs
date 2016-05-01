@@ -193,8 +193,22 @@ namespace Windows.Mvvm.Reactive
                         this.inputItemMap.Clear();
                         this.outputItemMap.Clear();
 
-                        // Clears the derived collection, because the input reactive collection no longer contains any items
+                        // Clears the derived collection
                         this.derivedReactiveCollection.Clear();
+
+                        // Rebuilds the whole reactive collection
+                        List<TOutput> newContent = new List<TOutput>();
+                        foreach (TInput item in reactiveCollection)
+                        {
+                            Guid initialInputItemGuid = Guid.NewGuid();
+                            this.inputItemMap.Add(initialInputItemGuid);
+                            if (this.wherePredicate(item))
+                            {
+                                this.outputItemMap.Add(initialInputItemGuid);
+                                newContent.Add(this.selectPredicate(item));
+                            }
+                        }
+                        this.derivedReactiveCollection.AddRange(newContent);
                         break;
                 }
             };
