@@ -165,8 +165,8 @@ namespace System.Windows.Mvvm.Reactive
                 this.beforeItemAdded?.OnNext(item);
                 this.collection.Add(item);
                 this.itemAdded?.OnNext(item);
-                this.collectionChangedSubject.OnNext(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item));
             }
+            this.collectionChangedSubject.OnNext(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
         /// <summary>
@@ -184,8 +184,8 @@ namespace System.Windows.Mvvm.Reactive
                 this.beforeItemRemoved?.OnNext(item);
                 this.collection.Remove(item);
                 this.itemRemoved?.OnNext(item);
-                this.collectionChangedSubject.OnNext(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, item, index));
             }
+            this.collectionChangedSubject.OnNext(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
         #endregion
