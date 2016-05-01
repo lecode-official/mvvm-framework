@@ -70,7 +70,7 @@ namespace Windows.Mvvm.Application
         /// <summary>
         /// Gets callen wehn the applicaiton is being activated via a launch.
         /// </summary>
-        /// <param name="e">The event arguments, that contain more information about the lauch of the application.</param>
+        /// <param name="eventArguments">The event arguments, that contain more information about the lauch of the application.</param>
         protected override async void OnLaunched(LaunchActivatedEventArgs eventArguments) => await this.OnActivatedAsync(eventArguments);
 
         /// <summary>

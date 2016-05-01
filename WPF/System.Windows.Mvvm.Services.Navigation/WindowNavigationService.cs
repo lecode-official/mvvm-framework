@@ -397,7 +397,6 @@ namespace System.Windows.Mvvm.Services.Navigation
         /// <typeparam name="TWindow">The type of the window that is to be created.</typeparam>
         /// <typeparam name="TView">The type of the view to which is navigated within the window.</typeparam>
         /// <param name="viewParameters">The parameters that are passeed to the view model of the view.</param>
-        /// <param name="isMainWindow">Determines whether the new window is set as the main window of the application. If the main window is closed, then the application is shut down.</param>
         /// <exception cref="InvalidOperationException">If the view, the window, or either of the view models can not be instantiated, or the window does not support navigation, an <see cref="InvalidOperationException"/> is thrown.</exception>
         /// <returns>Returns whether the navigation was successful or cancelled.</returns>
         public Task<WindowNavigationResult> NavigateDialogAsync<TWindow, TView>(object viewParameters)
@@ -412,7 +411,6 @@ namespace System.Windows.Mvvm.Services.Navigation
         /// </summary>
         /// <typeparam name="TWindow">The type of the window that is to be created.</typeparam>
         /// <param name="parameters">The parameters that are passed to the view model of the window.</param>
-        /// <param name="isMainWindow">Determines whether the new window is set as the main window of the application. If the main window is closed, then the application is shut down.</param>
         /// <exception cref="InvalidOperationException">If the the window or it's view model can not be instantiated, an <see cref="InvalidOperationException"/> is thrown.</exception>
         /// <returns>Returns whether the navigation was successful or cancelled.</returns>
         public async Task<WindowNavigationResult> NavigateDialogAsync<TWindow>(object parameters) where TWindow : Window
@@ -443,7 +441,6 @@ namespace System.Windows.Mvvm.Services.Navigation
         /// Creates a new window and displays it. It shows the window as a dialog and waits till the window has closed.
         /// </summary>
         /// <typeparam name="TWindow">The type of the window that is to be created.</typeparam>
-        /// <param name="isMainWindow">Determines whether the new window is set as the main window of the application. If the main window is closed, then the application is shut down.</param>
         /// <exception cref="InvalidOperationException">If the the window or it's view model can not be instantiated, an <see cref="InvalidOperationException"/> is thrown.</exception>
         /// <returns>Returns whether the navigation was successful or cancelled.</returns>
         public Task<WindowNavigationResult> NavigateDialogAsync<TWindow>() where TWindow : Window => this.NavigateDialogAsync<TWindow>(null);
