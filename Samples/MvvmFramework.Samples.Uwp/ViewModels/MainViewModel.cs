@@ -101,14 +101,14 @@ namespace MvvmFramework.Samples.Uwp.ViewModels
             this.MarkTodoListItemAsFinishedCommand = new ReactiveCommand(() =>
             {
                 this.SelectedTodoListItem.Value.IsFinished.Value = true;
-                this.todoListItemsRepository.MarkTodoListItemAsFinished(this.SelectedTodoListItem.Value.Id.Value);
+                this.todoListItemsRepository.MarkTodoListItemAsFinished(this.SelectedTodoListItem.Value.Id);
                 return Task.FromResult(0);
             }, this.SelectedTodoListItem.Select(x => x != null));
 
             // Initializes the command, which removes the currently selected todo list item
             this.RemoveTodoListItemCommand = new ReactiveCommand(() =>
             {
-                this.todoListItemsRepository.RemoveTodoListItem(this.SelectedTodoListItem.Value.Id.Value);
+                this.todoListItemsRepository.RemoveTodoListItem(this.SelectedTodoListItem.Value.Id);
                 this.TodoListItems.Remove(this.SelectedTodoListItem.Value);
                 this.SelectedTodoListItem.Value = null;
                 return Task.FromResult(0);
