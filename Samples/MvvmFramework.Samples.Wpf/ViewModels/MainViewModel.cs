@@ -45,6 +45,11 @@ namespace System.Windows.Mvvm.Sample.ViewModels
         /// </summary>
         private readonly TodoListItemsRepository todoListItemsRepository;
 
+        /// <summary>
+        /// Contains the todo list items that are to be displayed.
+        /// </summary>
+        private readonly ReactiveCollection<TodoListItem> todoListItems = new ReactiveCollection<TodoListItem>();
+
         #endregion
 
         #region Public Properties
@@ -52,7 +57,7 @@ namespace System.Windows.Mvvm.Sample.ViewModels
         /// <summary>
         /// Gets the items of the todo list.
         /// </summary>
-        public ReactiveCollection<TodoListItemViewModel> TodoListItems { get; } = new ReactiveCollection<TodoListItemViewModel>();
+        public DerivedReactiveCollection<TodoListItem, TodoListItemViewModel> TodoListItems { get; private set; }
 
         /// <summary>
         /// Gets or sets the currently selected todo list item.
@@ -83,19 +88,22 @@ namespace System.Windows.Mvvm.Sample.ViewModels
         /// </summary>
         public override Task OnActivateAsync()
         {
+            // Initializes the derived collection, which turns the todo list items into their respective view models
+            this.TodoListItems = new DerivedReactiveCollection<TodoListItem, TodoListItemViewModel>(this.todoListItems);
+
             // Initializes the command, which marks the currently selected todo list item as finished
             this.MarkTodoListItemAsFinishedCommand = new ReactiveCommand(() =>
             {
                 this.SelectedTodoListItem.Value.IsFinished.Value = true;
-                this.todoListItemsRepository.MarkTodoListItemAsFinished(this.SelectedTodoListItem.Value.Id.Value);
+                this.todoListItemsRepository.MarkTodoListItemAsFinished(this.SelectedTodoListItem.Value.Id);
                 return Task.FromResult(0);
             }, this.SelectedTodoListItem.Select(x => x != null));
 
             // Initializes the command, which removes the currently selected todo list item
             this.RemoveTodoListItemCommand = new ReactiveCommand(() =>
             {
-                this.todoListItemsRepository.RemoveTodoListItem(this.SelectedTodoListItem.Value.Id.Value);
-                this.TodoListItems.Remove(this.SelectedTodoListItem.Value);
+                this.todoListItemsRepository.RemoveTodoListItem(this.SelectedTodoListItem.Value.Id);
+                this.todoListItems.Remove(this.todoListItems.FirstOrDefault(todoListItem => todoListItem.Id == this.SelectedTodoListItem.Value.Id));
                 this.SelectedTodoListItem.Value = null;
                 return Task.FromResult(0);
             }, this.SelectedTodoListItem.Select(x => x != null));
@@ -114,10 +122,10 @@ namespace System.Windows.Mvvm.Sample.ViewModels
         public override Task OnNavigateToAsync(NavigationEventArgs e)
         {
             // Clears the current list of todo list items first
-            this.TodoListItems.Clear();
+            this.todoListItems.Clear();
 
             // Loads all the todo list items from the repository and stores them in a list, so that the view has access to them
-            this.TodoListItems.AddRange(this.todoListItemsRepository.GetTodoListItems().Select(todoListItem => new TodoListItemViewModel(todoListItem)).ToList());
+            this.todoListItems.AddRange(this.todoListItemsRepository.GetTodoListItems().ToList());
 
             // Since no asynchronous operation was performed, an empty task is returned
             return Task.FromResult(0);
