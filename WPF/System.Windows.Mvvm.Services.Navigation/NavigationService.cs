@@ -189,7 +189,7 @@ namespace System.Windows.Mvvm.Services.Navigation
         /// </summary>
         /// <param name="isCancellable">Determines whether the closing of the application can be cancelled by the view model.</param>
         /// <param name="navigationReason">The navigation reason that is sent to the view model.</param>
-        /// <returns>Returns a value that determines whether the window was closed or its closing was cancelled. If <see cref="isCancellable"/> is set to <c>false</c>, <c>NavigationResult.Navigated</c> is always returned.</returns>
+        /// <returns>Returns a value that determines whether the window was closed or its closing was cancelled. If <see cref="p:isCancellable"/> is set to <c>false</c>, <c>NavigationResult.Navigated</c> is always returned.</returns>
         internal Task<NavigationResult> CloseWindowAsync(bool isCancellable, NavigationReason navigationReason) => this.CloseWindowAsync(isCancellable, navigationReason, true);
 
         /// <summary>

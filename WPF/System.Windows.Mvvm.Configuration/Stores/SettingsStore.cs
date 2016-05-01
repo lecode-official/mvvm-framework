@@ -14,11 +14,11 @@ namespace System.Windows.Mvvm.Configuration.Stores
     public class SettingsStore : IStore
     {
         #region Constructors
-        
+
         /// <summary>
         /// Initializes a new <see cref="SettingsStore"/> instance.
         /// </summary>
-        /// <param name="fileName">The settings that are used to store the configuration data.</param>
+        /// <param name="settings">The settings that are used to store the configuration data.</param>
         public SettingsStore(ApplicationSettingsBase settings)
             : this(settings, "Configuration")
         { }
@@ -26,7 +26,7 @@ namespace System.Windows.Mvvm.Configuration.Stores
         /// <summary>
         /// Initializes a new <see cref="SettingsStore"/> instance.
         /// </summary>
-        /// <param name="fileName">The settings that are used to store the configuration data.</param>
+        /// <param name="settings">The settings that are used to store the configuration data.</param>
         /// <param name="propertyName">The name of the property which is used to store the settings.</param>
         public SettingsStore(ApplicationSettingsBase settings, string propertyName)
         {
@@ -56,10 +56,7 @@ namespace System.Windows.Mvvm.Configuration.Stores
         /// Loads the stores configuration data and returns them as serialized string.
         /// </summary>
         /// <returns>Returns the loaded data.</returns>
-        public Task<string> LoadAsync()
-        {
-            return Task.FromResult(this.Settings[this.PropertyName] as string);
-        }
+        public Task<string> LoadAsync() => Task.FromResult(this.Settings[this.PropertyName] as string);
 
         /// <summary>
         /// Stores the configuration data.

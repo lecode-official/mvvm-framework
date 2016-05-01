@@ -27,7 +27,7 @@ namespace System.Windows.Controls.Extensions
             }));
 
         /// <summary>
-        /// Gets the value of the <see cref="IsHorizontalScrollingEnabled"/> attached property.
+        /// Gets the value of the <see cref="IsHorizontalScrollingEnabledProperty"/> attached property.
         /// </summary>
         /// <param name="scrollViewer">The scroll viewer which is used to get the value.</param>
         /// <returns>Returns the value of the attached property.</returns>
@@ -41,7 +41,7 @@ namespace System.Windows.Controls.Extensions
         }
 
         /// <summary>
-        /// Sets the value of the <see cref="IsHorizontalScrollingEnabled"/> attached property.
+        /// Sets the value of the <see cref="IsHorizontalScrollingEnabledProperty"/> attached property.
         /// </summary>
         /// <param name="scrollViewer">The scroll viewer which is used to set the value.</param>
         /// <param name="value">The value that is to be set.</param>

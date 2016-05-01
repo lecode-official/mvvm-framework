@@ -20,7 +20,7 @@ namespace Windows.Mvvm.Reactive
         /// Initializes a new <see cref="ReactiveCommand"/> instance.
         /// </summary>
         /// <param name="execute">The delegate that is to be executed when the command is being executed.</param>
-        /// <param name="canExecute">An observable, which determines whether the command can be executed or not. If <c>null</c> is specified, then the constructor defaults to the <see cref="IsExecuting"/> observable.</param>
+        /// <param name="canExecute">An observable, which determines whether the command can be executed or not. If <c>null</c> is specified, then the constructor defaults to the <see cref="p:IsExecuting"/> observable.</param>
         /// <param name="blockOnExecution">Determines whether can execute always returns false while the command is being executed.</param>
         public ReactiveCommand(Func<Task> execute, IObservable<bool> canExecute, bool blockOnExecution)
             : base(async (parameter) =>
@@ -34,7 +34,7 @@ namespace Windows.Mvvm.Reactive
         /// Initializes a new <see cref="ReactiveCommand"/> instance.
         /// </summary>
         /// <param name="execute">The delegate that is to be executed when the command is being executed.</param>
-        /// <param name="canExecute">An observable, which determines whether the command can be executed or not. If <c>null</c> is specified, then the constructor defaults to the <see cref="IsExecuting"/> observable.</param>
+        /// <param name="canExecute">An observable, which determines whether the command can be executed or not. If <c>null</c> is specified, then the constructor defaults to the <see cref="p:IsExecuting"/> observable.</param>
         public ReactiveCommand(Func<Task> execute, IObservable<bool> canExecute)
             : base(async parameter =>
             {
