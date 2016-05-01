@@ -1,7 +1,8 @@
 # Introduction
 
 > **Heads up:** *this quick guide is only valid for versions up to 0.2.9. In versions higher than 0.2.9 many things have drastically changed, making some of code*
-> *samples shown here obsolete or deprecated. The quick guide will be updated soon, to reflect the changes made to the framework.*
+> *samples shown here obsolete or deprecated. The quick guide will be updated soon, to reflect the changes made to the framework. For now please consult the sample*
+> *application to see how to use the new features.*
 
 Many parts of the source code were left out for brevity. The code samples have also been stripped of all comments. If you want to view the whole source code for the
 sample application, you can find it [here](https://github.com/lecode-official/mvvm-framework/tree/master/System.Windows.Mvvm.Sample).
