@@ -39,7 +39,12 @@
     <Owners>David Neumann, Lukas Rögner</Owners>
     <Summary>The MVVM Framework is a compact and simple, yet powerful implementation of the MVVM pattern for WPF.</Summary>
     <Description>The MVVM Framework is a compact and simple, yet powerful implementation of the MVVM pattern for WPF. It provides a strong model for managing the application lifecycle and the navigation. The MVVM framework decouples operation system functionality from the application logic by providing a powerful service system, which abstracts away any platform specific code from the application logic. Everything in the framework was build with the task awaitable pattern in mind, from application lifecycle management to navigation. The framework plays nice with all kinds of frameworks, for example the dependency injection mechanism build into the framework does not care what </Description>
-    <ReleaseNotes>Fixed some code smells and consolidated some minor things between the WPF and the UWP version.</ReleaseNotes>
+    <ReleaseNotes>- The reactive database context was removed from the framework, because it was deemed out of scope of the framework, the reactive database context is now a separate project on GitHub and  NuGet
+- Removed the reactive configuration context, because reactive should not be used on such a low layer
+- Removed all references to ReactiveUI and instead implemented custom implementations of ReactiveProperty, ReactiveCommand, ReactiveCollection, and ReactiveDerivedCollection, also now view models should either directly implement IViewModel or derive from ViewModel, because ReactiveViewModel no longer exists
+- The dialog service now offers the possibility to use the file open dialog to select multiple files
+- Fixed the WPF window owner bug, where a parent window would be minimized, when a child window closes
+- Fixed some minor bugs and code smells</ReleaseNotes>
     <ProjectUrl>https://github.com/lecode-official/mvvm-framework</ProjectUrl>
     <LicenseUrl>https://raw.githubusercontent.com/lecode-official/mvvm-framework/master/LICENSE</LicenseUrl>
     <Copyright>Copyright 2016 © David Neumann &amp; Lukas Rögner</Copyright>
