@@ -203,6 +203,14 @@ namespace System.Windows.Mvvm.Reactive
             : this(reactiveCollection, null, selectPredicate)
         { }
 
+        /// <summary>
+        /// Initializes a new <see cref="DerivedReactiveCollection{TInput, TOutput}"/> instance.
+        /// </summary>
+        /// <param name="reactiveCollection">The reactive collection on which the derived reactive collection is based.</param>
+        public DerivedReactiveCollection(IReactiveCollection<TInput> reactiveCollection)
+            : this(reactiveCollection, null, null)
+        { }
+
         #endregion
 
         #region Private Fields
