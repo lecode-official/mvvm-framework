@@ -23,7 +23,7 @@ using System.Runtime.InteropServices;
 
 #region Assembly Version
 
-[assembly: AssemblyVersion("0.3.0.*")]
-[assembly: AssemblyFileVersion("0.3.0.0")]
+[assembly: AssemblyVersion("0.3.1.*")]
+[assembly: AssemblyFileVersion("0.3.1.0")]
 
 #endregion
