@@ -36,8 +36,8 @@ namespace System.Windows.Mvvm.Reactive
             // 3. If the output type has a default constructor, then the predicate creates a new output type by calling the default constructor
             // 4. If none of the above apply, then the select predicate defaults to a delegate, which is just maps every input to null
             Type outputType = typeof(TOutput);
-            ConstructorInfo outputTypeConstructorInfo = outputType.GetConstructors(BindingFlags.Public).Where(constructorInfo => !constructorInfo.ContainsGenericParameters && constructorInfo.GetParameters().Count() == 1 && constructorInfo.GetParameters().First().ParameterType.GetTypeInfo().IsAssignableFrom(typeof(TInput))).FirstOrDefault();
-            ConstructorInfo outputTypeDefaultConstructorInfo = outputType.GetConstructors(BindingFlags.Default | BindingFlags.Public).FirstOrDefault();
+            ConstructorInfo outputTypeConstructorInfo = outputType.GetConstructors().Where(constructorInfo => !constructorInfo.ContainsGenericParameters && constructorInfo.GetParameters().Count() == 1 && constructorInfo.GetParameters().First().ParameterType.GetTypeInfo().IsAssignableFrom(typeof(TInput))).FirstOrDefault();
+            ConstructorInfo outputTypeDefaultConstructorInfo = outputType.GetConstructors().Where(constructorInfo => constructorInfo.GetParameters().Count() == 0).FirstOrDefault();
             if (selectPredicate != null)
                 this.selectPredicate = selectPredicate;
             else if (typeof(TInput) == typeof(TOutput))
@@ -48,6 +48,20 @@ namespace System.Windows.Mvvm.Reactive
                 this.selectPredicate = input => (TOutput)outputTypeDefaultConstructorInfo.Invoke(new object[0]);
             else
                 this.selectPredicate = input => default(TOutput);
+
+            // Initializes the derived collection by adding the initial content of the collection retrieved as a constructor parameter
+            List<TOutput> initialContent = new List<TOutput>();
+            foreach (TInput item in reactiveCollection)
+            {
+                Guid initialInputItemGuid = Guid.NewGuid();
+                this.inputItemMap.Add(initialInputItemGuid);
+                if (this.wherePredicate(item))
+                {
+                    this.outputItemMap.Add(initialInputItemGuid);
+                    initialContent.Add(this.selectPredicate(item));
+                }
+            }
+            this.derivedReactiveCollection = new ReactiveCollection<TOutput>(initialContent);
 
             // Everytime the input reactive collection changes, the derived collection changes
             (reactiveCollection as INotifyCollectionChanged).CollectionChanged += (sender, e) =>
@@ -183,6 +197,10 @@ namespace System.Windows.Mvvm.Reactive
                         break;
                 }
             };
+
+            // When the internal reactive collection changes, then the changes have to propagated upwards
+            (this.derivedReactiveCollection as INotifyCollectionChanged).CollectionChanged += (sender, e) => this.collectionChanged?.Invoke(this, e);
+            (this.derivedReactiveCollection as INotifyPropertyChanged).PropertyChanged += (sender, e) => this.propertyChanged?.Invoke(this, e);
         }
 
         /// <summary>
@@ -218,7 +236,7 @@ namespace System.Windows.Mvvm.Reactive
         /// <summary>
         /// Contains the reactive collection, which was derived from the input collection.
         /// </summary>
-        private readonly ReactiveCollection<TOutput> derivedReactiveCollection = new ReactiveCollection<TOutput>();
+        private readonly ReactiveCollection<TOutput> derivedReactiveCollection;
         
         /// <summary>
         /// Contains a map, which contains for each input element a GUID, which uniquely identifies the item (this is needed, because the input collection may contain the same element multiple times are different indices).
@@ -396,6 +414,160 @@ namespace System.Windows.Mvvm.Reactive
         /// </summary>
         /// <returns>Returns an enumerator for the collection.</returns>
         IEnumerator IEnumerable.GetEnumerator() => this.derivedReactiveCollection.GetEnumerator();
+
+        #endregion
+
+        #region ICollection Implementation
+        
+        /// <summary>
+        /// Gets the count of items that are in the collection.
+        /// </summary>
+        int ICollection.Count
+        {
+            get
+            {
+                return (this.derivedReactiveCollection as ICollection).Count;
+            }
+        }
+
+        /// <summary>
+        /// Gets an object with which the access to the collection can be synchronized.
+        /// </summary>
+        object ICollection.SyncRoot
+        {
+            get
+            {
+                return (this.derivedReactiveCollection as ICollection).SyncRoot;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value that determines whether the collection is synchronized (thread-safe).
+        /// </summary>
+        bool ICollection.IsSynchronized
+        {
+            get
+            {
+                return (this.derivedReactiveCollection as ICollection).IsSynchronized;
+            }
+        }
+
+        /// <summary>
+        /// Copies the content of the collection to the specified array, beginning from the specified index.
+        /// </summary>
+        /// <param name="array">The array into which the content of the collection is to be copied.</param>
+        /// <param name="index">The index at from which the copying is to be started.</param>
+        void ICollection.CopyTo(Array array, int index) => (this.derivedReactiveCollection as ICollection).CopyTo(array, index);
+
+        #endregion
+
+        #region IList Implementation
+        
+        /// <summary>
+        /// Gets a value that determines whether the collection is read-only (<see cref="DerivedReactiveCollection{TInput, TOutput}"/> is always read-only).
+        /// </summary>
+        bool IList.IsReadOnly
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value that determines whether the collection has a fixed size (<see cref="DerivedReactiveCollection{TInput, TOutput}"/> never has a fixed size).
+        /// </summary>
+        bool IList.IsFixedSize
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the item at the specified index.
+        /// </summary>
+        /// <param name="index">The index of the item that is to be retrieved or set.</param>
+        /// <exception cref="IndexOutOfRangeException">If the specified index is out of range, then an <see cref="IndexOutOfRangeException"/> exception is thrown.</exception>
+        /// <exception cref="NotImplementedException">Since items can not be set explicitely to a derived reactive collection, this method throws a <see cref="NotImplementedException"/> exception.</exception>
+        /// <returns>Returns the item at the specified index.</returns>
+        object IList.this[int index]
+        {
+            get
+            {
+                return this.derivedReactiveCollection[index];
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        /// <summary>
+        /// Adds the specified item to the collection.
+        /// </summary>
+        /// <exception cref="NotImplementedException">Since items can not be added explicitely to a derived reactive collection, this method throws a <see cref="NotImplementedException"/> exception.</exception>
+        /// <param name="value">The item that is to be added to the collection.</param>
+        int IList.Add(object value)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Determines whether the specified item is in the collection.
+        /// </summary>
+        /// <param name="value">The item for which is to be determined whether it is in the collection.</param>
+        /// <returns>Returns <c>true</c> if the specified item is in the collection and <c>false</c> otherwise.</returns>
+        bool IList.Contains(object value) => (this.derivedReactiveCollection as IList).Contains(value);
+
+        /// <summary>
+        /// Removes all items from the collection.
+        /// </summary>
+        /// <exception cref="NotImplementedException">Since items can not be removed explicitely to a derived reactive collection, this method throws a <see cref="NotImplementedException"/> exception.</exception>
+        void IList.Clear()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Determines the index of the specified item.
+        /// </summary>
+        /// <param name="value">The item for which the index is to be determined.</param>
+        /// <returns>Returns the index of the specified item or -1 if the specified item is not in the collection.</returns>
+        int IList.IndexOf(object value) => (this.derivedReactiveCollection as IList).IndexOf(value);
+
+        /// <summary>
+        /// Inserts the specified item into the collection at the specified index.
+        /// </summary>
+        /// <param name="index">The index at which the specified item is to be inserted.</param>
+        /// <param name="value">The item that is to be inserted.</param>
+        /// <exception cref="NotImplementedException">Since items can not be inserted explicitely to a derived reactive collection, this method throws a <see cref="NotImplementedException"/> exception.</exception>
+        void IList.Insert(int index, object value)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Removes the specified item from the collection.
+        /// </summary>
+        /// <param name="value">The item that is to be removed from the collection.</param>
+        /// <exception cref="NotImplementedException">Since items can not be removed explicitely to a derived reactive collection, this method throws a <see cref="NotImplementedException"/> exception.</exception>
+        void IList.Remove(object value)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Removes the item at the specified index.
+        /// </summary>
+        /// <param name="index">The index of the item that is to be removed.</param>
+        /// <exception cref="NotImplementedException">Since items can not be removed explicitely to a derived reactive collection, this method throws a <see cref="NotImplementedException"/> exception.</exception>
+        void IList.RemoveAt(int index)
+        {
+            throw new NotImplementedException();
+        }
 
         #endregion
     }

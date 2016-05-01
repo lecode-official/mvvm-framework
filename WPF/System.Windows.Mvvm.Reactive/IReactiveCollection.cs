@@ -14,7 +14,7 @@ namespace System.Windows.Mvvm.Reactive
     /// Represents an interface for the different types of reactive collections.
     /// </summary>
     /// <typeparam name="T">The type of items that the reactive collection manages.</typeparam>
-    public interface IReactiveCollection<T> : INotifyCollectionChanged, INotifyPropertyChanged, IReadOnlyCollection<T>, IReadOnlyList<T>, IEnumerable<T>, IEnumerable
+    public interface IReactiveCollection<T> : INotifyCollectionChanged, INotifyPropertyChanged, IReadOnlyCollection<T>, IReadOnlyList<T>, IEnumerable<T>, IEnumerable, ICollection, IList
     {
         #region Properties
 

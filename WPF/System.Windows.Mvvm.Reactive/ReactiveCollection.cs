@@ -17,7 +17,7 @@ namespace System.Windows.Mvvm.Reactive
     /// Represents a collection where the changing of items can be observed.
     /// </summary>
     /// <typeparam name="T">The type of the items of the collection.</typeparam>
-    public class ReactiveCollection<T> : IReactiveCollection<T>, ICollection<T>, ICollection, IList, IList<T>
+    public class ReactiveCollection<T> : IReactiveCollection<T>, ICollection<T>, IList<T>
     {
         #region Constructors
 
