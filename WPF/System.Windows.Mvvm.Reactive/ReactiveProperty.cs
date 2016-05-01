@@ -29,7 +29,11 @@ namespace System.Windows.Mvvm.Reactive
             this.OnlyRaiseIfChanged = onlyRaiseIfChanged;
 
             // Subscribes to the Changed observable and fires the PropertyChanged event if the Changed observable has fired
-            this.Changed.ObserveOnDispatcher().Subscribe(x => this.propertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(this.Value))));
+            this.Changed.ObserveOnDispatcher().Subscribe(x =>
+            {
+                this.propertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(this.Value)));
+                this.propertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(this.HasValue)));
+            });
         }
 
         /// <summary>
@@ -86,6 +90,17 @@ namespace System.Windows.Mvvm.Reactive
                 this.value = value;
                 this.reactivePropertyValueSubject?.OnNext(this.value);
                 this.changed.OnNext(this.value);
+            }
+        }
+
+        /// <summary>
+        /// Gets a value that determines whether the property has a value (or if the value is <c>default(T)</c>).
+        /// </summary>
+        public bool HasValue
+        {
+            get
+            {
+                return !object.Equals(this.Value, default(T));
             }
         }
 

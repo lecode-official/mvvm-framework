@@ -33,6 +33,7 @@ namespace Windows.Mvvm.Reactive
             {
                 this.collectionChanged?.Invoke(this, x);
                 this.propertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(this.Count)));
+                this.propertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(this.IsEmpty)));
             });
         }
 
@@ -60,7 +61,18 @@ namespace Windows.Mvvm.Reactive
         #endregion
 
         #region Public Properties
-        
+
+        /// <summary>
+        /// Gets a value that determines whether the collection is empty.
+        /// </summary>
+        public bool IsEmpty
+        {
+            get
+            {
+                return this.Count == 0;
+            }
+        }
+
         /// <summary>
         /// Contains a subject, which fires before a new item is added to the collection.
         /// </summary>
