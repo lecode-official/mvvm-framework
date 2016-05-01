@@ -18,7 +18,7 @@ namespace Windows.Mvvm.Reactive
     /// Represents a collection where the changing of items can be observed.
     /// </summary>
     /// <typeparam name="T">The type of the items of the collection.</typeparam>
-    public class ReactiveCollection<T> : INotifyCollectionChanged, INotifyPropertyChanged, ICollection<T>, ICollection, IReadOnlyCollection<T>, IList<T>, IReadOnlyList<T>, IList, IEnumerable<T>, IEnumerable
+    public class ReactiveCollection<T> : IReactiveCollection<T>, ICollection<T>, IList<T>
     {
         #region Constructors
 
@@ -166,8 +166,8 @@ namespace Windows.Mvvm.Reactive
                 this.beforeItemAdded?.OnNext(item);
                 this.collection.Add(item);
                 this.itemAdded?.OnNext(item);
-                this.collectionChangedSubject.OnNext(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item, this.collection.IndexOf(item)));
             }
+            this.collectionChangedSubject.OnNext(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
         /// <summary>
@@ -185,8 +185,8 @@ namespace Windows.Mvvm.Reactive
                 this.beforeItemRemoved?.OnNext(item);
                 this.collection.Remove(item);
                 this.itemRemoved?.OnNext(item);
-                this.collectionChangedSubject.OnNext(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, item, index));
             }
+            this.collectionChangedSubject.OnNext(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
         #endregion
@@ -257,7 +257,7 @@ namespace Windows.Mvvm.Reactive
         /// <summary>
         /// Gets a value that determines whether the collection is read-only (<see cref="ReactiveCollection{T}"/> is never read-only).
         /// </summary>
-        public bool IsReadOnly
+        bool ICollection<T>.IsReadOnly
         {
             get
             {
@@ -393,7 +393,7 @@ namespace Windows.Mvvm.Reactive
                 this.collection[index] = value;
                 this.itemRemoved?.OnNext(oldItem);
                 this.itemAdded?.OnNext(value);
-                this.collectionChangedSubject.OnNext(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, value, oldItem));
+                this.collectionChangedSubject.OnNext(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, value, oldItem, index));
             }
         }
 
@@ -477,7 +477,7 @@ namespace Windows.Mvvm.Reactive
                 this.collection[index] = newItem;
                 this.itemRemoved?.OnNext(oldItem);
                 this.itemAdded?.OnNext(newItem);
-                this.collectionChangedSubject.OnNext(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, newItem, oldItem));
+                this.collectionChangedSubject.OnNext(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, newItem, oldItem, index));
             }
         }
 

@@ -108,6 +108,8 @@
     <None Include="Project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DerivedReactiveCollection.cs" />
+    <Compile Include="IReactiveCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReactiveCollection.cs" />
     <Compile Include="ReactiveCommand.cs" />
