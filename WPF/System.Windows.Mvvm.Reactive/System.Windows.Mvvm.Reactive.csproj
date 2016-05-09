@@ -69,6 +69,7 @@
     <Compile Include="ReactiveCommandOfTParameterTResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReactiveProperty.cs" />
+    <Compile Include="ReadOnlyReactiveCollection.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Packages.config" />
