@@ -19,43 +19,41 @@ namespace System.Windows.Mvvm.Reactive
     /// <typeparam name="T">The type of the items of the collection.</typeparam>
     public abstract class ReadOnlyReactiveCollection<T> : IReactiveCollection<T>
     {
-        #region Constructors
-
-        /// <summary>
-        /// Initializes a new <see cref="ReadOnlyReactiveCollection{T}"/> instance.
-        /// </summary>
-        /// <param name="collection">The collection from which the <see cref="ReadOnlyReactiveCollection{T}"/> is to be constructed.</param>
-        internal ReadOnlyReactiveCollection(IEnumerable<T> collection)
-        {
-            this.Collection = collection.ToList();
-            this.CollectionChangedSubject.ObserveOnDispatcher().Subscribe(x =>
-            {
-                this.collectionChanged?.Invoke(this, x);
-                this.propertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(this.Count)));
-                this.propertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(this.IsEmpty)));
-            });
-        }
-
-        /// <summary>
-        /// Initializes a new <see cref="ReadOnlyReactiveCollection{T}"/> instance.
-        /// </summary>
-        internal ReadOnlyReactiveCollection()
-            : this(new List<T>())
-        { }
-
-        #endregion
-        
         #region Protected Properties
+
+        /// <summary>
+        /// Contains a subject, which is fired, whenever the collection is changed.
+        /// </summary>
+        private Subject<NotifyCollectionChangedEventArgs> collectionChangedSubject;
 
         /// <summary>
         /// Gets a subject, which is fired, whenever the collection is changed.
         /// </summary>
-        protected Subject<NotifyCollectionChangedEventArgs> CollectionChangedSubject { get; } = new Subject<NotifyCollectionChangedEventArgs>();
+        protected Subject<NotifyCollectionChangedEventArgs> CollectionChangedSubject
+        {
+            get
+            {
+                // Checks if the collection changed subject already exists, if not then it is lazily created and initialized
+                if (this.collectionChangedSubject == null)
+                {
+                    this.collectionChangedSubject = new Subject<NotifyCollectionChangedEventArgs>();
+                    this.CollectionChangedSubject.ObserveOnDispatcher().Subscribe(x =>
+                    {
+                        this.collectionChanged?.Invoke(this, x);
+                        this.propertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(this.Count)));
+                        this.propertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(this.IsEmpty)));
+                    });
+                }
+
+                // Returns the collection changed subject
+                return this.collectionChangedSubject;
+            }
+        }
 
         /// <summary>
-        /// Gets the internal collection on which all the operations are performed.
+        /// Gets or sets the internal collection on which all the operations are performed.
         /// </summary>
-        protected List<T> Collection { get; private set; }
+        protected List<T> Collection { get; set; } = new List<T>();
 
         #endregion
 
@@ -73,7 +71,7 @@ namespace System.Windows.Mvvm.Reactive
         }
 
         /// <summary>
-        /// Contains a subject, which fires before a new item is added to the collection.
+        /// Gets a subject, which fires before a new item is added to the collection.
         /// </summary>
         protected Subject<T> BeforeItemAddedSubject { get; private set; }
 
@@ -91,7 +89,7 @@ namespace System.Windows.Mvvm.Reactive
         }
 
         /// <summary>
-        /// Contains a subject, which fires after a new item is added to the collection.
+        /// Gets a subject, which fires after a new item is added to the collection.
         /// </summary>
         protected Subject<T> ItemAddedSubject { get; private set; }
 
@@ -109,7 +107,7 @@ namespace System.Windows.Mvvm.Reactive
         }
 
         /// <summary>
-        /// Contains a subject, which fires before an item is removed to the collection.
+        /// Gets a subject, which fires before an item is removed to the collection.
         /// </summary>
         protected Subject<T> BeforeItemRemovedSubject { get; private set; }
 
@@ -127,7 +125,7 @@ namespace System.Windows.Mvvm.Reactive
         }
 
         /// <summary>
-        /// Contains a subject, which fires after an item is removed to the collection.
+        /// Gets a subject, which fires after an item is removed to the collection.
         /// </summary>
         protected Subject<T> ItemRemovedSubject { get; private set; }
 
@@ -145,7 +143,7 @@ namespace System.Windows.Mvvm.Reactive
         }
 
         /// <summary>
-        /// Contains an observable, which fires when the count of the collection has changed.
+        /// Gets an observable, which fires when the count of the collection has changed.
         /// </summary>
         protected IObservable<int> CountChangedSubject { get; private set; }
 
