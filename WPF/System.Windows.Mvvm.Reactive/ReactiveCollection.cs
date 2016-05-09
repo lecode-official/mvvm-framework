@@ -24,14 +24,15 @@ namespace System.Windows.Mvvm.Reactive
         /// </summary>
         /// <param name="collection">The collection from which the <see cref="ReactiveCollection{T}"/> is to be constructed.</param>
         public ReactiveCollection(IEnumerable<T> collection)
-            : base(collection)
-        { }
+        {
+            this.Collection = collection.ToList();
+        }
 
         /// <summary>
         /// Initializes a new <see cref="ReactiveCollection{T}"/> instance.
         /// </summary>
         public ReactiveCollection()
-            : base()
+            : this(new List<T>())
         { }
 
         #endregion
