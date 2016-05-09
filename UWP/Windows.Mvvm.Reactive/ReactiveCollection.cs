@@ -5,10 +5,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Reactive.Subjects;
 
 #endregion
 
@@ -18,7 +16,7 @@ namespace Windows.Mvvm.Reactive
     /// Represents a collection where the changing of items can be observed.
     /// </summary>
     /// <typeparam name="T">The type of the items of the collection.</typeparam>
-    public class ReactiveCollection<T> : IReactiveCollection<T>, ICollection<T>, IList<T>
+    public class ReactiveCollection<T> : ReadOnlyReactiveCollection<T>, ICollection<T>, IList<T>, IList
     {
         #region Constructors
 
@@ -28,13 +26,7 @@ namespace Windows.Mvvm.Reactive
         /// <param name="collection">The collection from which the <see cref="ReactiveCollection{T}"/> is to be constructed.</param>
         public ReactiveCollection(IEnumerable<T> collection)
         {
-            this.collection = collection.ToList();
-            this.collectionChangedSubject.ObserveOnDispatcher().Subscribe(x =>
-            {
-                this.collectionChanged?.Invoke(this, x);
-                this.propertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(this.Count)));
-                this.propertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(this.IsEmpty)));
-            });
+            this.Collection = collection.ToList();
         }
 
         /// <summary>
@@ -46,225 +38,23 @@ namespace Windows.Mvvm.Reactive
 
         #endregion
 
-        #region Private Fields
-
-        /// <summary>
-        /// Contains the internal collection on which all the operations are performed.
-        /// </summary>
-        private List<T> collection;
-
-        /// <summary>
-        /// Contains a subject, which is fired, whenever the collection is changed.
-        /// </summary>
-        private Subject<NotifyCollectionChangedEventArgs> collectionChangedSubject = new Subject<NotifyCollectionChangedEventArgs>();
-
-        #endregion
-
-        #region Public Properties
-
-        /// <summary>
-        /// Gets a value that determines whether the collection is empty.
-        /// </summary>
-        public bool IsEmpty
-        {
-            get
-            {
-                return this.Count == 0;
-            }
-        }
-
-        /// <summary>
-        /// Contains a subject, which fires before a new item is added to the collection.
-        /// </summary>
-        private Subject<T> beforeItemAdded;
-
-        /// <summary>
-        /// Gets an observable, which fires before a new item is added to the collection.
-        /// </summary>
-        public IObservable<T> BeforeItemAdded
-        {
-            get
-            {
-                if (this.beforeItemAdded == null)
-                    this.beforeItemAdded = new Subject<T>();
-                return this.beforeItemAdded.AsObservable();
-            }
-        }
-
-        /// <summary>
-        /// Contains a subject, which fires after a new item is added to the collection.
-        /// </summary>
-        private Subject<T> itemAdded;
-
-        /// <summary>
-        /// Gets an observable, which fires after a new item is added to the collection.
-        /// </summary>
-        public IObservable<T> ItemAdded
-        {
-            get
-            {
-                if (this.itemAdded == null)
-                    this.itemAdded = new Subject<T>();
-                return this.itemAdded.AsObservable();
-            }
-        }
-
-        /// <summary>
-        /// Contains a subject, which fires before an item is removed to the collection.
-        /// </summary>
-        private Subject<T> beforeItemRemoved;
-
-        /// <summary>
-        /// Gets an observable, which fires before an item is removed to the collection.
-        /// </summary>
-        public IObservable<T> BeforeItemRemoved
-        {
-            get
-            {
-                if (this.beforeItemRemoved == null)
-                    this.beforeItemRemoved = new Subject<T>();
-                return this.beforeItemRemoved.AsObservable();
-            }
-        }
-
-        /// <summary>
-        /// Contains a subject, which fires after an item is removed to the collection.
-        /// </summary>
-        private Subject<T> itemRemoved;
-
-        /// <summary>
-        /// Gets an observable, which fires after an item is removed to the collection.
-        /// </summary>
-        public IObservable<T> ItemRemoved
-        {
-            get
-            {
-                if (this.itemRemoved == null)
-                    this.itemRemoved = new Subject<T>();
-                return this.itemRemoved.AsObservable();
-            }
-        }
-
-        /// <summary>
-        /// Contains an observable, which fires when the count of the collection has changed.
-        /// </summary>
-        private IObservable<int> countChanged;
-
-        /// <summary>
-        /// Gets an observable, which fires when the count of the collection has changed.
-        /// </summary>
-        public IObservable<int> CountChanged
-        {
-            get
-            {
-                if (this.countChanged == null)
-                    this.countChanged = this.collectionChangedSubject.Select(x => this.collection.Count).AsObservable();
-                return this.countChanged.AsObservable();
-            }
-        }
-
-        #endregion
-
         #region Public Methods
 
         /// <summary>
         /// Adds the items in the specified collection to the collection.
         /// </summary>
         /// <param name="collection">The collection whose items are to be added to the collection.</param>
-        public void AddRange(IEnumerable<T> collection)
-        {
-            foreach (T item in collection.ToList())
-            {
-                this.beforeItemAdded?.OnNext(item);
-                this.collection.Add(item);
-                this.itemAdded?.OnNext(item);
-            }
-            this.collectionChangedSubject.OnNext(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-        }
+        public new void AddRange(IEnumerable<T> collection) => base.AddRange(collection);
 
         /// <summary>
         /// Removes the items in the specified collection from the collection.
         /// </summary>
         /// <param name="collection">The collection that contains all the items that are to be removed from the collection.</param>
-        public void RemoveRange(IEnumerable<T> collection)
-        {
-            foreach (T item in collection.ToList())
-            {
-                int index = this.collection.IndexOf(item);
-                if (index == -1)
-                    continue;
-
-                this.beforeItemRemoved?.OnNext(item);
-                this.collection.Remove(item);
-                this.itemRemoved?.OnNext(item);
-            }
-            this.collectionChangedSubject.OnNext(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-        }
-
-        #endregion
-
-        #region INotifyCollectionChanged Implementation
-
-        /// <summary>
-        /// An event, which is raised when the collection has changed.
-        /// </summary>
-        private event NotifyCollectionChangedEventHandler collectionChanged;
-
-        /// <summary>
-        /// An event, which is raised when the collection has changed.
-        /// </summary>
-        event NotifyCollectionChangedEventHandler INotifyCollectionChanged.CollectionChanged
-        {
-            add
-            {
-                this.collectionChanged += value;
-            }
-
-            remove
-            {
-                this.collectionChanged -= value;
-            }
-        }
-
-        #endregion
-
-        #region INotifyPropertyChanged Implementation
-
-        /// <summary>
-        /// An event, which is raised when a property of the reactive collection has changed.
-        /// </summary>
-        private event PropertyChangedEventHandler propertyChanged;
-
-        /// <summary>
-        /// An event, which is raised when a property of the reactive collection has changed.
-        /// </summary>
-        event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
-        {
-            add
-            {
-                this.propertyChanged += value;
-            }
-
-            remove
-            {
-                this.propertyChanged -= value;
-            }
-        }
+        public new void RemoveRange(IEnumerable<T> collection) => base.AddRange(collection);
 
         #endregion
 
         #region ICollection Implementation
-
-        /// <summary>
-        /// Gets the count of items that are in the collection.
-        /// </summary>
-        public int Count
-        {
-            get
-            {
-                return this.collection.Count;
-            }
-        }
 
         /// <summary>
         /// Gets a value that determines whether the collection is read-only (<see cref="ReactiveCollection{T}"/> is never read-only).
@@ -276,108 +66,24 @@ namespace Windows.Mvvm.Reactive
                 return false;
             }
         }
-        
+
         /// <summary>
         /// Adds the specified item to the collection.
         /// </summary>
         /// <param name="item">The item that is to be added to the collection.</param>
-        public void Add(T item)
-        {
-            this.beforeItemAdded?.OnNext(item);
-            this.collection.Add(item);
-            this.itemAdded?.OnNext(item);
-            this.collectionChangedSubject.OnNext(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item, this.collection.IndexOf(item)));
-        }
+        public new void Add(T item) => base.Add(item);
 
         /// <summary>
         /// Removes all items from the collection.
         /// </summary>
-        public void Clear()
-        {
-            List<T> items = this.collection.ToList();
-
-            foreach(T item in items)
-                this.beforeItemRemoved?.OnNext(item);
-
-            this.collection.Clear();
-
-            foreach (T item in items)
-                this.itemRemoved?.OnNext(item);
-            
-            this.collectionChangedSubject.OnNext(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-        }
-
-        /// <summary>
-        /// Determines whether the specified item is in the collection.
-        /// </summary>
-        /// <param name="item">The item for which is to be determined whether it is in the collection.</param>
-        /// <returns>Returns <c>true</c> if the specified item is in the collection and <c>false</c> otherwise.</returns>
-        public bool Contains(T item) => this.collection.Contains(item);
-
-        /// <summary>
-        /// Copies the content of the collection to the specified array, beginning from the specified index.
-        /// </summary>
-        /// <param name="array">The array into which the content of the collection is to be copied.</param>
-        /// <param name="arrayIndex">The index at from which the copying is to be started.</param>
-        public void CopyTo(T[] array, int arrayIndex) => this.collection.CopyTo(array, arrayIndex);
+        public new void Clear() => base.Clear();
 
         /// <summary>
         /// Removes the specified item from the collection.
         /// </summary>
         /// <param name="item">The item that is to be removed from the collection.</param>
         /// <returns>Returns <c>true</c> if the item was removed from the collection and <c>false</c> otherwise.</returns>
-        public bool Remove(T item)
-        {
-            int index = this.collection.IndexOf(item);
-            if (index == -1)
-                return false;
-
-            this.beforeItemRemoved?.OnNext(item);
-            bool result = this.collection.Remove(item);
-            this.itemRemoved?.OnNext(item);
-            this.collectionChangedSubject.OnNext(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, item, index));
-            return result;
-        }
-
-        /// <summary>
-        /// Gets the count of items that are in the collection.
-        /// </summary>
-        int ICollection.Count
-        {
-            get
-            {
-                return (this.collection as ICollection).Count;
-            }
-        }
-
-        /// <summary>
-        /// Gets an object with which the access to the collection can be synchronized.
-        /// </summary>
-        object ICollection.SyncRoot
-        {
-            get
-            {
-                return (this.collection as ICollection).SyncRoot;
-            }
-        }
-
-        /// <summary>
-        /// Gets a value that determines whether the collection is synchronized (thread-safe).
-        /// </summary>
-        bool ICollection.IsSynchronized
-        {
-            get
-            {
-                return (this.collection as ICollection).IsSynchronized;
-            }
-        }
-
-        /// <summary>
-        /// Copies the content of the collection to the specified array, beginning from the specified index.
-        /// </summary>
-        /// <param name="array">The array into which the content of the collection is to be copied.</param>
-        /// <param name="index">The index at from which the copying is to be started.</param>
-        void ICollection.CopyTo(Array array, int index) => (this.collection as ICollection).CopyTo(array, index);
+        public new bool Remove(T item) => base.Remove(item);
 
         #endregion
 
@@ -389,32 +95,18 @@ namespace Windows.Mvvm.Reactive
         /// <param name="index">The index of the item that is to be retrieved or set.</param>
         /// <exception cref="IndexOutOfRangeException">If the specified index is out of range, then an <see cref="IndexOutOfRangeException"/> exception is thrown.</exception>
         /// <returns>Returns the item at the specified index.</returns>
-        public T this[int index]
+        public new T this[int index]
         {
             get
             {
-                return this.collection[index];
+                return base[index];
             }
 
             set
             {
-                T oldItem = this.collection[index];
-
-                this.beforeItemRemoved?.OnNext(oldItem);
-                this.beforeItemAdded?.OnNext(value);
-                this.collection[index] = value;
-                this.itemRemoved?.OnNext(oldItem);
-                this.itemAdded?.OnNext(value);
-                this.collectionChangedSubject.OnNext(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, value, oldItem, index));
+                base[index] = value;
             }
         }
-
-        /// <summary>
-        /// Determines the index of the specified item.
-        /// </summary>
-        /// <param name="item">The item for which the index is to be determined.</param>
-        /// <returns>Returns the index of the specified item or -1 if the specified item is not in the collection.</returns>
-        public int IndexOf(T item) => this.collection.IndexOf(item);
 
         /// <summary>
         /// Inserts the specified item into the collection at the specified index.
@@ -422,27 +114,14 @@ namespace Windows.Mvvm.Reactive
         /// <param name="index">The index at which the specified item is to be inserted.</param>
         /// <param name="item">The item that is to be inserted.</param>
         /// <exception cref="ArgumentOutOfRangeException">If the specified index is out of range, then an <see cref="ArgumentOutOfRangeException"/> exception is thrown.</exception>
-        public void Insert(int index, T item)
-        {
-            this.beforeItemAdded?.OnNext(item);
-            this.collection.Insert(index, item);
-            this.itemAdded?.OnNext(item);
-            this.collectionChangedSubject.OnNext(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item, index));
-        }
+        public new void Insert(int index, T item) => base.Insert(index, item);
 
         /// <summary>
         /// Removes the item at the specified index.
         /// </summary>
         /// <param name="index">The index of the item that is to be removed.</param>
         /// <exception cref="ArgumentOutOfRangeException">If the specified index is out of range, then an <see cref="ArgumentOutOfRangeException"/> exception is thrown.</exception>
-        public void RemoveAt(int index)
-        {
-            T item = this.collection[index];
-            this.beforeItemRemoved?.OnNext(item);
-            this.collection.RemoveAt(index);
-            this.itemRemoved?.OnNext(item);
-            this.collectionChangedSubject.OnNext(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, item, index));
-        }
+        public new void RemoveAt(int index) => base.RemoveAt(index);
 
         /// <summary>
         /// Gets a value that determines whether the collection is read-only (<see cref="ReactiveCollection{T}"/> is never read-only).
@@ -476,20 +155,20 @@ namespace Windows.Mvvm.Reactive
         {
             get
             {
-                return this.collection[index];
+                return this.Collection[index];
             }
 
             set
             {
-                T oldItem = this.collection[index];
+                T oldItem = this.Collection[index];
                 T newItem = (T)value;
 
-                this.beforeItemRemoved?.OnNext(oldItem);
-                this.beforeItemAdded?.OnNext(newItem);
-                this.collection[index] = newItem;
-                this.itemRemoved?.OnNext(oldItem);
-                this.itemAdded?.OnNext(newItem);
-                this.collectionChangedSubject.OnNext(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, newItem, oldItem, index));
+                this.BeforeItemRemovedSubject?.OnNext(oldItem);
+                this.BeforeItemAddedSubject?.OnNext(newItem);
+                this.Collection[index] = newItem;
+                this.ItemRemovedSubject?.OnNext(oldItem);
+                this.ItemAddedSubject?.OnNext(newItem);
+                this.CollectionChangedSubject.OnNext(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, newItem, oldItem, index));
             }
         }
 
@@ -501,12 +180,12 @@ namespace Windows.Mvvm.Reactive
         {
             T item = (T)value;
 
-            this.beforeItemAdded?.OnNext(item);
-            this.collection.Add(item);
-            this.itemAdded?.OnNext(item);
-            this.collectionChangedSubject.OnNext(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item, this.collection.IndexOf(item)));
+            this.BeforeItemAddedSubject?.OnNext(item);
+            this.Collection.Add(item);
+            this.ItemAddedSubject?.OnNext(item);
+            this.CollectionChangedSubject.OnNext(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item, this.Collection.IndexOf(item)));
 
-            return this.collection.IndexOf(item);
+            return this.Collection.IndexOf(item);
         }
 
         /// <summary>
@@ -514,24 +193,24 @@ namespace Windows.Mvvm.Reactive
         /// </summary>
         /// <param name="value">The item for which is to be determined whether it is in the collection.</param>
         /// <returns>Returns <c>true</c> if the specified item is in the collection and <c>false</c> otherwise.</returns>
-        bool IList.Contains(object value) => (this.collection as IList).Contains(value);
+        bool IList.Contains(object value) => (this.Collection as IList).Contains(value);
 
         /// <summary>
         /// Removes all items from the collection.
         /// </summary>
         void IList.Clear()
         {
-            List<T> items = this.collection.ToList();
+            List<T> items = this.Collection.ToList();
 
             foreach (T item in items)
-                this.beforeItemRemoved?.OnNext(item);
+                this.BeforeItemRemovedSubject?.OnNext(item);
 
-            this.collection.Clear();
+            this.Collection.Clear();
 
             foreach (T item in items)
-                this.itemRemoved?.OnNext(item);
+                this.ItemRemovedSubject?.OnNext(item);
 
-            this.collectionChangedSubject.OnNext(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            this.CollectionChangedSubject.OnNext(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
         /// <summary>
@@ -539,7 +218,7 @@ namespace Windows.Mvvm.Reactive
         /// </summary>
         /// <param name="value">The item for which the index is to be determined.</param>
         /// <returns>Returns the index of the specified item or -1 if the specified item is not in the collection.</returns>
-        int IList.IndexOf(object value) =>  (this.collection as IList).IndexOf(value);
+        int IList.IndexOf(object value) =>  (this.Collection as IList).IndexOf(value);
 
         /// <summary>
         /// Inserts the specified item into the collection at the specified index.
@@ -551,10 +230,10 @@ namespace Windows.Mvvm.Reactive
         {
             T item = (T)value;
 
-            this.beforeItemAdded?.OnNext(item);
-            this.collection.Insert(index, item);
-            this.itemAdded?.OnNext(item);
-            this.collectionChangedSubject.OnNext(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item, index));
+            this.BeforeItemAddedSubject?.OnNext(item);
+            this.Collection.Insert(index, item);
+            this.ItemAddedSubject?.OnNext(item);
+            this.CollectionChangedSubject.OnNext(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item, index));
         }
 
         /// <summary>
@@ -564,14 +243,14 @@ namespace Windows.Mvvm.Reactive
         void IList.Remove(object value)
         {
             T item = (T)value;
-            int index = this.collection.IndexOf(item);
+            int index = this.Collection.IndexOf(item);
             if (index == -1)
                 return;
 
-            this.beforeItemRemoved?.OnNext(item);
-            this.collection.Remove(item);
-            this.itemRemoved?.OnNext(item);
-            this.collectionChangedSubject.OnNext(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, item, index));
+            this.BeforeItemRemovedSubject?.OnNext(item);
+            this.Collection.Remove(item);
+            this.ItemRemovedSubject?.OnNext(item);
+            this.CollectionChangedSubject.OnNext(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, item, index));
         }
 
         /// <summary>
@@ -581,28 +260,12 @@ namespace Windows.Mvvm.Reactive
         /// <exception cref="ArgumentOutOfRangeException">If the specified index is out of range, then an <see cref="ArgumentOutOfRangeException"/> exception is thrown.</exception>
         void IList.RemoveAt(int index)
         {
-            T item = this.collection[index];
-            this.beforeItemRemoved?.OnNext(item);
-            this.collection.RemoveAt(index);
-            this.itemRemoved?.OnNext(item);
-            this.collectionChangedSubject.OnNext(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, item, index));
+            T item = this.Collection[index];
+            this.BeforeItemRemovedSubject?.OnNext(item);
+            this.Collection.RemoveAt(index);
+            this.ItemRemovedSubject?.OnNext(item);
+            this.CollectionChangedSubject.OnNext(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, item, index));
         }
-
-        #endregion
-
-        #region IEnumerable Implementation
-
-        /// <summary>
-        /// Retrieves an enumerator for the collection.
-        /// </summary>
-        /// <returns>Returns an enumerator for the collection.</returns>
-        public IEnumerator<T> GetEnumerator() => this.collection.GetEnumerator();
-
-        /// <summary>
-        /// Retrieves an enumerator for the collection.
-        /// </summary>
-        /// <returns>Returns an enumerator for the collection.</returns>
-        IEnumerator IEnumerable.GetEnumerator() => this.collection.GetEnumerator();
 
         #endregion
     }
