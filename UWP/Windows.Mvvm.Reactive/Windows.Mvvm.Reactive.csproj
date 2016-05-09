@@ -116,6 +116,7 @@
     <Compile Include="ReactiveCommandOfTParameter.cs" />
     <Compile Include="ReactiveCommandOfTParameterTResult.cs" />
     <Compile Include="ReactiveProperty.cs" />
+    <Compile Include="ReadOnlyReactiveCollection.cs" />
     <EmbeddedResource Include="Properties\Windows.Mvvm.Reactive.rd.xml" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
