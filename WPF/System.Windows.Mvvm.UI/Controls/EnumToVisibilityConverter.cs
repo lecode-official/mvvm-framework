@@ -2,6 +2,7 @@
 #region Using Directives
 
 using System.Globalization;
+using System.Linq;
 using System.Windows.Data;
 
 #endregion
@@ -55,17 +56,24 @@ namespace System.Windows.Controls
         /// <returns>Returns the enum value of the parameter.</returns>
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            // Checks if the value provided is null, if so then tells the converter that the value is unset
-            if (value == null)
-                return DependencyProperty.UnsetValue;
+            // Determines whether the target type is nullable
+            bool isNullable = targetType.Name == typeof(Nullable<>).Name;
+            Type enumerationType = isNullable ? targetType.GenericTypeArguments.FirstOrDefault() : targetType;
 
-            // Gets the parameter and check if it is null, if so then tells the converter, that the value is unset
+            // Checks if the value provided is null, if so then the default value for the target type is returned
+            if (value == null)
+                return isNullable ? null : Enum.GetValues(enumerationType).GetValue(0);
+
+            // Gets the parameter and check if it is null, if so then the default value for the target type is returned
             string enumValueName = parameter as string;
             if (enumValueName == null)
-                return DependencyProperty.UnsetValue;
+                return isNullable ? null : Enum.GetValues(enumerationType).GetValue(0);
 
-            // Then the parameter is converted to the enum type and returned
-            return (Visibility)value == Visibility.Visible ? Enum.Parse(targetType, enumValueName) : DependencyProperty.UnsetValue;
+            // Converts the parameter to its target value
+            if (value is Visibility && (Visibility)value == Visibility.Visible)
+                return Enum.Parse(targetType, enumValueName);
+            else
+                return isNullable ? null : Enum.GetValues(enumerationType).GetValue(0);
         }
 
         #endregion

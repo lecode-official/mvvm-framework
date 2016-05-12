@@ -41,7 +41,7 @@ namespace System.Windows.Controls
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value == null)
-                return DependencyProperty.UnsetValue;
+                return targetType == typeof(Nullable<bool>) ? null : (Nullable<bool>)true;
             return (bool)value ? false : true;
         }
 
