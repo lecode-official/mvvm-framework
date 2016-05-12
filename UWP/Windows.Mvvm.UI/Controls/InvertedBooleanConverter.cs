@@ -42,7 +42,7 @@ namespace Windows.Mvvm.UI.Controls
         public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
             if (value == null)
-                return DependencyProperty.UnsetValue;
+                return targetType == typeof(Nullable<bool>) ? null : (Nullable<bool>)true;
             return (bool)value ? false : true;
         }
 

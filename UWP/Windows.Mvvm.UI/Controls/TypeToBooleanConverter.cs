@@ -30,12 +30,12 @@ namespace Windows.Mvvm.UI.Controls
             if (value == null)
                 return DependencyProperty.UnsetValue;
 
-            // Gets the value as type and check if it is null, if so then tells the converter, that the type of the object is used
+            // Gets the value as type and check if it is null, if so then the type of the object is used
             Type typeValue = value as Type;
             if (typeValue == null)
                 typeValue = value.GetType();
 
-            // Gets the parameter and check if it is null, if so then tells the converter, that the value is unset
+            // Gets the parameter and checks if it is null, if so then tells the converter, that the value is unset
             Type parameterValue = parameter as Type;
             if (parameterValue == null)
                 return DependencyProperty.UnsetValue;
@@ -54,17 +54,17 @@ namespace Windows.Mvvm.UI.Controls
         /// <returns>Returns the type of the parameter.</returns>
         public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
-            // Checks if the value provided is null, if so then tell the converter that the value is unset
+            // Checks if the value provided is null, if so then null is returned
             if (value == null)
-                return DependencyProperty.UnsetValue;
+                return null;
 
-            // Gets the parameter and check if it is null, if so then tells the converter, that the value is unset
+            // Gets the parameter and check if it is null, if so then null is returned
             Type parameterValue = parameter as Type;
             if (parameterValue == null)
-                return DependencyProperty.UnsetValue;
+                return null;
 
             // Then the parameter is converted to the type and returned
-            return (bool)value ? parameterValue : DependencyProperty.UnsetValue;
+            return (bool)value ? parameterValue : null;
         }
 
         #endregion

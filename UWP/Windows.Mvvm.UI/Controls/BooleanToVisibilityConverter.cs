@@ -10,9 +10,9 @@ using Windows.UI.Xaml.Data;
 namespace Windows.Mvvm.UI.Controls
 {
     /// <summary>
-    /// Convertes boolean values into visibility values and vice versa. Unlike the standard boolean to visibility converter it does not return <c>DependencyProperty.UnsetValue</c>, when the input value is <c>null</c>, but it returns <c>Visibility.Collapsed</c>. This is
-    /// very helpful, when the binding is asynchronous, because in an asynchronous binding, the value can be undetermined (i.e. <c>null</c>) for a short amount of time, which results in the control to be displayed for a short period of time, even if the binding value
-    /// eventually evaluates to <c>false</c>.
+    /// Convertes boolean values into visibility values and vice versa. Unlike the standard boolean to visibility converter it does not return <c>DependencyProperty.UnsetValue</c>, when the input value is <c>null</c>, but it returns
+    /// <c>Visibility.Collapsed</c>. This is very helpful, when the binding is asynchronous, because in an asynchronous binding, the value can be undetermined (i.e. <c>null</c>) for a short amount of time, which results in the control to
+    /// be displayed for a short period of time, even if the binding value eventually evaluates to <c>false</c>.
     /// </summary>
     public class BooleanToVisibilityConverter : IValueConverter
     {
@@ -41,7 +41,14 @@ namespace Windows.Mvvm.UI.Controls
         /// <param name="parameter">A parameter for the conversion. Not used in this converter, so it should always be null.</param>
         /// <param name="language">The name of the language, so that parsing can be adjusted to cultural conventions.</param>
         /// <returns>Returns false if the value is <see cref="Visibility.Visible"/> and true if the value is <see cref="Visibility.Collapsed"/>.</returns>
-        public object ConvertBack(object value, Type targetType, object parameter, string language) => (Visibility)value == Visibility.Visible ? true : false;
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            bool isNullable = targetType == typeof(Nullable<bool>);
+            if (value is Visibility && (Visibility)value == Visibility.Visible)
+                return true;
+            else
+                return isNullable ? (Nullable<bool>)null : false;
+        }
         
         #endregion
     }
