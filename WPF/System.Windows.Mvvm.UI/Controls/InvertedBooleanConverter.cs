@@ -38,12 +38,7 @@ namespace System.Windows.Controls
         /// <param name="parameter">A parameter for the conversion. Not used in this converter, so it should always be null.</param>
         /// <param name="culture">The culture information of the current culture, so that parsing can be adjusted to cultural conventions.</param>
         /// <returns>Returns true if the value is <see cref="Visibility.Visible"/> and false if the value is <see cref="Visibility.Collapsed"/>.</returns>
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (value == null)
-                return targetType == typeof(Nullable<bool>) ? null : (Nullable<bool>)true;
-            return (bool)value ? false : true;
-        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => (bool)value ? false : true;
 
         #endregion
     }

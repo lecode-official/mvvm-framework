@@ -39,12 +39,7 @@ namespace Windows.Mvvm.UI.Controls
         /// <param name="parameter">A parameter for the conversion. Not used in this converter, so it should always be null.</param>
         /// <param name="language">The name of the language, so that parsing can be adjusted to cultural conventions.</param>
         /// <returns>Returns <c>false</c> if the value is <c>true</c> and <c>true</c> if the value is <c>false</c>.</returns>
-        public object ConvertBack(object value, Type targetType, object parameter, string language)
-        {
-            if (value == null)
-                return targetType == typeof(Nullable<bool>) ? null : (Nullable<bool>)true;
-            return (bool)value ? false : true;
-        }
+        public object ConvertBack(object value, Type targetType, object parameter, string language) => (bool)value ? false : true;
 
         #endregion
     }
