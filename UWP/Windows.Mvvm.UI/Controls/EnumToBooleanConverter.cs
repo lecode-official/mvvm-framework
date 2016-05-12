@@ -60,21 +60,17 @@ namespace Windows.Mvvm.UI.Controls
             // Determines whether the target type is nullable
             bool isNullable = targetType.Name == typeof(Nullable<>).Name;
             Type enumerationType = isNullable ? targetType.GenericTypeArguments.FirstOrDefault() : targetType;
-
-            // Checks if the value provided is null, if so then the default value for the target type is returned
-            if (value == null)
-                return isNullable ? null : Enum.GetValues(enumerationType).GetValue(0);
             
             // Gets the parameter and check if it is null, if so then the default value for the target type is returned
             string enumValueName = parameter as string;
             if (enumValueName == null)
-                return isNullable ? null : Enum.GetValues(enumerationType).GetValue(0);
+                throw new ArgumentException("The parameter was not set.");
 
             // Converts the parameter to its target value
-            if (value is bool && (bool)value)
-                return Enum.Parse(targetType, enumValueName);
+            if ((bool)value)
+                return Enum.Parse(enumerationType, enumValueName);
             else
-                return isNullable ? null : Enum.GetValues(enumerationType).GetValue(0);
+                return DependencyProperty.UnsetValue;
         }
 
         #endregion

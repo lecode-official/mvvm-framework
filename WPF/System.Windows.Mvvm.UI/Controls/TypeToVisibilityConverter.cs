@@ -53,17 +53,7 @@ namespace System.Windows.Controls
         /// <returns>Returns the type of the parameter.</returns>
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            // Checks if the value provided is null, if so then null is returned
-            if (value == null)
-                return null;
-
-            // Gets the parameter and check if it is null, if so then null is returned
-            Type parameterValue = parameter as Type;
-            if (parameterValue == null)
-                return null;
-
-            // Then the parameter is converted to the type and returned
-            return (Visibility)value == Visibility.Visible ? parameterValue : null;
+            throw new NotImplementedException();
         }
 
         #endregion

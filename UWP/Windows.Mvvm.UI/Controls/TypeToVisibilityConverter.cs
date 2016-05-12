@@ -36,12 +36,12 @@ namespace Windows.Mvvm.UI.Controls
                 typeValue = value.GetType();
 
             // Gets the parameter and check if it is null, if so then tells the converter, that the value is unset
-            Type parameterValue = parameter as Type;
+            string parameterValue = parameter as string;
             if (parameterValue == null)
                 return DependencyProperty.UnsetValue;
 
             // If the parameter equals the value that is to be converted, then returns visible, otherwise hidden is returned
-            return typeValue == parameterValue ? Visibility.Visible : Visibility.Collapsed;
+            return typeValue.Name == parameterValue ? Visibility.Visible : Visibility.Collapsed;
         }
 
         /// <summary>
@@ -54,17 +54,7 @@ namespace Windows.Mvvm.UI.Controls
         /// <returns>Returns the type of the parameter.</returns>
         public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
-            // Checks if the value provided is null, if so then null is returned
-            if (value == null)
-                return null;
-
-            // Gets the parameter and check if it is null, if so then null is returned
-            Type parameterValue = parameter as Type;
-            if (parameterValue == null)
-                return null;
-
-            // Then the parameter is converted to the type and returned
-            return (Visibility)value == Visibility.Visible ? parameterValue : null;
+            throw new NotImplementedException();
         }
 
         #endregion
