@@ -43,7 +43,7 @@
     <ProjectUrl>https://github.com/lecode-official/mvvm-framework</ProjectUrl>
     <LicenseUrl>https://raw.githubusercontent.com/lecode-official/mvvm-framework/master/LICENSE</LicenseUrl>
     <Copyright>Copyright 2016 © David Neumann &amp; Lukas Rögner</Copyright>
-    <Tags>MVVM, WPF, Framework, ReactiveUI</Tags>
+    <Tags>MVVM, WPF, Framework, Reactive Extensions</Tags>
     <GenerateSymbolPackage>true</GenerateSymbolPackage>
     <IconUrl>https://raw.githubusercontent.com/lecode-official/mvvm-framework/master/Documentation/Images/Logo128x128.png</IconUrl>
   </PropertyGroup>

@@ -29,7 +29,7 @@
     <ProjectUrl>https://github.com/lecode-official/mvvm-framework</ProjectUrl>
     <LicenseUrl>https://raw.githubusercontent.com/lecode-official/mvvm-framework/master/LICENSE</LicenseUrl>
     <Copyright>Copyright 2016 © David Neumann &amp; Lukas Rögner</Copyright>
-    <Tags>MVVM, UWP, WinRT, Windows 10, Windows 10 Mobile, Framework, ReactiveUI</Tags>
+    <Tags>MVVM, UWP, WinRT, Windows 10, Windows 10 Mobile, Framework, Reactive Extensions</Tags>
     <IconUrl>https://raw.githubusercontent.com/lecode-official/mvvm-framework/master/Documentation/Images/Logo128x128.png</IconUrl>
   </PropertyGroup>
   <ItemGroup>
