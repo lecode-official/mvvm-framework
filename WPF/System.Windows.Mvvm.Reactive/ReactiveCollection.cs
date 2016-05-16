@@ -49,7 +49,7 @@ namespace System.Windows.Mvvm.Reactive
         /// Removes the items in the specified collection from the collection.
         /// </summary>
         /// <param name="collection">The collection that contains all the items that are to be removed from the collection.</param>
-        public new void RemoveRange(IEnumerable<T> collection) => base.AddRange(collection);
+        public new void RemoveRange(IEnumerable<T> collection) => base.RemoveRange(collection);
 
         #endregion
         
