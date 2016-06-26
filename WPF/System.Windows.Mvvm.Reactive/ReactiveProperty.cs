@@ -25,13 +25,13 @@ namespace System.Windows.Mvvm.Reactive
         /// </summary>
         /// <param name="value">The initial value of the reactive property.</param>
         /// <param name="onlyRaiseIfChanged">A value that determines if the <see cref="Changing"/> and <see cref="Changed"/> observables are only raised if the value has actually changed.</param>
-        /// <param name="validate">An observable, which determines whether the current value of the <see cref="ReactiveProperty{T}"/> has a validation error or not.</param>
-        public ReactiveProperty(T value, bool onlyRaiseIfChanged, IObservable<ValidationResult> validate)
+        /// <param name="validate">A delegate, which determines whether the current value of the <see cref="ReactiveProperty{T}"/> has a validation error or not.</param>
+        public ReactiveProperty(T value, bool onlyRaiseIfChanged, Func<ReactiveProperty<T>, IObservable<ValidationResult>> validate)
         {
             // Stores the parameters for later use
             this.Value = value;
             this.OnlyRaiseIfChanged = onlyRaiseIfChanged;
-            this.Validate = Observable.CombineLatest(validate ?? Observable.Return(new ValidationResult(false)), Observable.Return(new ValidationResult(false)), (firstResult, secondResult) => firstResult.Errors.Any() || secondResult.Errors.Any() ? new ValidationResult(firstResult.Errors.Union(secondResult.Errors)) : new ValidationResult(firstResult.HasErrors || secondResult.HasErrors));
+            this.Validate = Observable.CombineLatest(validate(this) == null ? Observable.Return(new ValidationResult(false)) : validate(this), Observable.Return(new ValidationResult(false)), (firstResult, secondResult) => firstResult.Errors.Any() || secondResult.Errors.Any() ? new ValidationResult(firstResult.Errors.Union(secondResult.Errors)) : new ValidationResult(firstResult.HasErrors || secondResult.HasErrors));
 
             // Subscribes to the Changed observable and fires the PropertyChanged event if the Changed observable has fired
             this.Changed.ObserveOnDispatcher().Subscribe(x =>
@@ -55,8 +55,18 @@ namespace System.Windows.Mvvm.Reactive
         /// </summary>
         /// <param name="value">The initial value of the reactive property.</param>
         /// <param name="onlyRaiseIfChanged">A value that determines if the <see cref="Changing"/> and <see cref="Changed"/> observables are only raised if the value has actually changed.</param>
+        /// <param name="validate">A delegate, which determines whether the current value of the <see cref="ReactiveProperty{T}"/> has a validation error or not.</param>
+        public ReactiveProperty(T value, bool onlyRaiseIfChanged, IObservable<ValidationResult> validate)
+            : this(value, onlyRaiseIfChanged, self => validate)
+        { }
+        
+        /// <summary>
+        /// Initializes a new <see cref="ReactiveProperty{T}"/> instance.
+        /// </summary>
+        /// <param name="value">The initial value of the reactive property.</param>
+        /// <param name="onlyRaiseIfChanged">A value that determines if the <see cref="Changing"/> and <see cref="Changed"/> observables are only raised if the value has actually changed.</param>
         public ReactiveProperty(T value, bool onlyRaiseIfChanged)
-            : this(value, onlyRaiseIfChanged, null)
+            : this(value, onlyRaiseIfChanged, self => null)
         { }
 
         /// <summary>
@@ -72,8 +82,25 @@ namespace System.Windows.Mvvm.Reactive
         /// </summary>
         /// <param name="value">The initial value of the reactive property.</param>
         /// <param name="validate">An observable, which determines whether the current value of the <see cref="ReactiveProperty{T}"/> has a validation error or not.</param>
-        public ReactiveProperty(T value, IObservable<ValidationResult> validate)
+        public ReactiveProperty(T value, Func<ReactiveProperty<T>, IObservable<ValidationResult>> validate)
             : this(value, true, validate)
+        { }
+
+        /// <summary>
+        /// Initializes a new <see cref="ReactiveProperty{T}"/> instance.
+        /// </summary>
+        /// <param name="value">The initial value of the reactive property.</param>
+        /// <param name="validate">A delegate, which determines whether the current value of the <see cref="ReactiveProperty{T}"/> has a validation error or not.</param>
+        public ReactiveProperty(T value, IObservable<ValidationResult> validate)
+            : this(value, true, self => validate)
+        { }
+
+        /// <summary>
+        /// Initializes a new <see cref="ReactiveProperty{T}"/> instance.
+        /// </summary>
+        /// <param name="validate">An observable, which determines whether the current value of the <see cref="ReactiveProperty{T}"/> has a validation error or not.</param>
+        public ReactiveProperty(Func<ReactiveProperty<T>, IObservable<ValidationResult>> validate)
+            : this(default(T), validate)
         { }
 
         /// <summary>
@@ -81,7 +108,7 @@ namespace System.Windows.Mvvm.Reactive
         /// </summary>
         /// <param name="validate">An observable, which determines whether the current value of the <see cref="ReactiveProperty{T}"/> has a validation error or not.</param>
         public ReactiveProperty(IObservable<ValidationResult> validate)
-            : this(default(T), validate)
+            : this(default(T), self => validate)
         { }
 
         /// <summary>
