@@ -3,6 +3,7 @@
 
 using MvvmFramework.Samples.Uwp.Repositories;
 using System;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Windows.Mvvm.Reactive;
 using Windows.Mvvm.Services.Application;
@@ -66,12 +67,12 @@ namespace MvvmFramework.Samples.Uwp.ViewModels
         /// <summary>
         /// Gets the title property of the new todo list item.
         /// </summary>
-        public ReactiveProperty<string> Title { get; } = new ReactiveProperty<string>();
+        public ReactiveProperty<string> Title { get; } = new ReactiveProperty<string>(self => self.Select(value => new ValidationResult(string.IsNullOrWhiteSpace(value) ? "Please specify a title." : null)));
 
         /// <summary>
         /// Gets the description property of the new todo list item.
         /// </summary>
-        public ReactiveProperty<string> Description { get; } = new ReactiveProperty<string>();
+        public ReactiveProperty<string> Description { get; } = new ReactiveProperty<string>(self => self.Select(value => new ValidationResult(string.IsNullOrWhiteSpace(value) ? "Please describe the todo item." : null)));
 
         /// <summary>
         /// Gets the command, which cancels the creation dialog and returns to the previous view.
@@ -119,7 +120,7 @@ namespace MvvmFramework.Samples.Uwp.ViewModels
 
                 // Navigates the user back to the main view
                 await this.navigationService.NavigateBackAsync();
-            });
+            }, Observable.CombineLatest(this.Title.IsValidChanged, this.Description.IsValidChanged, (first, second) => first && second));
 
             // Initializes the command, which shuts down the application
             this.ShutdownApplicationCommand = new ReactiveCommand(() =>

@@ -25,10 +25,10 @@
         <TextBlock FontSize="18" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0">Create new todo list item</TextBlock>
 
         <TextBlock Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center">Title</TextBlock>
-        <TextBox Grid.Column="1" Grid.Row="1" Margin="2" Text="{Binding Path=Title.Value, Mode=TwoWay}"></TextBox>
+        <TextBox Grid.Column="1" Grid.Row="1" Margin="2" Text="{Binding Path=Title.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
 
         <TextBlock Grid.Column="0" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center">Description</TextBlock>
-        <TextBox Grid.Column="1" Grid.Row="2" Margin="2" Text="{Binding Path=Description.Value, Mode=TwoWay}"></TextBox>
+        <TextBox Grid.Column="1" Grid.Row="2" Margin="2" Text="{Binding Path=Description.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
 
         <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4" HorizontalAlignment="Right">
             <Button Command="{Binding Path=CancelCommand}" Padding="5" Margin="10">Cancel</Button>

@@ -1,6 +1,8 @@
 ﻿
 #region Using Directives
 
+using System;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Mvvm.Reactive;
 using System.Windows.Mvvm.Sample.Repositories;
@@ -57,12 +59,12 @@ namespace System.Windows.Mvvm.Sample.ViewModels
         /// <summary>
         /// Gets the title property of the new todo list item.
         /// </summary>
-        public ReactiveProperty<string> Title { get; } = new ReactiveProperty<string>();
+        public ReactiveProperty<string> Title { get; } = new ReactiveProperty<string>(self => self.Select(value => new ValidationResult(string.IsNullOrWhiteSpace(value) ? "Please specify a title." : null)));
 
         /// <summary>
         /// Gets the description property of the new todo list item.
         /// </summary>
-        public ReactiveProperty<string> Description { get; } = new ReactiveProperty<string>();
+        public ReactiveProperty<string> Description { get; } = new ReactiveProperty<string>(self => self.Select(value => new ValidationResult(string.IsNullOrWhiteSpace(value) ? "Please describe the todo item." : null)));
 
         /// <summary>
         /// Gets the command, which cancels the creation dialog and returns to the previous view.
@@ -98,7 +100,7 @@ namespace System.Windows.Mvvm.Sample.ViewModels
 
                 // Navigates the user back to the main view
                 await this.navigationService.NavigateBackAsync();
-            });
+            }, Observable.CombineLatest(this.Title.IsValidChanged, this.Description.IsValidChanged, (first, second) => first && second));
 
             // Since no asynchronous operation was performed, an empty task is returned
             return Task.FromResult(0);
