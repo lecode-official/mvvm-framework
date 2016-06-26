@@ -65,6 +65,33 @@ namespace System.Windows.Mvvm.Reactive
             : this(execute, null, true)
         { }
 
+        /// <summary>
+        /// Initializes a new <see cref="ReactiveCommand{TParameter, TResult}"/> instance.
+        /// </summary>
+        /// <param name="execute">The delegate that is to be executed when the command is being executed.</param>
+        /// <param name="canExecute">An observable, which determines whether the command can be executed or not. If <c>null</c> is specified, then the constructor defaults to the <see cref="IsExecuting"/> observable.</param>
+        /// <param name="blockOnExecution">Determines whether can execute always returns false while the command is being executed.</param>
+        public ReactiveCommand(Func<TParameter, TResult> execute, IObservable<bool> canExecute, bool blockOnExecution)
+            : this(parameter => Task.FromResult(execute(parameter)), canExecute, blockOnExecution)
+        { }
+
+        /// <summary>
+        /// Initializes a new <see cref="ReactiveCommand{TParameter, TResult}"/> instance.
+        /// </summary>
+        /// <param name="execute">The delegate that is to be executed when the command is being executed.</param>
+        /// <param name="canExecute">An observable, which determines whether the command can be executed or not. If <c>null</c> is specified, then the constructor defaults to the <see cref="IsExecuting"/> observable.</param>
+        public ReactiveCommand(Func<TParameter, TResult> execute, IObservable<bool> canExecute)
+            : this(parameter => Task.FromResult(execute(parameter)), canExecute, true)
+        { }
+
+        /// <summary>
+        /// Initializes a new <see cref="ReactiveCommand{TParameter, TResult}"/> instance.
+        /// </summary>
+        /// <param name="execute">The delegate that is to be executed when the command is being executed.</param>
+        public ReactiveCommand(Func<TParameter, TResult> execute)
+            : this(parameter => Task.FromResult(execute(parameter)), null, true)
+        { }
+
         #endregion
 
         #region Private Fields
