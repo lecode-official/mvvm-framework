@@ -130,6 +130,6 @@
     <value>The view model for the window could not be instantiated.</value>
   </data>
   <data name="WrongViewModelTypeExceptionMessage" xml:space="preserve">
-    <value>The type of the window view model must be a sub-class of ViewModelBase.</value>
+    <value>The type of the window view model must be an implementation of IViewModel.</value>
   </data>
 </root>
