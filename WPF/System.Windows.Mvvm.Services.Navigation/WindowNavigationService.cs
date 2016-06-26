@@ -297,9 +297,10 @@ namespace System.Windows.Mvvm.Services.Navigation
             // Sets the window as the new main window, if the user requested us to do so
             if (Application.Current != null)
             {
-                if (isMainWindow)
+                // The main window has to be set either if it is explicitely requested by the user of if the created window is the first/only one
+                if (isMainWindow || this.navigationServices.Count == 1)
                     Application.Current.MainWindow = result.NavigationService.Window;
-                else if (Application.Current.MainWindow != null)
+                else if (Application.Current.MainWindow != null && Application.Current.MainWindow != result.NavigationService.Window)
                     result.NavigationService.Window.Owner = Application.Current.MainWindow;
             }
 
