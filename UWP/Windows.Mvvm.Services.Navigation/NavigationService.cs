@@ -244,7 +244,7 @@ namespace Windows.Mvvm.Services.Navigation
 
                 // Checks whether the view model implements the IViewModel interface
                 if (viewModel == null)
-                    throw new InvalidOperationException("The view model type is incorrect. View models must implement the IViewModel interface.");
+                    throw new InvalidOperationException("The type of the view model must be an implementation of IViewModel.");
             }
 
             // Calls the activate event and then the navigate event of the view model
