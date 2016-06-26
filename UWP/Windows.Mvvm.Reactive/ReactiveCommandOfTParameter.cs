@@ -56,6 +56,45 @@ namespace Windows.Mvvm.Reactive
             })
         { }
 
+        /// <summary>
+        /// Initializes a new <see cref="ReactiveCommand{TParameter}"/> instance.
+        /// </summary>
+        /// <param name="execute">The delegate that is to be executed when the command is being executed.</param>
+        /// <param name="canExecute">An observable, which determines whether the command can be executed or not. If <c>null</c> is specified, then the constructor defaults to the <see cref="IsExecuting"/> observable.</param>
+        /// <param name="blockOnExecution">Determines whether can execute always returns false while the command is being executed.</param>
+        public ReactiveCommand(Action<TParameter> execute, IObservable<bool> canExecute, bool blockOnExecution)
+            : this(parameter =>
+            {
+                execute(parameter);
+                return Task.FromResult(Unit.Default);
+            }, canExecute, blockOnExecution)
+        { }
+
+        /// <summary>
+        /// Initializes a new <see cref="ReactiveCommand{TParameter}"/> instance.
+        /// </summary>
+        /// <param name="execute">The delegate that is to be executed when the command is being executed.</param>
+        /// <param name="canExecute">An observable, which determines whether the command can be executed or not. If <c>null</c> is specified, then the constructor defaults to the <see cref="IsExecuting"/> observable.</param>
+        public ReactiveCommand(Action<TParameter> execute, IObservable<bool> canExecute)
+            : this(parameter =>
+            {
+                execute(parameter);
+                return Task.FromResult(Unit.Default);
+            }, canExecute, true)
+        { }
+
+        /// <summary>
+        /// Initializes a new <see cref="ReactiveCommand{TParameter}"/> instance.
+        /// </summary>
+        /// <param name="execute">The delegate that is to be executed when the command is being executed.</param>
+        public ReactiveCommand(Action<TParameter> execute)
+            : this(parameter =>
+            {
+                execute(parameter);
+                return Task.FromResult(Unit.Default);
+            }, null, true)
+        { }
+
         #endregion
 
         #region Public Methods
