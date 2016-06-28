@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
@@ -18,7 +19,7 @@ namespace Windows.Mvvm.Reactive
     /// </summary>
     /// <typeparam name="TParameter">The type of the parameter of the command.</typeparam>
     /// <typeparam name="TResult">The type of the result of the command.</typeparam>
-    public class ReactiveCommand<TParameter, TResult> : ICommand
+    public class ReactiveCommand<TParameter, TResult> : ICommand, INotifyPropertyChanged
     {
         #region Constructors
 
@@ -36,8 +37,8 @@ namespace Windows.Mvvm.Reactive
             // Creates the observable for can execute
             this.CanExecute = Observable.CombineLatest(new List<IObservable<bool>>
             {
-                canExecute != null ? canExecute.StartWith(false): Observable.Return(true),
-                blockOnExecution ? this.IsExecuting.Select(x => !x) : Observable.Return(true),
+                canExecute != null ? canExecute.StartWith(false) : Observable.Return(true),
+                blockOnExecution ? this.IsExecutingChanged.Select(x => !x) : Observable.Return(true),
                 Observable.Return(true)
             }, latestResults => latestResults.All(result => result));
 
@@ -47,6 +48,9 @@ namespace Windows.Mvvm.Reactive
                 this.latestCanExecuteValue = newValue;
                 this.canExecuteChanged?.Invoke(this, new EventArgs());
             });
+
+            // Subscribes to the changing of the is executing property and invokes the property changed event
+            this.IsExecutingChanged.ObserveOnDispatcher().Subscribe(newValue => this.propertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(this.IsExecuting))));
         }
 
         /// <summary>
@@ -119,18 +123,23 @@ namespace Windows.Mvvm.Reactive
         /// <summary>
         /// Contains a subject, which determines whether the command is currently being executed.
         /// </summary>
-        private BehaviorSubject<bool> isExecuting = new BehaviorSubject<bool>(false);
+        private BehaviorSubject<bool> isExecutingChangedSubject = new BehaviorSubject<bool>(false);
 
         /// <summary>
         /// Gets an observable, which determines whether the command is currently being executed.
         /// </summary>
-        public IObservable<bool> IsExecuting
+        public IObservable<bool> IsExecutingChanged
         {
             get
             {
-                return this.isExecuting.AsObservable();
+                return this.isExecutingChangedSubject.AsObservable();
             }
         }
+
+        /// <summary>
+        /// Gets a value that determines whether the command is currently being exeucted or not.
+        /// </summary>
+        public bool IsExecuting { get; private set; }
 
         #endregion
 
@@ -144,11 +153,13 @@ namespace Windows.Mvvm.Reactive
         public async Task<TResult> ExecuteAsync(TParameter parameter)
         {
             // Sets the is executing subject to true, because the command is currently being executed
-            this.isExecuting.OnNext(true);
+            this.IsExecuting = true;
+            this.isExecutingChangedSubject.OnNext(this.IsExecuting);
 
             // Invokes the delegate 
             TResult result = await this.execute(parameter);
-            this.isExecuting.OnNext(false);
+            this.IsExecuting = false;
+            this.isExecutingChangedSubject.OnNext(this.IsExecuting);
             return result;
         }
 
@@ -189,6 +200,31 @@ namespace Windows.Mvvm.Reactive
         /// </summary>
         /// <param name="parameter">The parameter of the command.</param>
         async void ICommand.Execute(object parameter) => await this.ExecuteAsync((TParameter)parameter);
+
+        #endregion
+
+        #region INotifyPropertyChanged Implementation
+
+        /// <summary>
+        /// An event, which is raised when a property in the reactive command has changed.
+        /// </summary>
+        private event PropertyChangedEventHandler propertyChanged;
+
+        /// <summary>
+        /// An event, which is raised when a property in the reactive command has changed.
+        /// </summary>
+        event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
+        {
+            add
+            {
+                this.propertyChanged += value;
+            }
+
+            remove
+            {
+                this.propertyChanged -= value;
+            }
+        }
 
         #endregion
     }
