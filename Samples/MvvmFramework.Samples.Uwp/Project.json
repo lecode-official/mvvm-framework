@@ -1,6 +1,6 @@
 ﻿{
   "dependencies": {
-    "Microsoft.NETCore.UniversalWindowsPlatform": "5.1.0",
+    "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.0",
     "System.InversionOfControl.Abstractions.SimpleIoc": "0.1.2"
   },
   "frameworks": {
