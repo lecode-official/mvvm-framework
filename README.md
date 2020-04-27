@@ -2,6 +2,8 @@
 
 ![MVVM Framework Logo](https://github.com/lecode-official/mvvm-framework/blob/master/Documentation/Images/Banner.png "MVVM Framework Logo")
 
+> **IMPORTANT** This project is no longer actively in development.
+
 The MVVM Framework is a compact and simple, yet powerful implementation of the MVVM pattern. It provides a strong model for managing the application lifecycle
 and the navigation. It was build on three important core principles:
 
